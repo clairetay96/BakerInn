@@ -6,6 +6,22 @@ The baking/cooking community in Singapore does not have a common space to expres
 
 ## Target audience
 
+### Personas
+1. Robert, 17
+  * student and loves to try new things
+  * loves pastry but does not know how to bake.
+  * hopes to find recipes and the cookery to get him started
+
+2. Karen, 34
+  * housewife and plant collector
+  * tends to overbuy ingredients and wants to give away produce instead of wasting
+  * wants to use the platform to connect others to her items
+
+3. Monica, 22
+  * food blogger and influencer
+  * trying to keep relevant
+  * wants to look for new food spots by reaching out to the baking community
+
 ### Epics
 * Allow the user to share their ideas and interest
 * Enable communication between users
