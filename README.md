@@ -4,20 +4,21 @@
 
 The baking/cooking community in Singapore does not have a common space to express their interest, socialize, share ideas and have a convenient location to share common sought items. Even though there are group in community centres, facebook groups and SMEs that cater to the niche community, there is not a platform which caters to all their needs. 
 
+## Target audience
 
-## User Stories
+### Epics
+* Allow the user to share their ideas and interest
+* Enable communication between users
+* Facilitate the exchange of ingredients and cookery/ baking equipment between users
+* Inspire users on baking ideas
 
-User A wants to find recipes
-User C wants to find recipes for food that can be made with certain ingredients
-User D wants to store recipes into recipebooks
-User E wants to store bookmarks to recipes
-User F wants to post listings to a marketplace to share ingredients
-User G wants to post listings to a marketplace to share equipment
-User H wants to browse all listings
-User I wants borrow equipment
-User J wants take ingredients
-User L wants chat to another user about getting ingredients and/or equipment
-User M wants generate interest about a topic in a forum
+### User Stories
+* As a **site visitor**, I want to **find recipes** so that **I can make with my remaining ingredients**
+* As a **user**, I want to **create a recipe book** so that **I can organize the recipe I found or created**
+* As a **site visitor**, I want to **browse all the listings** so that **find ingredients or equipment**
+* As a **user**, I want to **be able to interact with listings** so that **I can post new listings to share my ingredient or equipment**
+* As a **user**, I want to **be able to interact with listings** so that **I can contact the lister to receive the ingredient or equipment**
+* As a **site visitor**, I want to **find a space to meet like-minded people** so that **I can share ideas and have meaningful discussions about my interest**
 
 
 ## User Flow
