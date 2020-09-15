@@ -36,6 +36,8 @@ The baking/cooking community in Singapore does not have a common space to expres
 * As a **user**, I want to **be able to interact with listings** so that **I can contact the lister to receive the ingredient or equipment**
 * As a **site visitor**, I want to **find a space to meet like-minded people** so that **I can share ideas and have meaningful discussions about my interest**
 
+## Project overview
+![Overview](/pre-project/BakerInn_Idea_Board.png)
 
 ## User Flow
 Diagrams of which pages you take the user to in order to acomplish their goals.
