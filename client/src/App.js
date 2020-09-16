@@ -10,6 +10,7 @@ class App extends React.Component {
 
     // logged in is used for placeholder
     // use proper auth to validate user
+    // placeholder user data, need to fetch data on component mount
     this.state = {
       loggedIn : false,
     }
@@ -26,7 +27,7 @@ class App extends React.Component {
     return (
       <div className="App">
         
-        {/* always show the nav */}
+        {/* always show the overlays 1. nav 2. chat 3. add listing? */}
         <NavBar isLoggedIn={this.state.loggedIn}/>
 
         <Route path="/dashboard">             

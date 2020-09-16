@@ -9,6 +9,12 @@ export default class DashboardPage extends Component {
 
     this.state = {
       search: '',
+      user: 'User0',
+      userLendingListings: {
+        available: [1,2,3,4,5],
+        loan: [1,2,3,4,5],
+      },
+      userBorrowing: [1,2,3,4,5],
     }
   }
 
@@ -36,7 +42,8 @@ export default class DashboardPage extends Component {
                    onKeyUp={this.handleSearch}
                    value={this.state.search}/>
 
-        <ListingTabs/>        
+        <ListingTabs listingData={{...this.state.userLendingListings,
+                                    userBorrowing: this.state.userBorrowing}}/>        
 
       </div>
     )

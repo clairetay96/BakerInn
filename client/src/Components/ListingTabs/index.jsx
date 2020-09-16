@@ -1,16 +1,32 @@
 import React from 'react'
 import './index.css'
 
-import { Tab, Tabs } from "react-bootstrap";
+import { Tab, Tabs, Row, Col } from "react-bootstrap";
+import ListingDetail from '../ListingDetail';
 
-export default function ListingTabs() {
+export default function ListingTabs(props) {
+  let { available=null, loan=null, userBorrowing=null } = props.listingData
   return (
-    <Tabs defaultActiveKey="home" transition={false} id="noanim-tab-example" className="listing-tabs">
-      <Tab eventKey="home" title="Listing Status">
+    <Tabs defaultActiveKey="listing-status" transition={false} id="noanim-tab-listing" className="listing-tabs">
+      <Tab eventKey="listing-status" title="Listing Status">
         Links to user borrowing from other users and user lending to other users
+        <Row>
+          <Col className="listing-selection">
+            Lending
+            <div>
+              x items
+            </div>
+          </Col>
+          <Col className="listing-selection">
+            Borrowing
+            <div>
+              x items
+            </div>
+          </Col>
+        </Row>
       </Tab>
-      <Tab eventKey="profile" title="My Listing">
-        User posted listing that is available
+      <Tab eventKey="user-listing" title="My Listing">
+        <ListingDetail allListings={available}/>
       </Tab>
     </Tabs>
   )
