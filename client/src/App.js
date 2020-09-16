@@ -1,14 +1,14 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Button } from 'react-bootstrap'
 
 class App extends React.Component {
 
   componentDidMount(){
-    fetch('/')
+    fetch('/api')
     .then(res=>res.text())
     .then(res=>console.log(res))
+    .catch(err=>console.log(err))
   }
 
   render(){
