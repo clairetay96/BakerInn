@@ -1,35 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import NavBar from './Components/NavBar';
 
 class App extends React.Component {
+  constructor(){
+    super();
+
+    // logged in is used for placeholder
+    // use proper auth to validate user
+    this.state = {
+      loggedIn : false,
+    }
+  }
 
   componentDidMount(){
-    fetch('/api')
-    .then(res=>res.text())
-    .then(res=>console.log(res))
-    .catch(err=>console.log(err))
+    // check if user is logged in
+    this.setState({
+      loggedIn: true,
+    })
   }
 
   render(){
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+       <NavBar isLoggedIn={this.state.loggedIn}/>
       </div>
     );
   }
 }
+
 export default App;
