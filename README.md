@@ -29,8 +29,6 @@ The baking/cooking community in Singapore does not have a common space to expres
 * Inspire users on baking ideas
 
 ### User Stories
-* As a **site visitor**, I want to **find recipes** so that **I can make with my remaining ingredients**
-* As a **user**, I want to **create a recipe book** so that **I can organize the recipe I found or created**
 * As a **site visitor**, I want to **browse all the listings** so that **find ingredients or equipment**
 * As a **user**, I want to **be able to interact with listings** so that **I can post new listings to share my ingredient or equipment**
 * As a **user**, I want to **be able to interact with listings** so that **I can contact the lister to receive the ingredient or equipment**
