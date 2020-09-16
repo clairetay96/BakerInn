@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.css';
 import NavBar from './Components/NavBar';
+import DashboardPage from './Pages/DashboardPage';
+import { Route } from 'react-router-dom'
 
 class App extends React.Component {
   constructor(){
@@ -23,7 +25,13 @@ class App extends React.Component {
   render(){
     return (
       <div className="App">
-       <NavBar isLoggedIn={this.state.loggedIn}/>
+        
+        {/* always show the nav */}
+        <NavBar isLoggedIn={this.state.loggedIn}/>
+
+        <Route path="/dashboard">             
+          <DashboardPage/>
+        </Route>
       </div>
     );
   }

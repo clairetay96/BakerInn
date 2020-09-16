@@ -1,0 +1,13 @@
+.listing-tabs > a {
+  width: 50%;
+}
+
+.search {
+  padding: 10px 0;
+  margin: 14px 0;
+  border: 2px solid lightgrey;
+}
+
+.search > input {
+  width: 35%;
+}
