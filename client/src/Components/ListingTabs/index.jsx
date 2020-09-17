@@ -36,8 +36,16 @@ export default function ListingTabs(props) {
             </Row>
           </Tab>
           <Tab eventKey="user-listing" title="My Available Listing">
-            <ListingDetail allListings={available}
+            <div>
+              <Row className="ml-2 mr-2">
+                <div>
+                  Total listing: xxx
+                </div>
+                <button>Add new listing</button>
+              </Row>
+              <ListingDetail allListings={available}
                            edit={true}/>
+            </div>
           </Tab>
         </Tabs>
       </Route>

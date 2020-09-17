@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import NavBar from './Components/NavBar';
 import DashboardPage from './Pages/DashboardPage';
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import HomePage from './Pages/HomePage';
 
 class App extends React.Component {
@@ -36,6 +36,10 @@ class App extends React.Component {
         </Route>
         <Route path="/homepage">             
           <HomePage isLoggedIn={this.state.loggedIn}/>
+        </Route>
+
+        <Route exact path="/">
+          <Redirect to="/homepage" />
         </Route>
       </div>
     );
