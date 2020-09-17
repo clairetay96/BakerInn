@@ -5,8 +5,8 @@ import './App.css';
 class App extends React.Component {
 
   componentDidMount(){
-    fetch('/api')
-    .then(res=>res.text())
+    fetch('/api/listings')
+    .then(res=>res.json())
     .then(res=>console.log(res))
     .catch(err=>console.log(err))
   }
