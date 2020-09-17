@@ -85,6 +85,62 @@ module.exports = (db) => {
     })
   }
 
+  let makeNewListing = (request, response) => {
+    let newListingInput = request.body
+    let userID; //from cookies
+    newListingInput.user_id = userID
+    modelFuncs.makeNewListing(newListingInput, (err, res)=>{
+        if(err){
+            console.log(err)
+            response.send("error occurred.")
+        } else {
+            response.send("success")
+        }
+
+    })
+
+  }
+
+  let getUserListings = (request, response) => {
+    let userID = request.params.userid
+    modelFuncs.getUserListing(userID, false, (err, res)=>{
+        if(err){
+            console.log(error)
+            response.send("Error occurred.")
+        } else {
+            response.send(res)
+        }
+    })
+  }
+
+  //gets all of a user's currently borrowed listings.
+  let getUserBorrowed = (request, response) => {
+    //some authentication required - only a user can see their borrowed items
+    let userID = request.params.userid
+    modelFuncs.getUserListing(userID, true, (err, res) => {
+        if(err){
+            console.log(err)
+            response.send("Error occurred.")
+        } else {
+            response.send(res)
+        }
+    })
+  }
+
+  let getListingInfo = (request, response) => {
+    let listingID = request.params.id
+    modelFuncs.getOneListing(listingID, (err, res)=>{
+        if(err){
+            console.log(err)
+            response.send("Error occurred.")
+        } else {
+            response.send(res)
+        }
+
+    })
+
+  }
+
   return {
     ping,
     getAllUsers,
@@ -92,7 +148,11 @@ module.exports = (db) => {
     createUser,
     editUser,
     deleteUser,
-    getAllListings
+    getAllListings,
+    makeNewListing,
+    getUserListings,
+    getUserBorrowed,
+    getListingInfo
   }
 
 };
