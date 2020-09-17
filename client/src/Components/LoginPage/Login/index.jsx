@@ -7,6 +7,18 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const url = "/api/users/login"
+        fetch(url, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        })
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err))
     }
 
     return (

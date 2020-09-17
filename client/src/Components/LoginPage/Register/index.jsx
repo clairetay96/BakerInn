@@ -12,20 +12,19 @@ const Register = () => {
         const url = "/api/users/new"
         fetch(url, {
             method: "POST",
-            header: {
+            headers: {
+                Accept: "application/json",
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({ email, username, password })
         })
-            .then((res) => res.text())
-            .then((res) => {
-                console.log(res)
-            })
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err))
     }
 
     return (
         <div>
-            <div className="Login">
+            <div className="Register">
                 <form onSubmit={handleSubmit}>
                     <div>
                         <label >Email:</label>

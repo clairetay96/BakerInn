@@ -4,28 +4,23 @@ import Register from "../../Components/LoginPage/Register"
 export default class RegisterPage extends Component {
     render() {
         return (
-            <html>
-                <head>
-
-                </head>
-                <body>
-                    <header>
-                        Logo
-                        BakerInn
+            <div>
+                <header>
+                    Logo
+                    BakerInn
                     </header>
+                <div>
+                    <h3>Register</h3>
+                    <p>Already have an account?<a href="#">Sign In</a></p>
+                    <Register />
                     <div>
-                        <h3>Register</h3>
-                        <p>Already have an account?<a href="#">Sign In</a></p>
-                        <Register />
-                        <div>
-                            img
+                        img
                         </div>
-                    </div>
-                    <footer>
-                        footer
+                </div>
+                <footer>
+                    footer
                     </footer>
-                </body>
-            </html>
+            </div>
         )
     }
 }
