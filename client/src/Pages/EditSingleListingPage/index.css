@@ -1,0 +1,7 @@
+.col, .row  {
+  border: 1px solid steelblue;
+}
+
+.p-Icon {
+  display: inline;
+}

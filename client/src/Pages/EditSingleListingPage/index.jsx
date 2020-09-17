@@ -3,11 +3,9 @@ import './index.css'
 
 import { Col, Row } from 'react-bootstrap'
 
-export default class SingleListingPage extends Component {
+export default class EditSingleListingPage extends Component {
   render() {
 
-    // layout the page
-    // get dynamic data for single page
     return (
       <div>
         <Row>
@@ -19,7 +17,9 @@ export default class SingleListingPage extends Component {
         </Row>
         <Row>
           <Col>
-            Image here
+            Image here! 
+            <br/>
+            Edittttttttttt
           </Col>
           <Col>
             <h3>item name</h3>
@@ -28,11 +28,10 @@ export default class SingleListingPage extends Component {
             <p>detail 3</p>
             <p>detail 4</p>
             <p>detail 5</p>
-            <button>Chat</button>
+            <button>Confirm</button>
+            <button>Edit</button>
+            <button>Delete</button>
           </Col>
-        </Row>
-        <Row>
-          Related items/ other items the lender has to offer
         </Row>
       </div>
     )

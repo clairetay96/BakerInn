@@ -13,9 +13,9 @@ export default class DashboardPage extends Component {
       user: 'User0',
       userLendingListings: {
         available: [1,2,3,4,5],
-        loan: [1,2,3,4,5],
+        loan: [6,7,8,9,10],
       },
-      userBorrowing: [1,2,3,4,5],
+      userBorrowing: [11,12,13,14,15],
     }
   }
 
