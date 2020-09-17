@@ -19,7 +19,7 @@ export default function ListingTabs(props) {
               <Col className="listing-selection">
                 Lending
                 <div>
-                  <Link to="/dashboard/borrowing">
+                  <Link to="/dashboard/lending">
                     x items
                   </Link>
                 </div>
@@ -27,7 +27,7 @@ export default function ListingTabs(props) {
               <Col className="listing-selection">
                 Borrowing
                 <div>
-                  <Link to="/dashboard/lending">
+                  <Link to="/dashboard/borrowing">
                     x items
                   </Link>
                 </div>
@@ -40,10 +40,10 @@ export default function ListingTabs(props) {
         </Tabs>
       </Route>
         <Route path="/dashboard/borrowing">
-          <ListingDetailPage />
+          <ListingDetailPage nextpage={"lending"}/>
         </Route>
         <Route path="/dashboard/lending">
-          <ListingDetailPage />
+          <ListingDetailPage nextpage={"borrowing"}/>
         </Route>    
     </Switch>
   )

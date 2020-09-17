@@ -1,18 +1,32 @@
 import React from 'react'
 
-import { Row } from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom'
 import ListingDetail from '../../Components/ListingDetail'
 
-export default function ListingDetailPage() {
+export default function ListingDetailPage(props) {
+  let history = useHistory()
+  let {nextpage : next} = props
+  
+  const handleBack = () => {
+    history.push("/dashboard")
+  }
+
+  const handleNext = () => {
+    history.push(`/dashboard/${next}`)
+  }
+
   return (
-    <div>
-      <Row>
-        <button>Back</button>
-        <button>Next page</button>
-      </Row>
-      <Row>
+    <Row className="justify-content-around">
+      <Col>
+        <button onClick={handleBack}>Back</button>
+      </Col>
+      <Col>
+        <button onClick={handleNext}>{next}</button>
+      </Col>
+      <Col xs={12}>
         <ListingDetail />
-      </Row>
-    </div>
+      </Col>
+    </Row>
   )
 }
