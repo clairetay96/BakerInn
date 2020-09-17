@@ -3,6 +3,7 @@ import './App.css';
 import NavBar from './Components/NavBar';
 import DashboardPage from './Pages/DashboardPage';
 import { Route } from 'react-router-dom'
+import HomePage from './Pages/HomePage';
 
 class App extends React.Component {
   constructor(){
@@ -32,6 +33,9 @@ class App extends React.Component {
 
         <Route path="/dashboard">             
           <DashboardPage/>
+        </Route>
+        <Route path="/homepage">             
+          <HomePage isLoggedIn={this.state.loggedIn}/>
         </Route>
       </div>
     );

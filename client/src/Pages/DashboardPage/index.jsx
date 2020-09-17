@@ -39,7 +39,8 @@ export default class DashboardPage extends Component {
       <div>
         <h1>Welcome back User</h1>
 
-        <SearchBar onChange={this.handleChange}
+        <SearchBar scope={"dashboard"}
+                   onChange={this.handleChange}
                    onKeyUp={this.handleSearch}
                    value={this.state.search}/>
 
