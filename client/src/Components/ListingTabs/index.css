@@ -1,0 +1,11 @@
+.listing-tabs > a {
+  width: 50%;
+}
+
+.listing-selection {
+  border: 1px solid lightgrey;
+}
+
+.listing-selection > div {
+  border: 1px solid lightgrey;
+}
