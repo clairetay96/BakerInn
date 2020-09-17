@@ -7,7 +7,7 @@ export default function ListingDetail(props) {
       ? props.allListings.map((listing, index)=>{
           return <h1 key={index}>{listing}</h1>
         }) 
-      : null}
+      : "nothing to show here"}
     </div>
   )
 }

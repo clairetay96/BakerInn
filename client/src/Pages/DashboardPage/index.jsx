@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 
+
 import ListingTabs from '../../Components/ListingTabs'
 import SearchBar from '../../Components/SearchBar'
 
@@ -44,7 +45,6 @@ export default class DashboardPage extends Component {
 
         <ListingTabs listingData={{...this.state.userLendingListings,
                                     userBorrowing: this.state.userBorrowing}}/>        
-
       </div>
     )
   }
