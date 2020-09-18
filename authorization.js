@@ -16,6 +16,7 @@ const withAuth = (req, res, next) => {
                 console.log("invalid token")
             } else {
                 // return the decoded info
+                req.userId = decoded.userId
                 req.email = decoded.email
                 req.username = decoded.username
                 next()
