@@ -13,6 +13,7 @@ export default class HomePage extends Component {
 
     this.state = {
       search: '',
+      lastestListing: null
     }
   }
 
@@ -29,6 +30,18 @@ export default class HomePage extends Component {
         search: '',
       })
     }
+  }
+
+  componentDidMount() {
+    const url = '/api/listings'
+    
+    fetch(url)
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        lastestListing: res
+      })
+    })
   }
 
   render() {
@@ -48,7 +61,7 @@ export default class HomePage extends Component {
             : (<IntroBanner />)
           }
           <Carousel title={"New listing for ingredients and equipment"}
-                    lastestListing={[1,2,3,4,5]}/>
+                    lastestListing={this.state.lastestListing}/>
           </Route>
           <Route path="/homepage/listing/:id">
             <SingleListingPage/>

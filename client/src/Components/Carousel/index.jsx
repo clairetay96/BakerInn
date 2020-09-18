@@ -21,11 +21,12 @@ export default function Carousel(props) {
               {lastestListing.map((item, index) => {
                 return (
                   <BCarousel.Item key={index}>
-                    <Link to={`/homepage/listing/${item}`}>
+                    <Link to={`/homepage/listing/${item._id}`}>
                       <div>
                         Placeholder
                       <BCarousel.Caption>
-                        <p>replace this listing card. Card no: {item}</p>
+                      <p>Name: {item.name}</p>
+                      <p>Description: {item.description}</p>
                       </BCarousel.Caption>
                       </div>
                     </Link>  
