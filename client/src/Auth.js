@@ -55,7 +55,6 @@ const authenticate = async (cb) => {
 
   try {
     const response = await fetch(url)
-    const data = await response.text()
     if (response.status === 200) {
       cb(true)
     } else {
@@ -66,14 +65,8 @@ const authenticate = async (cb) => {
   }
 }
 
-const logout = () => {
-  
-}
-
-
 module.exports = {
   login,
   register,
   authenticate,
-  logout,
 }

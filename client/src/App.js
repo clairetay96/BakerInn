@@ -8,6 +8,7 @@ import DashboardPage from './Pages/DashboardPage';
 import HomePage from './Pages/HomePage';
 import Chat from './Components/Chat';
 import Auth from './Auth';
+import ProtectedRoute from './Components/ProtectedRoute';
 
 class App extends React.Component {
   constructor(){
@@ -63,9 +64,9 @@ class App extends React.Component {
                component={()=><Login loggedIn={this.loggedIn}/>} />
       
         {/* this route must protected */}
-        <Route path="/dashboard">             
+        <ProtectedRoute path="/dashboard">             
           <DashboardPage/>
-        </Route>
+        </ProtectedRoute>
 
         {/* this route must have protected actions*/}
         <Route path="/homepage">             
