@@ -23,7 +23,7 @@ module.exports = (app, db) => {
   app.get('/api/listings', bakerIn.getAllListings)
 
   //create new listing
-  app.post('/api/listings/new', bakerIn.makeNewListing)
+  app.post('/api/listings/new', withAuth, bakerIn.makeNewListing)
 
   //get all of a user's posted listings
   app.get('/api/listings/user/:userid', bakerIn.getUserListings)

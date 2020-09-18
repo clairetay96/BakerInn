@@ -8,9 +8,10 @@ import DashboardPage from './Pages/DashboardPage';
 import HomePage from './Pages/HomePage';
 import Chat from './Components/Chat';
 import Auth from './Auth';
+import AddListingPage from './Pages/AddListingPage'
 
 class App extends React.Component {
-  constructor(){
+  constructor() {
     super();
 
     // logged in is used for placeholder
@@ -18,7 +19,7 @@ class App extends React.Component {
     // placeholder user data, need to fetch data on component mount
   }
 
-  componentDidMount(){
+  componentDidMount() {
     // check if user is logged in
     this.setState({
       loggedIn: true,
@@ -29,34 +30,36 @@ class App extends React.Component {
     return (
       <div className="App">
         <Router>
-          <NavBar isLoggedIn={Auth.authenticate(null)}/>
+          <NavBar isLoggedIn={Auth.authenticate(null)} />
 
-        {/* conditionally render chat-overlay, show only when logged in */}
-        { Auth.authenticate(null)
-          ? (<Chat/>)
-          : null 
-        }
+          {/* conditionally render chat-overlay, show only when logged in */}
+          {Auth.authenticate(null)
+            ? (<Chat />)
+            : null
+          }
 
-        <Route path="/signup" exact component={Register} />
-        <Route path="/login" exact component={Login} />
-      
-        {/* this route must protected */}
-        <Route path="/dashboard">             
-          <DashboardPage/>
-        </Route>
+          <Route path="/signup" exact component={Register} />
+          <Route path="/login" exact component={Login} />
 
-        {/* this route must have protected actions*/}
-        <Route path="/homepage">             
-          <HomePage isLoggedIn={Auth.authenticate(null)}/>
-        </Route>
+          {/* this route must protected */}
+          <Route path="/dashboard">
+            <DashboardPage />
+          </Route>
 
-        {/* redirect all non-specified routes. maybe have a 404 page*/}
-        <Route exact path="/">
-          <Redirect to="/homepage" />
-        </Route>
+          {/* this route must have protected actions*/}
+          <Route path="/homepage">
+            <HomePage isLoggedIn={Auth.authenticate(null)} />
+          </Route>
+
+          {/* redirect all non-specified routes. maybe have a 404 page*/}
+          <Route exact path="/">
+            <Redirect to="/homepage" />
+          </Route>
 
 
         </Router>
+
+        <AddListingPage />
       </div>
     );
   }
