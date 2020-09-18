@@ -80,10 +80,12 @@ class App extends React.Component {
             <Redirect to="/homepage" />
           </Route>
 
+          <AddListingPage />
+
 
         </Router>
 
-        <AddListingPage />
+
       </div>
     );
   }
