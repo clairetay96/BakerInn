@@ -3,6 +3,7 @@ import Switch from 'react-bootstrap/esm/Switch';
 import { Route } from 'react-router-dom';
 
 import Carousel from '../../Components/Carousel';
+import IntroBanner from '../../Components/IntroBanner';
 import SearchBar from '../../Components/SearchBar';
 import SingleListingPage from '../SingeListingPage';
 
@@ -34,8 +35,6 @@ export default class HomePage extends Component {
     let { isLoggedIn } = this.props;
     return (
       <div>
-        <h1>HomePage</h1>
-
         {/* search all pages and listings */}
         <SearchBar scope={"homepage"}
                    onChange={this.handleChange}
@@ -46,7 +45,7 @@ export default class HomePage extends Component {
           <Route exact path="/homepage">
           {isLoggedIn 
             ? ('Logged in')
-            : (<Carousel title={"What we offer"}/>)
+            : (<IntroBanner />)
           }
           <Carousel title={"New listing for ingredients and equipment"}
                     lastestListing={[1,2,3,4,5]}/>
