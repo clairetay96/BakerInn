@@ -35,9 +35,10 @@ class App extends React.Component {
   componentDidMount() {
     // check on first opening if the user has logged in before
     // authenticate the token
-    Auth.authenticate((log) => {
+    Auth.authenticate()
+    .then(valid=>{
       this.setState({
-        loggedIn: log
+        loggedIn: valid
       })
     })
   }
