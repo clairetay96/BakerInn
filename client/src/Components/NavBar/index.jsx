@@ -1,8 +1,18 @@
 import React, { Component } from 'react'
 import { Navbar, Nav } from 'react-bootstrap'
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
-export default class NavBar extends Component {
+class NavBar extends Component {
+  constructor(props){
+    super(props)
+  }
+
+  signout = () => {
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
+    this.props.signout()
+    this.props.history.push('/homepage')
+  }
+
   render() {
     let { isLoggedIn } = this.props;
 
@@ -22,7 +32,7 @@ export default class NavBar extends Component {
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
             {isLoggedIn 
-              ? "Icon Sign Out" 
+              ? (<>icon <button onClick={this.signout}>Sign out</button></>) 
               : (<Link to="/login">Log In</Link>)}
           </Navbar.Text>
         </Navbar.Collapse>
@@ -30,3 +40,5 @@ export default class NavBar extends Component {
     )
   }
 }
+
+export default withRouter(NavBar);

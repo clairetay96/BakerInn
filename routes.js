@@ -3,9 +3,13 @@ const withAuth = require("./authorization.js")
 module.exports = (app, db) => {
 
   const bakerIn = require('./controllers/bakerInn')(db);
+  const bakerInChats = require('./controllers/bakerInnChats')(db);
+
+  // ping to see if the server is running
+  app.get('/api/ping', bakerIn.ping)
 
   // used middleware to check authorization
-  app.get('/api', withAuth, bakerIn.ping);
+  app.get('/api', withAuth, bakerIn.validate);
 
 
   //user CRUD operations
@@ -34,20 +38,24 @@ module.exports = (app, db) => {
   //get specific listing info
   app.get('/api/listings/:id', bakerIn.getListingInfo)
 
-  //borrow a specific listing - changes listing state to on loan
-  app.post('/api/listings/:id/borrow')
-
-  //make a specific listing unavailable - changes listing state to unavailable
-  app.post('/api/listings/:id/unavailable')
-
-  //return a specific listing - changes listing state to available
-  app.post('/api/listings/:id/returned')
-
 
   //make changes to specific listing
   app.put('/api/listings/:id/edit')
+
   //delete specific listing
   app.delete('/api/listings/:id/delete')
+
+  //when user expresses interest, create chat
+  app.post('/api/chats/new', bakerInChats.createChat)
+
+  //to get basic information on existing chat
+  app.get('/api/chats/:id', bakerInChats.getChat)
+
+  //post a new message to message collection
+  app.post('/api/chats/:id/new-message', bakerInChats.postMessage)
+
+  //post a message to a chat
+  app.get('/api/chats/:id/messages', bakerInChats.getMessages)
 
   //search listings, search users
   app.get('/api/search/listings/')

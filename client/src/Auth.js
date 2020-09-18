@@ -50,22 +50,23 @@ const register = async (email, username, password, cb) => {
   }
 }
 
-const authenticate = (token, cb) => {
-  if (token) {
-    return true
-  } else {
-    return false
+const authenticate = async (cb) => {
+  const url = "/api"
+
+  try {
+    const response = await fetch(url)
+    if (response.status === 200) {
+      cb(true)
+    } else {
+      cb(false)
+    }
+  } catch (err) {
+    cb(false)
   }
 }
-
-const logout = () => {
-
-}
-
 
 module.exports = {
   login,
   register,
   authenticate,
-  logout,
 }

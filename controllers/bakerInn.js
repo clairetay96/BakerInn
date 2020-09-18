@@ -1,3 +1,4 @@
+const { response } = require('express');
 const jwt = require('jsonwebtoken')
 const secret = "youGuess"
 
@@ -6,10 +7,11 @@ module.exports = (db) => {
     let modelFuncs = db.modelFuncsObj
 
     let ping = (request, response) => {
-        // requesting username from authorization middleware
-        let username = request.username
+        response.send('server up and running');
+    };
 
-        response.send(`WELCOME ${username}`);
+    let validate = (request, response) => {
+        response.status(200).send('verified')
     };
 
 
@@ -180,7 +182,8 @@ module.exports = (db) => {
         getUserListings,
         getUserBorrowed,
         getListingInfo,
-        login
+        login,
+        validate
     }
 
 };

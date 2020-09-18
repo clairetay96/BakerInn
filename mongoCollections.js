@@ -15,6 +15,8 @@ myClient.connect((err,db)=>{
     //create new collections called users and listings
     newDB.createCollection("users")
         .then(res => newDB.createCollection("listings"))
+        .then(res => newDB.createCollection("chats"))
+        .then(res => newDB.createCollection("messages"))
         .then(res => {
             console.log("Successfully created database and collections.")
             db.close()})

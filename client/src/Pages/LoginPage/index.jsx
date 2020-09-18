@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom'
 import Login from "../../Components/LoginPage/Login"
 
 export default class LoginPage extends Component {
+    constructor(props){
+        super(props)
+    }
+
     render() {
         return (
             <div>
@@ -13,7 +17,7 @@ export default class LoginPage extends Component {
                 <div>
                     <h3>Login</h3>
                     <p>Dont have an account? <Link to="/signup">Sign Up</Link></p>
-                    <Login />
+                    <Login loggedIn={this.props.loggedIn}/>
                     <div>
                         img
                     </div>
