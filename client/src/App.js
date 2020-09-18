@@ -4,6 +4,7 @@ import NavBar from './Components/NavBar';
 import DashboardPage from './Pages/DashboardPage';
 import { Route, Redirect } from 'react-router-dom'
 import HomePage from './Pages/HomePage';
+import Chat from './Components/Chat';
 
 class App extends React.Component {
   constructor(){
@@ -31,13 +32,23 @@ class App extends React.Component {
         {/* always show the overlays 1. nav 2. chat 3. add listing? */}
         <NavBar isLoggedIn={this.state.loggedIn}/>
 
+        {/* conditionally render chat-overlay, show only when logged in */}
+        { this.state.loggedIn
+          ? (<Chat/>)
+          : null 
+        }
+
+        {/* this route must protected */}
         <Route path="/dashboard">             
           <DashboardPage/>
         </Route>
+
+        {/* this route must have protected actions*/}
         <Route path="/homepage">             
           <HomePage isLoggedIn={this.state.loggedIn}/>
         </Route>
 
+        {/* redirect all non-specified routes. maybe have a 404 page*/}
         <Route exact path="/">
           <Redirect to="/homepage" />
         </Route>
