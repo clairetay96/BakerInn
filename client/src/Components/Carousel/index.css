@@ -11,3 +11,7 @@
   height: 100%;
   border: 1px solid black;
 }
+
+.empty-carousel {
+  height: 200px;
+}

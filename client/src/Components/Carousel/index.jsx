@@ -35,7 +35,9 @@ export default function Carousel(props) {
               })}
             </BCarousel>
           )
-        : ("No items to show here")
+        : (<div className="empty-carousel">
+             No listing available
+           </div>)
       }
     </div>
   )
