@@ -73,6 +73,7 @@ module.exports = (db) => {
                 let data = {
                     email: emailResult[0].email,
                     username: emailResult[0].username,
+                    id: emailResult[0]._id,
                     result
                 }
                 callback(null, data)
@@ -113,15 +114,9 @@ module.exports = (db) => {
     }
 
     //put the new listing in listings collection, add listing to user info.
-    // temporary changes search users collection by username
-    let makeNewListing = (newListingInput, username, callback) => {
-        // db.collection("listings").insertOne(newListingInput)
-        //     .then(res => db.collection("users").updateOne({ _id: ObjectId(userID) }, { $push: { listings: res.insertedId } }))
-        //     .then(res => callback(null, res))
-        //     .catch(err => callback(err, null))
-
+    let makeNewListing = (newListingInput, userID, callback) => {
         db.collection("listings").insertOne(newListingInput)
-            .then(res => db.collection("users").updateOne({ username: username }, { $push: { listings: res.insertedId } }))
+            .then(res => db.collection("users").updateOne({ _id: ObjectId(userID) }, { $push: { listings: res.insertedId } }))
             .then(res => callback(null, res))
             .catch(err => callback(err, null))
     }
@@ -137,7 +132,7 @@ module.exports = (db) => {
                         db.collection("listings").findOne({ _id: ObjectId(listingID) })
                             .then(res1 => db.collection("users").findOne({ _id: ObjectId(res1.owner_id) }))
                             .then(res2 => {
-                                res1.owner_info = {username: res2.username, user_id: res2._id}
+                                res1.owner_info = { username: res2.username, user_id: res2._id }
                                 return res1
                             })
                             .catch(err => { throw err })
@@ -154,7 +149,7 @@ module.exports = (db) => {
         db.collection("listings").findOne({ _id: ObjectId(listingID) })
             .then(res => db.collection("users").findOne({ _id: ObjectId(res.owner_id) }))
             .then(res1 => {
-                res.owner_info = {username: res1.username, user_id: res1._id}
+                res.owner_info = { username: res1.username, user_id: res1._id }
                 callback(null, res)
             })
             .catch(err => callback(err, null))
