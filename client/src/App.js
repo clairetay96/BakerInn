@@ -8,10 +8,11 @@ import DashboardPage from './Pages/DashboardPage';
 import HomePage from './Pages/HomePage';
 import Chat from './Components/Chat';
 import Auth from './Auth';
+import AddListingPage from './Pages/AddListingPage'
 import ProtectedRoute from './Components/ProtectedRoute';
 
 class App extends React.Component {
-  constructor(){
+  constructor() {
     super();
 
     this.state = {
@@ -23,11 +24,6 @@ class App extends React.Component {
     // placeholder user data, need to fetch data on component mount
   }
 
-  loggedIn = () => {
-    this.setState({
-      loggedIn: true
-    })
-  }
 
   signout = () => {
     this.setState({
@@ -73,13 +69,20 @@ class App extends React.Component {
           <HomePage isLoggedIn={this.state.loggedIn}/>
         </Route>
 
-        {/* redirect all non-specified routes. maybe have a 404 page*/}
-        <Route exact path="/">
-          <Redirect to="/homepage" />
-        </Route>
+          {/* this route must have protected actions*/}
+          <Route path="/homepage">
+            <HomePage isLoggedIn={Auth.authenticate(null)} />
+          </Route>
+
+          {/* redirect all non-specified routes. maybe have a 404 page*/}
+          <Route exact path="/">
+            <Redirect to="/homepage" />
+          </Route>
 
 
         </Router>
+
+        <AddListingPage />
       </div>
     );
   }

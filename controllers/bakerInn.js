@@ -115,9 +115,12 @@ module.exports = (db) => {
 
     let makeNewListing = (request, response) => {
         let newListingInput = request.body
-        let userID; //from cookies
-        newListingInput.user_id = userID
-        modelFuncs.makeNewListing(newListingInput, (err, res) => {
+        // let userID; //from cookies
+        // newListingInput.user_id = userID
+        let username = request.username
+        newListingInput.username = username;
+        console.log(newListingInput)
+        modelFuncs.makeNewListing(newListingInput, username, (err, res) => {
             if (err) {
                 console.log(err)
                 response.send("error occurred.")
