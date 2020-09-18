@@ -1,30 +1,46 @@
 import React from 'react';
-import { Link, Route, Switch, Redirect, BrowserRouter as Router } from "react-router-dom"
+import { Route, Redirect, BrowserRouter as Router } from "react-router-dom"
 import './App.css';
 import Login from "./Pages/LoginPage/"
 import Register from "./Pages/RegisterPage/"
-import Test from "./Pages/TestPage"
 import NavBar from './Components/NavBar';
 import DashboardPage from './Pages/DashboardPage';
 import HomePage from './Pages/HomePage';
 import Chat from './Components/Chat';
+import Auth from './Auth';
 
 class App extends React.Component {
   constructor(){
     super();
 
+    this.state = {
+      loggedIn: false
+    }
+
     // logged in is used for placeholder
     // use proper auth to validate user
     // placeholder user data, need to fetch data on component mount
-    this.state = {
-      loggedIn : false,
-    }
   }
 
-  componentDidMount(){
-    // check if user is logged in
+  loggedIn = () => {
     this.setState({
-      loggedIn: true,
+      loggedIn: true
+    })
+  }
+
+  signout = () => {
+    this.setState({
+      loggedIn: false
+    })
+  }
+
+  componentDidMount() {
+    // check on first opening if the user has logged in before
+    // authenticate the token
+    Auth.authenticate((log) => {
+      this.setState({
+        loggedIn: log
+      })
     })
   }
 
@@ -32,11 +48,8 @@ class App extends React.Component {
     return (
       <div className="App">
         <Router>
-          <NavBar isLoggedIn={this.state.loggedIn}/>
-          <p><Link to="/signup">Sign Up</Link></p>
-          <p><Link to="/login">Login</Link></p>
-          <p><Link to="/test">Test</Link></p>
-
+          <NavBar isLoggedIn={this.state.loggedIn}
+                  signout={this.signout}/>
 
         {/* conditionally render chat-overlay, show only when logged in */}
         { this.state.loggedIn
@@ -44,6 +57,11 @@ class App extends React.Component {
           : null 
         }
 
+        <Route path="/signup" exact component={Register} />
+        <Route path="/login" 
+               exact 
+               component={()=><Login loggedIn={this.loggedIn}/>} />
+      
         {/* this route must protected */}
         <Route path="/dashboard">             
           <DashboardPage/>
@@ -59,13 +77,7 @@ class App extends React.Component {
           <Redirect to="/homepage" />
         </Route>
 
-          <Switch>
-            <Route path="/signup" exact component={Register} />
-            <Route path="/login" exact component={Login} />
-            <Route path="/test" exact component={Test} />
-          </Switch>
-      
-      
+
         </Router>
       </div>
     );

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import Register from "../../Components/LoginPage/Register"
 
 export default class RegisterPage extends Component {
@@ -11,7 +12,7 @@ export default class RegisterPage extends Component {
                     </header>
                 <div>
                     <h3>Register</h3>
-                    <p>Already have an account?<a href="#">Sign In</a></p>
+                    <p>Already have an account?<Link to="/login">Log In</Link></p>
                     <Register />
                     <div>
                         img

@@ -29,16 +29,17 @@ module.exports = (db) => {
         let emailResult = await db.collection("users").find({ email: userInfo.email }).toArray()
         let usernameResult = await db.collection("users").find({ username: userInfo.username }).toArray()
         if (emailResult.length > 0) {
-            let output = "email has been taken"
-            callback(null, output)
+            let error = "email has been taken"
+            callback(error, null)
         } else if (usernameResult.length > 0) {
-            let output = "username has been taken"
-            callback(null, output)
+            let error = "username has been taken"
+            callback(error, null)
         } else {
             // hashing password before storing into db
             bcrypt.hash(userInfo.password, saltRounds, (err, hash) => {
                 if (err) {
                     console.log("error in password hashing")
+                    callback(err, null)
                 } else {
                     let hashedData = {
                         email: userInfo.email,
@@ -53,13 +54,32 @@ module.exports = (db) => {
                         })
                         .catch(err => {
                             console.log("err in createNewUser model", err)
+                            callback(err, null)
                         })
                 }
             })
         }
     }
 
+    let userLogin = async (userLoginInfo, callback) => {
+        let emailResult = await db.collection("users").find({ email: userLoginInfo.email }).toArray()
 
+        // result returns true if the password matches
+        bcrypt.compare(userLoginInfo.password, emailResult[0].password, (err, result) => {
+            if (err) {
+                console.log("err in userLogin model", err)
+                callback(err, null)
+            } else {
+                let data = {
+                    email: emailResult[0].email,
+                    username: emailResult[0].username,
+                    result
+                }
+                callback(null, data)
+            }
+        })
+
+    }
 
     let updateUserInfo = (updatedInfo, userID, callback) => {
         db.collection("users").updateOne({ _id: ObjectId(userID) }, { $set: updatedInfo })
@@ -132,25 +152,6 @@ module.exports = (db) => {
                 callback(null, res)
             })
             .catch(err => callback(err, null))
-
-    }
-
-    let userLogin = async (userLoginInfo, callback) => {
-        let emailResult = await db.collection("users").find({ email: userLoginInfo.email }).toArray()
-
-        // result returns true if the password matches
-        bcrypt.compare(userLoginInfo.password, emailResult[0].password, (err, result) => {
-            if (err) {
-                console.log("err in userLogin model", err)
-            } else {
-                let data = {
-                    email: emailResult[0].email,
-                    username: emailResult[0].username,
-                    result
-                }
-                callback(null, data)
-            }
-        })
 
     }
 
