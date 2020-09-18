@@ -1,8 +1,12 @@
 import React from 'react';
+import { Link, Route, Switch, BrowserRouter as Router } from "react-router-dom"
 import './App.css';
+import Login from "./Pages/LoginPage/"
+import Register from "./Pages/RegisterPage/"
+import Test from "./Pages/TestPage"
 import NavBar from './Components/NavBar';
 import DashboardPage from './Pages/DashboardPage';
-import { Route } from 'react-router-dom'
+
 
 class App extends React.Component {
   constructor(){
@@ -23,16 +27,29 @@ class App extends React.Component {
     })
   }
 
-  render(){
+  render() {
     return (
       <div className="App">
-        
-        {/* always show the overlays 1. nav 2. chat 3. add listing? */}
-        <NavBar isLoggedIn={this.state.loggedIn}/>
+        <Router>
+          <NavBar isLoggedIn={this.state.loggedIn}/>
+          <p><Link to="/signup">Sign Up</Link></p>
+          <p><Link to="/login">Login</Link></p>
+          <p><Link to="/test">Test</Link></p>
 
-        <Route path="/dashboard">             
+          <Switch>
+            <Route path="/signup" exact component={Register} />
+            <Route path="/login" exact component={Login} />
+            <Route path="/test" exact component={Test} />
+          </Switch>
+      
+          {/* always show the overlays 1. nav 2. chat 3. add listing? */}
+          <Route path="/dashboard">             
           <DashboardPage/>
-        </Route>
+          </Route>
+      
+      
+        </Router>
+
       </div>
     );
   }

@@ -1,14 +1,20 @@
+const withAuth = require("./authorization.js")
+
 module.exports = (app, db) => {
 
   const bakerIn = require('./controllers/bakerInn')(db);
 
-  app.get('/api', bakerIn.ping);
+  // used middleware to check authorization
+  app.get('/api', withAuth, bakerIn.ping);
 
 
   //user CRUD operations
   app.get('/api/users', bakerIn.getAllUsers)
 
   app.post('/api/users/new', bakerIn.createUser)
+
+  app.post('/api/users/login', bakerIn.login)
+
   app.get('/api/users/:id', bakerIn.getUser)
   app.put('/api/users/:id/edit', bakerIn.editUser)
   app.delete('/api/users/:id/delete', bakerIn.deleteUser)
