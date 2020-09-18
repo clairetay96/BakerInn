@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Route, Switch, Redirect, BrowserRouter as Router } from "react-router-dom"
+import { Route, Redirect, BrowserRouter as Router } from "react-router-dom"
 import './App.css';
 import Login from "./Pages/LoginPage/"
 import Register from "./Pages/RegisterPage/"
@@ -13,15 +13,34 @@ class App extends React.Component {
   constructor(){
     super();
 
+    this.state = {
+      loggedIn: false
+    }
+
     // logged in is used for placeholder
     // use proper auth to validate user
     // placeholder user data, need to fetch data on component mount
   }
 
-  componentDidMount(){
-    // check if user is logged in
+  loggedIn = () => {
     this.setState({
-      loggedIn: true,
+      loggedIn: true
+    })
+  }
+
+  signout = () => {
+    this.setState({
+      loggedIn: false
+    })
+  }
+
+  componentDidMount() {
+    // check on first opening if the user has logged in before
+    // authenticate the token
+    Auth.authenticate((log) => {
+      this.setState({
+        loggedIn: log
+      })
     })
   }
 
@@ -29,16 +48,19 @@ class App extends React.Component {
     return (
       <div className="App">
         <Router>
-          <NavBar isLoggedIn={Auth.authenticate(null)}/>
+          <NavBar isLoggedIn={this.state.loggedIn}
+                  signout={this.signout}/>
 
         {/* conditionally render chat-overlay, show only when logged in */}
-        { Auth.authenticate(null)
+        { this.state.loggedIn
           ? (<Chat/>)
           : null 
         }
 
         <Route path="/signup" exact component={Register} />
-        <Route path="/login" exact component={Login} />
+        <Route path="/login" 
+               exact 
+               component={()=><Login loggedIn={this.loggedIn}/>} />
       
         {/* this route must protected */}
         <Route path="/dashboard">             
@@ -47,7 +69,7 @@ class App extends React.Component {
 
         {/* this route must have protected actions*/}
         <Route path="/homepage">             
-          <HomePage isLoggedIn={Auth.authenticate(null)}/>
+          <HomePage isLoggedIn={this.state.loggedIn}/>
         </Route>
 
         {/* redirect all non-specified routes. maybe have a 404 page*/}

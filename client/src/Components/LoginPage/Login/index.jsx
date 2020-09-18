@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom';
 import Auth from '../../../Auth';
 
-const Login = () => {
+const Login = (props) => {
     let history = useHistory();
 
     const [email, setEmail] = useState("");
@@ -21,7 +21,12 @@ const Login = () => {
                     setEmail('');
                     setPassword('');
                     // redirect to homepage
+
+                    // remove error warnings
                     setValid(true)
+                    // change navbar/ show chat
+                    props.loggedIn()
+                    // redirect to homepage
                     history.push('/homepage')
                 } else {
                     // prompt user to try again with inline error msg
