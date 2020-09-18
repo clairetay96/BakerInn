@@ -7,7 +7,8 @@ export default function SearchBar(props) {
     <div className={`search ${scope}`}>
       <input onChange={props.onChange}
               onKeyUp={props.onKeyUp}
-              value={props.value}/>
+              value={props.value}
+              placeholder="Keyword search"/>
     </div>
   )
 }
