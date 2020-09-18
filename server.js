@@ -1,6 +1,7 @@
 const routes = require('./routes')
 const mongo = require('mongodb')
 const modelFuncs = require('./models/bakerInn')
+const modelChatFuncs = require('./models/bakerInnChats')
 const path = require('path')
 const express = require('express')
 const app = express()
@@ -33,9 +34,10 @@ myClient.connect((err, db) => {
   //link up to bakerInn_db
   let bakerInnDB = db.db("bakerInn_db")
   let modelFuncsObj = modelFuncs(bakerInnDB)
+  let modelChatFuncsObj = modelFuncs(bakerInnDB)
 
   // set up routes
-  routes(app, { modelFuncsObj })
+  routes(app, { modelFuncsObj, modelChatFuncsObj })
 
 })
 
@@ -44,13 +46,41 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 
-
-io.on('connection', (socket) => { 
+//connect socket io
+io.on('connection', (socket) => {
   console.log('user connected');
+
+  //socket joins a room
+  socket.on('join', ({room_id})=>{
+    socket.join(room_id)
+  })
+
+  //on sendMessage event from client, message gets emitted to the room
+  socket.on('sendMessage', ({ message, sender_name, chatroom_id, userroom_id })=>{
+
+    //if there are 2 people in the room, send the message to the room. Else send a notification.
+    if(noOfClientsInRoom(chatroom_id) == 2) {
+
+        io.to(chatroom_id).emit('receiveMessage', { message, sender_name } )
+
+    } else if (noOfClientsInRoom(chatroom_id) < 2) {
+
+        socket.to(userroom_id).emit('receiveNotification', { sender_name, chatroom_id })
+
+    }
+
+  })
+
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
   })
+
+  function noOfClientsInRoom(room){
+    let clients = io.nsps['/'].adapter.rooms[room]
+    return Object.keys(clients).length
+  }
+
 });
 
 const PORT = process.env.PORT || 5000

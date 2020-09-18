@@ -59,6 +59,8 @@ module.exports = (db) => {
         }
     }
 
+
+
     let updateUserInfo = (updatedInfo, userID, callback) => {
         db.collection("users").updateOne({ _id: ObjectId(userID) }, { $set: updatedInfo })
             .then(res => {
@@ -106,21 +108,29 @@ module.exports = (db) => {
                 let allQueries = []
                 userListings.forEach((listingID) => {
                     allQueries.push(
-                        db.collection("listings").find({ _id: ObjectId(listingID) })
-                            .then(res => res)
+                        db.collection("listings").findOne({ _id: ObjectId(listingID) })
+                            .then(res1 => db.collection("users").findOne({ _id: ObjectId(res1.owner_id) }))
+                            .then(res2 => {
+                                res1.owner_info = {username: res2.username, user_id: res2._id}
+                                return res1
+                            })
                             .catch(err => { throw err })
                     )
                 })
                 return Promise.all(allQueries)
             })
-            .then(allListings => { callback(null, allListings) })
+            .then(allListings => { callback(null, allListings) }) //a list of containing objects, where each object represents a listing.
             .catch(err => { callback(err, null) })
     }
 
 
     let getOneListing = (listingID, callback) => {
         db.collection("listings").findOne({ _id: ObjectId(listingID) })
-            .then(res => callback(null, res))
+            .then(res => db.collection("users").findOne({ _id: ObjectId(res.owner_id) }))
+            .then(res1 => {
+                res.owner_info = {username: res1.username, user_id: res1._id}
+                callback(null, res)
+            })
             .catch(err => callback(err, null))
 
     }
