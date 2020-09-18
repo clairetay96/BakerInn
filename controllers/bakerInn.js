@@ -61,7 +61,7 @@ module.exports = (db) => {
             } else {
                 if (res.result) {
                     // issue token
-                    const payload = { email: res.email, username: res.username };
+                    const payload = { email: res.email, username: res.username, userId: res.id };
                     // encode data into token
                     const token = jwt.sign(payload, secret)
                     response.cookie('token', token).sendStatus(200)
@@ -115,19 +115,16 @@ module.exports = (db) => {
 
     let makeNewListing = (request, response) => {
         let newListingInput = request.body
-        // let userID; //from cookies
-        // newListingInput.user_id = userID
-        let username = request.username
-        newListingInput.username = username;
+        let userID = request.userId; //from cookies
+        newListingInput.user_id = userID
         console.log(newListingInput)
-        modelFuncs.makeNewListing(newListingInput, username, (err, res) => {
+        modelFuncs.makeNewListing(newListingInput, userID, (err, res) => {
             if (err) {
                 console.log(err)
                 response.send("error occurred.")
             } else {
                 response.send("success")
             }
-
         })
 
     }
