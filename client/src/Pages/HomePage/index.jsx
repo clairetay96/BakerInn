@@ -4,6 +4,7 @@ import { Route, Link } from 'react-router-dom';
 //remove Link
 
 import Carousel from '../../Components/Carousel';
+import IntroBanner from '../../Components/IntroBanner';
 import SearchBar from '../../Components/SearchBar';
 import SingleListingPage from '../SingeListingPage';
 
@@ -13,6 +14,7 @@ export default class HomePage extends Component {
 
     this.state = {
       search: '',
+      lastestListing: null
     }
   }
 
@@ -31,12 +33,22 @@ export default class HomePage extends Component {
     }
   }
 
+  componentDidMount() {
+    const url = '/api/listings'
+    
+    fetch(url)
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        lastestListing: res
+      })
+    })
+  }
+
   render() {
     let { isLoggedIn } = this.props;
     return (
       <div>
-        <h1>HomePage</h1>
-
         {/* search all pages and listings */}
         <SearchBar scope={"homepage"}
                    onChange={this.handleChange}
@@ -45,12 +57,14 @@ export default class HomePage extends Component {
 
         <Switch>
           <Route exact path="/homepage">
-          {isLoggedIn
-            ? ('Logged in')
-            : (<Carousel title={"What we offer"}/>)
+            
+          {isLoggedIn 
+            ? null
+            : (<IntroBanner />)
+           
           }
           <Carousel title={"New listing for ingredients and equipment"}
-                    lastestListing={[1,2,3,4,5]}/>
+                    lastestListing={this.state.lastestListing}/>
           </Route>
           <Route path="/homepage/listing/:id">
             <SingleListingPage/>

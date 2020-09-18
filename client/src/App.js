@@ -6,7 +6,7 @@ import Register from "./Pages/RegisterPage/"
 import NavBar from './Components/NavBar';
 import DashboardPage from './Pages/DashboardPage';
 import HomePage from './Pages/HomePage';
-import Chat from './Components/Chat';
+// import Chat from './Components/Chat';
 import Auth from './Auth';
 import AddListingPage from './Pages/AddListingPage'
 import ProtectedRoute from './Components/ProtectedRoute';
@@ -19,15 +19,11 @@ class App extends React.Component {
     this.state = {
       loggedIn: false
     }
-
-    // logged in is used for placeholder
-    // use proper auth to validate user
-    // placeholder user data, need to fetch data on component mount
   }
 
   loggedIn = () => {
     this.setState({
-        loggedIn: true
+      loggedIn: true
     })
   }
 
@@ -37,12 +33,19 @@ class App extends React.Component {
     })
   }
 
+  loggedIn = () => {
+    this.setState({
+      loggedIn: true
+    })
+  }
+
   componentDidMount() {
     // check on first opening if the user has logged in before
     // authenticate the token
-    Auth.authenticate((log) => {
+    Auth.authenticate()
+    .then(valid=>{
       this.setState({
-        loggedIn: log
+        loggedIn: valid
       })
     })
   }
@@ -52,41 +55,35 @@ class App extends React.Component {
       <div className="App">
         <Router>
           <NavBar isLoggedIn={this.state.loggedIn}
-                  signout={this.signout}/>
+            signout={this.signout} />
 
-        {/* conditionally render chat-overlay, show only when logged in */}
-        { this.state.loggedIn
-          ? (<Chat/>)
-          : null
-        }
+          {/* conditionally render chat-overlay, show only when logged in */}
+          {/* {this.state.loggedIn
+            ? (<Chat />)
+            : null
+          } */}
 
-        <Route path="/signup" exact component={Register} />
-        <Route path="/login"
-               exact
-               component={()=><Login loggedIn={this.loggedIn}/>} />
+          <Route path="/signup" exact component={Register} />
+          <Route path="/login"
+            exact
+            component={() => <Login loggedIn={this.loggedIn} />} />
 
-        {/* this route must protected */}
-        <ProtectedRoute path="/dashboard">
-          <DashboardPage/>
-        </ProtectedRoute>
+          {/* this route must protected */}
+          <ProtectedRoute path="/dashboard">
+            <DashboardPage />
+          </ProtectedRoute>
 
-        {/* this route must have protected actions*/}
-        <Route path="/homepage">
-          <HomePage isLoggedIn={this.state.loggedIn}/>
-        </Route>
-
-        <Route path="/test">
-            <Test listingId="5f64b6beda9369c9936bebfd"/>
-        </Route>
+          {/* this route must have protected actions*/}
+          <Route path="/homepage">
+            <HomePage isLoggedIn={this.state.loggedIn} />
+          </Route>
 
           {/* redirect all non-specified routes. maybe have a 404 page*/}
           <Route exact path="/">
             <Redirect to="/homepage" />
           </Route>
-
-          <Route path="/add-listing">
+    
           <AddListingPage />
-          </Route>
 
 
         </Router>
