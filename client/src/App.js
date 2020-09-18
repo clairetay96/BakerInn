@@ -10,6 +10,7 @@ import HomePage from './Pages/HomePage';
 import Auth from './Auth';
 import AddListingPage from './Pages/AddListingPage'
 import ProtectedRoute from './Components/ProtectedRoute';
+import Test from './Pages/tempTest'
 
 class App extends React.Component {
   constructor() {
@@ -81,7 +82,7 @@ class App extends React.Component {
           <Route exact path="/">
             <Redirect to="/homepage" />
           </Route>
-
+    
           <AddListingPage />
 
 
@@ -94,4 +95,3 @@ class App extends React.Component {
 }
 
 export default App;
-

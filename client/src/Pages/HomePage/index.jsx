@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Switch from 'react-bootstrap/esm/Switch';
-import { Route } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
+//remove Link
 
 import Carousel from '../../Components/Carousel';
 import IntroBanner from '../../Components/IntroBanner';
@@ -20,7 +21,7 @@ export default class HomePage extends Component {
   handleChange = (e) => {
     this.setState({
       search: e.target.value,
-    })  
+    })
   }
 
   handleSearch = (e) => {
@@ -56,15 +57,18 @@ export default class HomePage extends Component {
 
         <Switch>
           <Route exact path="/homepage">
+            
           {isLoggedIn 
             ? null
             : (<IntroBanner />)
+           
           }
           <Carousel title={"New listing for ingredients and equipment"}
                     lastestListing={this.state.lastestListing}/>
           </Route>
           <Route path="/homepage/listing/:id">
             <SingleListingPage/>
+
           </Route>
         </Switch>
       </div>
