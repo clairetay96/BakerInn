@@ -32,44 +32,44 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        {/* <Router> */}
-        {/* <NavBar isLoggedIn={this.state.loggedIn} />
+        <Router>
+          <NavBar isLoggedIn={this.state.loggedIn} />
           <p><Link to="/signup">Sign Up</Link></p>
           <p><Link to="/login">Login</Link></p>
-          <p><Link to="/test">Test</Link></p> */}
+          <p><Link to="/test">Test</Link></p>
 
 
-        {/* conditionally render chat-overlay, show only when logged in */}
-        {/* {this.state.loggedIn
+          {/* conditionally render chat-overlay, show only when logged in */}
+          {this.state.loggedIn
             ? (<Chat />)
             : null
-          } */}
+          }
 
-        {/* this route must protected */}
-        {/* <Route path="/dashboard">
+          {/* this route must protected */}
+          <Route path="/dashboard">
             <DashboardPage />
-          </Route> */}
+          </Route>
 
-        {/* this route must have protected actions*/}
-        {/* <Route path="/homepage">
+          {/* this route must have protected actions*/}
+          <Route path="/homepage">
             <HomePage isLoggedIn={this.state.loggedIn} />
-          </Route> */}
+          </Route>
 
-        {/* redirect all non-specified routes. maybe have a 404 page*/}
-        {/* <Route exact path="/">
+          {/* redirect all non-specified routes. maybe have a 404 page*/}
+          <Route exact path="/">
             <Redirect to="/homepage" />
-          </Route> */}
+          </Route>
 
-        {/* <Switch>
+          <Switch>
             <Route path="/signup" exact component={Register} />
             <Route path="/login" exact component={Login} />
             <Route path="/test" exact component={Test} />
-          </Switch> */}
+          </Switch>
 
 
-        {/* </Router> */}
+        </Router>
 
-        <AddListingPage />
+        {/* <AddListingPage /> */}
       </div>
     );
   }

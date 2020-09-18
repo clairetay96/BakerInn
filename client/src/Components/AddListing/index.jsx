@@ -8,14 +8,14 @@ const AddListing = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // const url = "/api/listings/new"
+        const url = "/api/listings/new"
         fetch(url, {
             method: "POST",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ item, description, price, category, location })
+            body: JSON.stringify({ item: values.item, description: values.description, price: values.price, category: values.category, location: values.location })
         })
             .then((res) => console.log(res))
             .catch((err) => console.log(err))
