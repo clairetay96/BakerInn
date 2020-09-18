@@ -113,9 +113,15 @@ module.exports = (db) => {
     }
 
     //put the new listing in listings collection, add listing to user info.
-    let makeNewListing = (newListingInput, userID, callback) => {
+    // temporary changes search users collection by username
+    let makeNewListing = (newListingInput, username, callback) => {
+        // db.collection("listings").insertOne(newListingInput)
+        //     .then(res => db.collection("users").updateOne({ _id: ObjectId(userID) }, { $push: { listings: res.insertedId } }))
+        //     .then(res => callback(null, res))
+        //     .catch(err => callback(err, null))
+
         db.collection("listings").insertOne(newListingInput)
-            .then(res => db.collection("users").updateOne({ _id: ObjectId(userID) }, { $push: { listings: res.insertedId } }))
+            .then(res => db.collection("users").updateOne({ username: username }, { $push: { listings: res.insertedId } }))
             .then(res => callback(null, res))
             .catch(err => callback(err, null))
     }
