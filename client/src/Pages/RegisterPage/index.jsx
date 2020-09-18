@@ -1,25 +1,25 @@
 import React, { Component } from 'react'
-import Login from "../../Components/LoginPage/Login"
+import Register from "../../Components/LoginPage/Register"
 
-export default class LoginPage extends Component {
+export default class RegisterPage extends Component {
     render() {
         return (
             <div>
                 <header>
                     Logo
                     BakerInn
-                </header>
+                    </header>
                 <div>
-                    <h3>Login</h3>
-                    <p>Dont have an account? <a href="#">Sign Up</a></p>
-                    <Login />
+                    <h3>Register</h3>
+                    <p>Already have an account?<a href="#">Sign In</a></p>
+                    <Register />
                     <div>
                         img
-                    </div>
+                        </div>
                 </div>
                 <footer>
                     footer
-                </footer>
+                    </footer>
             </div>
         )
     }

@@ -1,8 +1,11 @@
 import React from 'react';
+import { Link, Route, Switch, Redirect, BrowserRouter as Router } from "react-router-dom"
 import './App.css';
+import Login from "./Pages/LoginPage/"
+import Register from "./Pages/RegisterPage/"
+import Test from "./Pages/TestPage"
 import NavBar from './Components/NavBar';
 import DashboardPage from './Pages/DashboardPage';
-import { Route, Redirect } from 'react-router-dom'
 import HomePage from './Pages/HomePage';
 import Chat from './Components/Chat';
 
@@ -25,12 +28,15 @@ class App extends React.Component {
     })
   }
 
-  render(){
+  render() {
     return (
       <div className="App">
-        
-        {/* always show the overlays 1. nav 2. chat 3. add listing? */}
-        <NavBar isLoggedIn={this.state.loggedIn}/>
+        <Router>
+          <NavBar isLoggedIn={this.state.loggedIn}/>
+          <p><Link to="/signup">Sign Up</Link></p>
+          <p><Link to="/login">Login</Link></p>
+          <p><Link to="/test">Test</Link></p>
+
 
         {/* conditionally render chat-overlay, show only when logged in */}
         { this.state.loggedIn
@@ -52,6 +58,15 @@ class App extends React.Component {
         <Route exact path="/">
           <Redirect to="/homepage" />
         </Route>
+
+          <Switch>
+            <Route path="/signup" exact component={Register} />
+            <Route path="/login" exact component={Login} />
+            <Route path="/test" exact component={Test} />
+          </Switch>
+      
+      
+        </Router>
       </div>
     );
   }
