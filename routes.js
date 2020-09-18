@@ -4,8 +4,11 @@ module.exports = (app, db) => {
 
   const bakerIn = require('./controllers/bakerInn')(db);
 
+  // ping to see if the server is running
+  app.get('/api/ping', bakerIn.ping)
+
   // used middleware to check authorization
-  app.get('/api', withAuth, bakerIn.ping);
+  app.get('/api', withAuth, bakerIn.validate);
 
 
   //user CRUD operations
