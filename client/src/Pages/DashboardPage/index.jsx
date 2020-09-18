@@ -10,13 +10,41 @@ export default class DashboardPage extends Component {
 
     this.state = {
       search: '',
-      user: 'User0',
+      user: '5f6347cd5ed305cd33dda22f',
       userLendingListings: {
         available: [1,2,3,4,5],
         loan: [6,7,8,9,10],
       },
       userBorrowing: [11,12,13,14,15],
     }
+  }
+
+  componentDidMount() {
+    this.pingServer()
+    this.fetchUserBorrowesListing()
+    this.fetchUserPostedListing()
+  }
+
+  pingServer = async () => {
+    const res = await fetch('/api')
+    const data = await res.text()
+    console.log(data);
+  }
+
+  fetchUserPostedListing = async () => {
+    const url = `/api/listings/user/${this.state.user}`;
+    
+    let res = await fetch(url)
+    // res = await res.json()
+    console.log(res);
+  }
+
+  fetchUserBorrowesListing = async () => {
+    const url = `/api/listings/user/${this.state.user}/borrowed`;
+
+    let res = await fetch(url)
+    // res = await res.json()
+    console.log(res);
   }
 
   handleChange = (e) => {
