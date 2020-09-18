@@ -44,7 +44,7 @@ export default class HomePage extends Component {
         <Switch>
           <Route exact path="/homepage">
           {isLoggedIn 
-            ? ('Logged in')
+            ? null
             : (<IntroBanner />)
           }
           <Carousel title={"New listing for ingredients and equipment"}

@@ -78,8 +78,8 @@ const sendMessage = (event) => {
         <div>Room name</div>
         <div className="message-board">Message</div>
         <form>
-          <input onChange={(event)=>{setMessage(event.target.value)}} onKeyPress={(event)=>{ event.keyCode === 13 ? sendMessage(event) : null }}/>
-          <button onClick={(event) => {sendMessage(event)}}>Send</button>
+          {/* <input onChange={(event)=>{setMessage(event.target.value)}} onKeyPress={(event)=>{ event.keyCode === 13 ? sendMessage(event) : null }}/>
+          <button onClick={(event) => {sendMessage(event)}}>Send</button> */}
         </form>
       </div>
     </div>
