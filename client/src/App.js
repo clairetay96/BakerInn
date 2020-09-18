@@ -18,12 +18,13 @@ class App extends React.Component {
     this.state = {
       loggedIn: false
     }
-
-    // logged in is used for placeholder
-    // use proper auth to validate user
-    // placeholder user data, need to fetch data on component mount
   }
 
+  loggedIn = () => {
+    this.setState({
+      loggedIn: true
+    })
+  }
 
   signout = () => {
     this.setState({
@@ -40,9 +41,10 @@ class App extends React.Component {
   componentDidMount() {
     // check on first opening if the user has logged in before
     // authenticate the token
-    Auth.authenticate((log) => {
+    Auth.authenticate()
+    .then(valid=>{
       this.setState({
-        loggedIn: log
+        loggedIn: valid
       })
     })
   }
