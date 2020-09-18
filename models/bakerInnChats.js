@@ -38,7 +38,7 @@ module.exports = (db) => {
                     id: buyerID
                 },
                 {
-                    field: "name",
+                    field: "item",
                     table: "listings",
                     id: listingID
                 }]
@@ -46,7 +46,7 @@ module.exports = (db) => {
 
                 queryParams.forEach((item) => {
                     allQueries.push(
-                        db.collections(item.table).findOne({_id: ObjectId(item._id)})
+                        db.collections(item.table).findOne({_id: ObjectId(item.id)})
                             .then(res => res[item.field])
                             .catch(err => {throw err}))
                 })
@@ -58,7 +58,7 @@ module.exports = (db) => {
             .then(res1 => {
                 res.owner_username = res1[0]
                 res.buyer_username = res1[1]
-                res.listing_name = res1[2]
+                res.listing_item = res1[2]
                 callback(null, res)
             })
             .catch(err => {callback(err, null)})

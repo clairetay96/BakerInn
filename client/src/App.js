@@ -24,6 +24,11 @@ class App extends React.Component {
     // placeholder user data, need to fetch data on component mount
   }
 
+  loggedIn = () => {
+    this.setState({
+        loggedIn: true
+    })
+  }
 
   signout = () => {
     this.setState({
@@ -51,28 +56,23 @@ class App extends React.Component {
         {/* conditionally render chat-overlay, show only when logged in */}
         { this.state.loggedIn
           ? (<Chat/>)
-          : null 
+          : null
         }
 
         <Route path="/signup" exact component={Register} />
-        <Route path="/login" 
-               exact 
+        <Route path="/login"
+               exact
                component={()=><Login loggedIn={this.loggedIn}/>} />
-      
+
         {/* this route must protected */}
-        <ProtectedRoute path="/dashboard">             
+        <ProtectedRoute path="/dashboard">
           <DashboardPage/>
         </ProtectedRoute>
 
         {/* this route must have protected actions*/}
-        <Route path="/homepage">             
+        <Route path="/homepage">
           <HomePage isLoggedIn={this.state.loggedIn}/>
         </Route>
-
-          {/* this route must have protected actions*/}
-          <Route path="/homepage">
-            <HomePage isLoggedIn={Auth.authenticate(null)} />
-          </Route>
 
           {/* redirect all non-specified routes. maybe have a 404 page*/}
           <Route exact path="/">
@@ -89,4 +89,3 @@ class App extends React.Component {
 }
 
 export default App;
-

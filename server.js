@@ -34,7 +34,7 @@ myClient.connect((err, db) => {
   //link up to bakerInn_db
   let bakerInnDB = db.db("bakerInn_db")
   let modelFuncsObj = modelFuncs(bakerInnDB)
-  let modelChatFuncsObj = modelFuncs(bakerInnDB)
+  let modelChatFuncsObj = modelChatFuncs(bakerInnDB)
 
   // set up routes
   routes(app, { modelFuncsObj, modelChatFuncsObj })
