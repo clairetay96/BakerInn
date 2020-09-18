@@ -170,7 +170,6 @@ module.exports = (db) => {
     let expressInterest = (request, response) => {
         let listingID = request.params.id
         let userID = request.userId
-        console.log(listingID, userID, "----LISTING, USER")
         modelFuncs.expressInterest(listingID, userID, (err, res)=>{
             if(err){
                 console.log(err)

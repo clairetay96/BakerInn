@@ -55,10 +55,10 @@ class App extends React.Component {
                   signout={this.signout}/>
 
         {/* conditionally render chat-overlay, show only when logged in */}
-        { this.state.loggedIn
+        {/* this.state.loggedIn
           ? (<Chat/>)
           : null
-        }
+        */}
 
         <Route path="/signup" exact component={Register} />
         <Route path="/login"
