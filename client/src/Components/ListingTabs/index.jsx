@@ -5,6 +5,7 @@ import { Tab, Tabs, Row, Col } from "react-bootstrap";
 import ListingDetail from '../ListingDetail';
 import { Link, Route, Switch } from 'react-router-dom';
 import ListingDetailPage from '../../Pages/ListingDetailPage';
+import EditSingleListingPage from '../../Pages/EditSingleListingPage';
 
 
 export default function ListingTabs(props) {
@@ -34,17 +35,33 @@ export default function ListingTabs(props) {
               </Col>
             </Row>
           </Tab>
-          <Tab eventKey="user-listing" title="My Listing">
-            <ListingDetail allListings={available}/>
+          <Tab eventKey="user-listing" title="My Available Listing">
+            <div>
+              <Row className="ml-2 mr-2">
+                <div>
+                  Total listing: xxx
+                </div>
+                <button>Add new listing</button>
+              </Row>
+              <ListingDetail allListings={available}
+                           edit={true}/>
+            </div>
           </Tab>
         </Tabs>
       </Route>
         <Route path="/dashboard/borrowing">
-          <ListingDetailPage nextpage={"lending"}/>
+          <ListingDetailPage allListings={userBorrowing} 
+                             nextpage={"lending"}
+                             edit={false}/>
         </Route>
         <Route path="/dashboard/lending">
-          <ListingDetailPage nextpage={"borrowing"}/>
+          <ListingDetailPage allListings={loan} 
+                             nextpage={"borrowing"}
+                             edit={true}/>
         </Route>    
+        <Route path="/dashboard/listing/:id">
+          <EditSingleListingPage />
+        </Route>  
     </Switch>
   )
 }

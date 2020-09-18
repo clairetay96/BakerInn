@@ -18,6 +18,7 @@ if (process.env.NODE_ENV === "production") {
 app.use(methodOverride('_method'));
 app.use(cookieParser());
 
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -38,10 +39,25 @@ myClient.connect((err, db) => {
 
 })
 
+//initialize io to receive connections
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
+
+
+io.on('connection', (socket) => { 
+  console.log('user connected');
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  })
+});
+
 const PORT = process.env.PORT || 5000
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Listening on Port: ${PORT}`);
 })
+
 
 //close db connection when app is closed.
 let onClose = function () {

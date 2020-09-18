@@ -1,0 +1,19 @@
+.chat-root {
+  display: flex;  
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
+
+.chat-window {
+  height: 350px;
+  width: 265px;
+  border: 1px solid rebeccapurple;
+}
+
+.message-board {
+  margin: 10px auto;
+  height: 75%;
+  width: 250px;
+  border: 1px solid rebeccapurple;
+}

@@ -6,8 +6,8 @@ import ListingDetail from '../../Components/ListingDetail'
 
 export default function ListingDetailPage(props) {
   let history = useHistory()
-  let {nextpage : next} = props
-  
+  let {nextpage : next, allListings, edit} = props
+
   const handleBack = () => {
     history.push("/dashboard")
   }
@@ -25,7 +25,8 @@ export default function ListingDetailPage(props) {
         <button onClick={handleNext}>{next}</button>
       </Col>
       <Col xs={12}>
-        <ListingDetail />
+        <ListingDetail allListings={allListings}
+                       edit={edit}/>
       </Col>
     </Row>
   )

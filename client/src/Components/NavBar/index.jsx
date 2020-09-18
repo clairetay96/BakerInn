@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Navbar } from 'react-bootstrap'
+import { Navbar, Nav } from 'react-bootstrap'
+import { Link } from 'react-router-dom';
 
 export default class NavBar extends Component {
   render() {
@@ -7,12 +8,20 @@ export default class NavBar extends Component {
 
     return (
       <Navbar bg="dark" variant="dark">
-        <Navbar.Brand>
-          BakeInn
-        </Navbar.Brand>
+        <Link to='/homepage'>
+          <Navbar.Brand>
+            BakeInn
+          </Navbar.Brand>
+        </Link>
+        {isLoggedIn 
+         ? (<Nav>
+              <Link to='/dashboard'>Dashboard</Link>
+              <Link to='/homepage'>Homepage</Link>
+            </Nav>)
+         : null}
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
-            {isLoggedIn ? "Icon" : "Log In"}
+            {isLoggedIn ? "Icon Sign Out" : "Log In"}
           </Navbar.Text>
         </Navbar.Collapse>
       </Navbar>
