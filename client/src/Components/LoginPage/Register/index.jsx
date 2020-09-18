@@ -1,25 +1,40 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom';
+import Auth from '../../../Auth';
 
 const Register = () => {
+    let history = useHistory()
 
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [isValid, setValid] = useState(true);
+    const [error, setError] = useState('Try again')
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (email !== '' &&
+            password !== '' &&
+            username !== '') {
 
-        const url = "/api/users/new"
-        fetch(url, {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ email, username, password })
-        })
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err))
+            Auth.register(email, username, password, (isValid, err) => {
+                if (isValid) {
+                    setEmail('');
+                    setPassword('');
+                    setUsername('');
+                    // redirect to homepage
+                    setValid(true)
+                    history.push('/login')
+                } else {
+                    // prompt user to try again with inline error msg
+                    // temp alert for debugging
+                    setError(err)
+                    setValid(false)
+                }
+            })
+        } else {
+            setValid(false)
+        }
     }
 
     return (
@@ -46,6 +61,11 @@ const Register = () => {
                             name="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)} />
+                    </div>
+                    <div style={isValid 
+                                ? {display: 'hidden'} 
+                                : {display: 'block'}}>
+                        {error}
                     </div>
                     <button type="submit">Register</button>
                 </form>

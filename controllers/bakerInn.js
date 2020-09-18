@@ -43,12 +43,32 @@ module.exports = (db) => {
         let newUserInfo = request.body
         modelFuncs.createNewUser(newUserInfo, (err, res) => {
             if (err) {
-                response.send("Error occurred.")
+                response.status(500).send(err)
             } else {
-                console.log(res)
+                response.status(201).send('user created')
             }
         })
+    }
 
+    let login = (request, response) => {
+        let userLoginInfo = request.body
+        console.log("userLoginInfo", userLoginInfo)
+        modelFuncs.userLogin(userLoginInfo, (err, res) => {
+            if (err) {
+                response.status(500).send(err)
+            } else {
+                if (res.result) {
+                    // issue token
+                    const payload = { email: res.email, username: res.username };
+                    // encode data into token
+                    const token = jwt.sign(payload, secret)
+                    response.cookie('token', token).sendStatus(200)
+                    console.log("login successful")
+                } else {
+                    response.status(401).send('wrong password')
+                }
+            }
+        })
     }
 
     let editUser = (request, response) => {
@@ -141,28 +161,6 @@ module.exports = (db) => {
                 response.send("Error occurred.")
             } else {
                 response.send(res)
-            }
-        })
-    }
-
-    let login = (request, response) => {
-        let userLoginInfo = request.body
-        console.log("userLoginInfo", userLoginInfo)
-        modelFuncs.userLogin(userLoginInfo, (err, res) => {
-            if (err) {
-                response.send("Error occurred.")
-            } else {
-                if (res.result) {
-                    // issue token
-                    const payload = { email: res.email, username: res.username };
-                    // encode data into token
-                    const token = jwt.sign(payload, secret)
-                    response.cookie('token', token).sendStatus(200)
-                    console.log(token)
-                    console.log("login successful")
-                } else {
-                    console.log("wrong password!")
-                }
             }
         })
     }
