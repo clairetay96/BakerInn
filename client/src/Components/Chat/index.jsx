@@ -4,62 +4,68 @@ import io from 'socket.io-client'
 
 let socket;
 
-export default function Chat({ chat_id, user_id }) {
+export default function Chat({ chat_id }) {
 
   //where chat_id is the chat_id and user_id is the logged in user_id
 
   const ENDPOINT = "localhost:5000"
+
   const cookie = document.cookie
-  const userID = JSON.parse(atob(cookie.split(".")[1])).iat
-  console.log(userID)
+  const user_id = JSON.parse(atob(cookie.split(".")[1])).userId
+
   const [message, setMessage] = useState('')
+
   const [messages, setMessages] = useState([])
   const [sender, setSender] = useState({}) //object containing user_id, username and whether this user is the owner of the item
   const [receiver, setReceiver] = useState({})
+  const [listing, setListing] = useState({}) //object containing listing_id, listing name
 
 
-  useEffect(()=>{
-    //fetch chat data from database
-    //fetch previous messages from database
-    fetch(`/api/chats/${chat_id}`)
-        .then(res => {
-            let sender_id = res.buyer_id
-            let sender_username = res.buyer_username
-            let receiver_id = res.owner_id
-            let receiver_username = res.owner_username
+  // useEffect(()=>{
+  //   //fetch chat data from database
+  //   //fetch previous messages from database
+  //   fetch(`/api/chats/${chat_id}`)
+  //       .then(res => {
+  //           let sender_id = res.buyer_id
+  //           let sender_username = res.buyer_username
+  //           let receiver_id = res.owner_id
+  //           let receiver_username = res.owner_username
 
-            if(user_id === res.owner_id) {
-                sender_id = res.owner_id
-                sender_username = res.owner_username
-                receiver_id = res.buyer_id
-                receiver_username = res.buyer_username
+  //           if(user_id === res.owner_id) {
+  //               sender_id = res.owner_id
+  //               sender_username = res.owner_username
+  //               receiver_id = res.buyer_id
+  //               receiver_username = res.buyer_username
 
-            }
+  //           }
 
-            let listing_id = res.listing_id
-            let listing_item = res.listing_item
+  //           setSender(
+  //               {
+  //                   user_id: sender_id,
+  //                   isOwner: sender_id ===user_id,
+  //                   username: sender_username
+  //               })
 
-            // setSender(
-            //     {
-            //         user_id: sender_id,
-            //         isOwner:
-            //         username: sender_username
-            //     })
+  //           setReceiver(
+  //               {
+  //                   user_id: receiver_id,
+  //                   isOwner: receiver_id===user_id,
+  //                   username: receiver_username
+  //               })
 
-            // setReceiver(
-            //     {
-            //         user_id:
-            //         isOwner:
-            //         username:
-            //     })
+  //           setListing(
+  //           {
+  //               listing_id: res.listing_id,
+  //               listing_item: res.listing_item
+  //           })
 
-        })
-        .catch(err => console.log(err))
+  //       })
+  //       .catch(err => console.log(err))
 
-    fetch(`/api/chats/${chat_id}/messages`)
-    //set messages state to contain messages.
+  //   fetch(`/api/chats/${chat_id}/messages`)
+  //   //set messages state to contain messages.
 
-  }, [])
+  // }, [])
 
   useEffect(()=>{
     //socket to join chat room - emit
@@ -73,7 +79,7 @@ export default function Chat({ chat_id, user_id }) {
   useEffect(()=>{
     //socket to  receive message - on
     socket.on('receiveMessage', ( { message, sender_name } )=>{
-        setMessages([...messages, message])
+        setMessages([...messages, { message, sender_name }])
     })
 
 
@@ -93,7 +99,7 @@ const sendMessage = (event) => {
     //emit message
     socket.emit('sendMessage', messageInfo)
 
-    //write message to database - fetch post request.
+    //write message to database
     let url = `/api/chats/${chat_id}/new-message`
     let requestOptions = {
         method: "POST",
@@ -135,8 +141,8 @@ const sendMessage = (event) => {
       <div className="chat-window">
         <div>Room name</div>
         <div className="message-board">Message</div>
-        <form>
-          <input type="text"/>
+        <form onSubmit={(event)=>{sendMessage(event)}}>
+          <input type="text" name="message" onChange={(event)=>{setMessage(event.target.value)}}/>
           <input type="submit" value="Send" />
         </form>
       </div>

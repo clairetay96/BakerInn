@@ -5,9 +5,19 @@ const ObjectId = mongo.ObjectId
 
 module.exports = (db) => {
 
+    //create new chat and then push to both users 'chats'
     let newChat = (newChatInfo, callback) => {
         db.collections("chats").insertOne(newChatInfo)
-            .then(res=> {callback(null, res)})
+            .then(res=> {
+                return db.collections("users").update(
+                    {_id:
+                        {
+                            $in: [ ObjectId(newChatInfo.owner_id),
+                            ObjectId(newChatInfo.buyer_id) ]
+                        }
+                    })
+            })
+            .then(res1=> {callback(null, res1)})
             .catch(err => {callback(err,null)})
     }
 
@@ -21,7 +31,7 @@ module.exports = (db) => {
     let getChatInfo = (chatID, callback) => {
         db.collections("chats").findOne({_id: ObjectId(chatID)})
             .then(res => {
-                let allQueries = []
+                let allQueries = [res]
                 let ownerID = res.owner_id
                 let buyerID = res.buyer_id
                 let listingID = res.listing_id
@@ -52,14 +62,14 @@ module.exports = (db) => {
                 })
 
 
-                return Promise.all(allQueries)
+                return Promise.all(allQueries) //returns a list with [chatInfo, ownerName, buyerName, listingName]
 
             })
             .then(res1 => {
-                res.owner_username = res1[0]
-                res.buyer_username = res1[1]
-                res.listing_item = res1[2]
-                callback(null, res)
+                res1[0].owner_username = res1[1]
+                res1[0].buyer_username = res1[2]
+                res1[0].listing_item = res1[3]
+                callback(null, res1)
             })
             .catch(err => {callback(err, null)})
     }

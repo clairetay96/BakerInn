@@ -10,6 +10,7 @@ import Chat from './Components/Chat';
 import Auth from './Auth';
 import AddListingPage from './Pages/AddListingPage'
 import ProtectedRoute from './Components/ProtectedRoute';
+import Test from './Pages/tempTest'
 
 class App extends React.Component {
   constructor() {
@@ -74,15 +75,23 @@ class App extends React.Component {
           <HomePage isLoggedIn={this.state.loggedIn}/>
         </Route>
 
+        <Route path="/test">
+            <Test listingId="5f64b6beda9369c9936bebfd"/>
+        </Route>
+
           {/* redirect all non-specified routes. maybe have a 404 page*/}
           <Route exact path="/">
             <Redirect to="/homepage" />
           </Route>
 
+          <Route path="/add-listing">
+          <AddListingPage />
+          </Route>
+
 
         </Router>
 
-        <AddListingPage />
+
       </div>
     );
   }
