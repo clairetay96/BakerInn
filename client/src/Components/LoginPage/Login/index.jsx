@@ -1,24 +1,38 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom';
+import Auth from '../../../Auth';
 
 const Login = () => {
+    let history = useHistory();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isValid, setValid] = useState(true);
+    const [error, setError] = useState('Try again')
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
+        if (password !== '' &&
+            email !== '') {
 
-        const url = "/api/users/login"
-        fetch(url, {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ email, password })
-        })
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err))
+            Auth.login(email, password, (isValid, err) => {
+                if (isValid) {
+                    setEmail('');
+                    setPassword('');
+                    // redirect to homepage
+                    setValid(true)
+                    history.push('/homepage')
+                } else {
+                    // prompt user to try again with inline error msg
+                    // temp alert for debugging
+                    setError(err)
+                    setValid(false)
+                }
+            })
+        } else {
+            setValid(false)
+        }
     }
 
     return (
@@ -38,6 +52,11 @@ const Login = () => {
                             name="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)} />
+                    </div>
+                    <div style={isValid 
+                                ? {visibility: 'hidden'} 
+                                : {visibility: 'visible'}}>
+                        {error}
                     </div>
                     <button type="submit">Login</button>
                 </form>

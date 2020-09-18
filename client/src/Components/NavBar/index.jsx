@@ -21,7 +21,9 @@ export default class NavBar extends Component {
          : null}
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
-            {isLoggedIn ? "Icon Sign Out" : "Log In"}
+            {isLoggedIn 
+              ? "Icon Sign Out" 
+              : (<Link to="/login">Log In</Link>)}
           </Navbar.Text>
         </Navbar.Collapse>
       </Navbar>
