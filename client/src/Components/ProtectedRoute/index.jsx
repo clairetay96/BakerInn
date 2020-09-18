@@ -9,10 +9,10 @@ function ProtectedRoute({ children, ...rest }) {
         <Route
             {...rest}
             render={({ location }) =>{
-                return Auth.authenticate() 
+                return Auth.authenticate() === true 
                 ? (children) 
-                : (<Redirect to="/homepage"></Redirect>)
-              }}
+                : (<Redirect to="/homepage"/>)
+                }}
         />
     )
 }
