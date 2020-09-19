@@ -1,16 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './index.css'
 
-import { Tab, Tabs, Row, Col } from "react-bootstrap";
+import { Tab, Tabs, Row, Col, Button, Modal } from "react-bootstrap";
 import ListingDetail from '../ListingDetail';
 import { Link, Route, Switch } from 'react-router-dom';
 import ListingDetailPage from '../../Pages/ListingDetailPage';
 import EditSingleListingPage from '../../Pages/EditSingleListingPage';
 import ProtectedRoute from '../ProtectedRoute';
 
+import AddListingPage from "../../Pages/AddListingPage";
+
 
 export default function ListingTabs(props) {
-  let { available=null, loan=null, userBorrowing=null } = props.listingData
+  let { available = null, loan = null, userBorrowing = null } = props.listingData
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   return (
     <Switch>
       <ProtectedRoute exact path="/dashboard">
@@ -42,27 +50,37 @@ export default function ListingTabs(props) {
                 <div>
                   Total listing: xxx
                 </div>
-                <button>Add new listing</button>
+                <Button variant="primary" onClick={handleShow}>Add New Listing</Button>
+                <Modal show={show} onHide={handleClose}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Add Listing</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body><AddListingPage /></Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>Close</Button>
+                  </Modal.Footer>
+                </Modal>
               </Row>
               <ListingDetail allListings={available}
-                           edit={true}/>
+                edit={true} />
             </div>
           </Tab>
         </Tabs>
       </ProtectedRoute>
-        <Route path="/dashboard/borrowing">
-          <ListingDetailPage allListings={userBorrowing} 
-                             nextpage={"lending"}
-                             edit={false}/>
-        </Route>
-        <Route path="/dashboard/lending">
-          <ListingDetailPage allListings={loan} 
-                             nextpage={"borrowing"}
-                             edit={true}/>
-        </Route>    
-        <Route path="/dashboard/listing/:id">
-          <EditSingleListingPage />
-        </Route>  
+      <Route path="/dashboard/borrowing">
+        <ListingDetailPage allListings={userBorrowing}
+          nextpage={"lending"}
+          edit={false} />
+      </Route>
+      <Route path="/dashboard/lending">
+        <ListingDetailPage allListings={loan}
+          nextpage={"borrowing"}
+          edit={true} />
+      </Route>
+      <Route path="/dashboard/listing/:id">
+        <EditSingleListingPage />
+      </Route>
+      {/* <Route path="/dashboard/addlisting" component={AddListingPage} /> */}
     </Switch>
   )
 }
