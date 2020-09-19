@@ -12,7 +12,7 @@ const Login = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         if (password !== '' &&
             email !== '') {
 
@@ -58,9 +58,9 @@ const Login = (props) => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)} />
                     </div>
-                    <div style={isValid 
-                                ? {visibility: 'hidden'} 
-                                : {visibility: 'visible'}}>
+                    <div style={isValid
+                        ? { visibility: 'hidden' }
+                        : { visibility: 'visible' }}>
                         {error}
                     </div>
                     <button type="submit">Login</button>

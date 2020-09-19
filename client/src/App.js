@@ -42,11 +42,11 @@ class App extends React.Component {
     // check on first opening if the user has logged in before
     // authenticate the token
     Auth.authenticate()
-    .then(valid=>{
-      this.setState({
-        loggedIn: valid
+      .then(valid => {
+        this.setState({
+          loggedIn: valid
+        })
       })
-    })
   }
 
   render() {
@@ -72,14 +72,11 @@ class App extends React.Component {
             <DashboardPage />
           </ProtectedRoute>
 
-<<<<<<< HEAD
           {/* this route must have protected actions*/}
           <Route path="/homepage">
             <HomePage isLoggedIn={this.state.loggedIn} />
           </Route>
 
-=======
->>>>>>> upstream/master
           {/* redirect all non-specified routes. maybe have a 404 page*/}
           <Route exact path="/">
             <Redirect to="/homepage" />

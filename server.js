@@ -34,7 +34,7 @@ myClient.connect((err, db) => {
   //link up to bakerInn_db
   let bakerInnDB = db.db("bakerInn_db")
   let modelFuncsObj = modelFuncs(bakerInnDB)
-  let modelChatFuncsObj = modelFuncs(bakerInnDB)
+  let modelChatFuncsObj = modelChatFuncs(bakerInnDB)
 
   // set up routes
   routes(app, { modelFuncsObj, modelChatFuncsObj })
@@ -60,7 +60,7 @@ io.on('connection', (socket) => {
 
     //if there are 2 people in the room, send the message to the room. Else send a notification.
     if(noOfClientsInRoom(chatroom_id) == 2) {
-
+        console.log(sender_name)
         io.to(chatroom_id).emit('receiveMessage', { message, sender_name } )
 
     } else if (noOfClientsInRoom(chatroom_id) < 2) {

@@ -62,9 +62,9 @@ const Register = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)} />
                     </div>
-                    <div style={isValid 
-                                ? {display: 'hidden'} 
-                                : {display: 'block'}}>
+                    <div style={isValid
+                        ? { visibility: 'hidden' }
+                        : { visibility: 'visible' }}>
                         {error}
                     </div>
                     <button type="submit">Register</button>

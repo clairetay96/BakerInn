@@ -76,7 +76,7 @@ module.exports = (db) => {
     let editUser = (request, response) => {
         //some authentication required
         let updatedUserInfo = request.body
-        let userID = request.params.id //would rather use cookies here?
+        let userID = request.userId
         modelFuncs.updateUserInfo(updatedUserInfo, userID, (err, res) => {
             if (err) {
                 console.log(err)
@@ -90,7 +90,7 @@ module.exports = (db) => {
 
     let deleteUser = (request, response) => {
         //some authentication required
-        let userID = request.params.id
+        let userID = request.userId
         modelFuncs.deleteUser(userID, (err, res) => {
             if (err) {
                 console.log(err)
@@ -116,7 +116,7 @@ module.exports = (db) => {
     let makeNewListing = (request, response) => {
         let newListingInput = request.body
         let userID = request.userId; //from cookies
-        newListingInput.user_id = userID
+        newListingInput.owner_id = userID
         console.log(newListingInput)
         modelFuncs.makeNewListing(newListingInput, userID, (err, res) => {
             if (err) {
@@ -133,7 +133,7 @@ module.exports = (db) => {
         let userID = request.params.userid
         modelFuncs.getUserListing(userID, false, (err, res) => {
             if (err) {
-                console.log(error)
+                console.log(err)
                 response.send("Error occurred.")
             } else {
                 response.send(res)
@@ -144,7 +144,7 @@ module.exports = (db) => {
     //gets all of a user's currently borrowed listings.
     let getUserBorrowed = (request, response) => {
         //some authentication required - only a user can see their borrowed items
-        let userID = request.params.userid
+        let userID = request.userId
         modelFuncs.getUserListing(userID, true, (err, res) => {
             if (err) {
                 console.log(err)
@@ -167,6 +167,21 @@ module.exports = (db) => {
         })
     }
 
+    let expressInterest = (request, response) => {
+        let listingID = request.params.id
+        let userID = request.userId
+        modelFuncs.expressInterest(listingID, userID, (err, res)=>{
+            if(err){
+                console.log(err)
+                response.status(500).send("Error occurred.")
+            } else {
+                response.status(200).send("successfully expressed interest.")
+            }
+
+
+        })
+    }
+
     return {
         ping,
         getAllUsers,
@@ -180,7 +195,8 @@ module.exports = (db) => {
         getUserBorrowed,
         getListingInfo,
         login,
-        validate
+        validate,
+        expressInterest
     }
 
 };

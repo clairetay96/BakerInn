@@ -1,5 +1,5 @@
 .chat-root {
-  display: flex;  
+  display: flex;
   position: fixed;
   right: 20px;
   bottom: 20px;
@@ -17,4 +17,5 @@
   height: 75%;
   width: 250px;
   border: 1px solid rebeccapurple;
+  overflow: auto;
 }

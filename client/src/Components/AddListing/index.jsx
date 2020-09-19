@@ -3,7 +3,7 @@ import { useForm } from './useForm'
 
 const AddListing = () => {
 
-    const [values, handleChange] = useForm({ item: "", description: "", price: "", category: "", location: "" })
+    const [values, handleChange] = useForm({ item: "", description: "", price: "", category: "", option: "", location: "" })
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -15,7 +15,7 @@ const AddListing = () => {
                 Accept: "application/json",
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ item: values.item, description: values.description, price: values.price, category: values.category, location: values.location })
+            body: JSON.stringify({ item: values.item, description: values.description, price: values.price, category: values.category, option: values.option, location: values.location })
         })
             .then((res) => console.log(res))
             .catch((err) => console.log(err))
@@ -50,15 +50,23 @@ const AddListing = () => {
                     <div>
                         <label >Category:</label>
                         <select name="category" onChange={handleChange}>
-                            <option value="">Please select the category</option>
+                            <option value="">Please select</option>
                             <option value="ingredient">Ingredient</option>
                             <option value="equipment">Equipment</option>
                         </select>
                     </div>
                     <div>
+                        <label >For Loan/Sale:</label>
+                        <select name="option" onChange={handleChange}>
+                            <option value="">Please select</option>
+                            <option value="loan">For loan</option>
+                            <option value="sale">For sale</option>
+                        </select>
+                    </div>
+                    <div>
                         <label >Location:</label>
                         <select name="location" onChange={handleChange}>
-                            <option value="">Please select the location</option>
+                            <option value="">Please select</option>
                             <option value="north">North</option>
                             <option value="east">East</option>
                             <option value="south">South</option>
