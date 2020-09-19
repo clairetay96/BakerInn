@@ -22,7 +22,6 @@ export default function Chat({ chat_id }) {
   const [listing, setListing] = useState({}) //object containing listing_id, listing name
   const [messageKey, setMessageKey] = useState(0)
 
-
   useEffect(()=>{
     //fetch chat data from database
     //fetch previous messages from database
@@ -184,13 +183,13 @@ const sendMessage = (event) => {
 
   return (
     <div className="chat-root">
-      <div className="to-do">
+      {/* <div className="to-do">
       <h5>this is the beningging of the end</h5>
       <p>show a list of past chats (side tab / toggle)</p>
       <p>have a chat window open (bottom tab / toggle)</p>
       <p>have a input field to post a new message</p>
       <p>think of more functions</p>
-      </div>
+      </div> */}
       <div className="chat-window">
         <div>{chat_id}</div>
 

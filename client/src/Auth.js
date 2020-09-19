@@ -56,12 +56,12 @@ const authenticate = async (cb) => {
   try {
     const response = await fetch(url)
     if (response.status === 200) {
-      cb(true)
+      return true
     } else {
-      cb(false)
+      return false
     }
   } catch (err) {
-    cb(false)
+    return false
   }
 }
 
