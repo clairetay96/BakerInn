@@ -20,12 +20,15 @@ export default function Chat({ chat_id }) {
   const [sender, setSender] = useState({}) //object containing user_id, username and whether this user is the owner of the item
   const [receiver, setReceiver] = useState({})
   const [listing, setListing] = useState({}) //object containing listing_id, listing name
+  const [messageKey, setMessageKey] = useState(0)
 
 
   useEffect(()=>{
     //fetch chat data from database
     //fetch previous messages from database
-    fetch(`/api/chats/${chat_id}`)
+    let abortController = new AbortController()
+    fetch(`/api/chats/${chat_id}`, { signal: abortController.signal})
+        .then(res=>res.json())
         .then(res => {
             let sender_id = res.buyer_id
             let sender_username = res.buyer_username
@@ -61,29 +64,50 @@ export default function Chat({ chat_id }) {
             })
 
         })
-        .catch(err => console.log(err))
-
-    //set messages state to contain messages.
-    fetch(`/api/chats/${chat_id}/messages`)
-        .then(res=> res.json())
-        .then(res=> {
-            setMessages(res)
-            console.log(res)
-            let messageHTMLtemp = res.map((message, index)=>{
-                return <p key={index}>{message.message}</p>
-
-            })
-            console.log(messageHTMLtemp)
-            setMessageHTML(messageHTMLtemp)
+        .catch(err => {
+            if(!abortController.signal.aborted){
+                console.log(err)
+            }
         })
+
+        return () => {
+            abortController.abort()
+        }
 
 
   }, [])
 
   useEffect(()=>{
+    let abortController1 = new AbortController()
+    //set messages state to contain messages.
+    fetch(`/api/chats/${chat_id}/messages`, {signal: abortController1.signal})
+        .then(res=> res.json())
+        .then(res=> {
+            setMessages(res)
+
+            let messageHTMLtemp = res.map((message, index)=>{
+                return <p key={message._id}><span>{message.sender_name}: </span>{message.message}</p>
+
+            })
+
+            setMessageHTML(messageHTMLtemp)
+
+        })
+        .catch(err=>{
+            if(!abortController1.signal.aborted){
+                console.log(err)
+            }
+        })
+
+        return ()=>{
+            abortController1.abort()
+        }
+  })
+
+  useEffect(()=>{
     //socket to join chat room - emit
     socket = io(ENDPOINT)
-    console.log("This is io!", socket)
+    console.log("This is io client!")
     socket.emit('join', { room_id: 'room' + chat_id })
 
   }, [ENDPOINT])
@@ -94,10 +118,20 @@ export default function Chat({ chat_id }) {
     socket.on('receiveMessage', ( { message, sender_name } )=>{
 
         setMessages( messages =>[...messages, { message, sender_name }])
-        setMessageHTML(messageHTML => [...messageHTML, <p>{message}</p>])
+        setMessageKey( messageKey => messageKey+1)
+        setMessageHTML(messageHTML => [...messageHTML, <p key={messageKey}><span>{sender_name}: </span>{message}</p>])
 
     })
 
+    return () => {
+        socket.off('receiveMessage', ( { message, sender_name } )=>{
+
+        setMessages( messages =>[...messages, { message, sender_name }])
+        setMessageKey( messageKey => messageKey+1)
+        setMessageHTML(messageHTML => [...messageHTML, <p key={messageKey}><span>{sender_name}: </span>{message}</p>])
+
+    })
+    }
 
   }, [])
 
@@ -140,6 +174,9 @@ const sendMessage = (event) => {
         })
         .catch(err => console.log(err))
 
+    //set message to empty
+    setMessage("")
+
 }
 
 
@@ -159,7 +196,7 @@ const sendMessage = (event) => {
 
         <div className="message-board">{messageHTML}</div>
         <form onSubmit={sendMessage}>
-          <input type="text" name="message" onChange={(event)=>{setMessage(event.target.value)}}/>
+          <input type="text" value={message} onChange={(event)=>{setMessage(event.target.value)}}/>
           <input type="submit" value="Send" />
         </form>
       </div>

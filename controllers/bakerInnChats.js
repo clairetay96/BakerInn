@@ -9,12 +9,13 @@ module.exports = (db) => {
     let createChat = (request, response) => {
         let newChatInfo = request.body
         newChatInfo.buyer_id = request.userId
+        console.log(newChatInfo)
         modelChatFuncs.newChat(newChatInfo, (err, res)=>{
             if(err){
                 console.log(err)
                 response.status(500).send("Error occurred.")
             } else {
-                response.status(200).send("New chat successfully created.")
+                response.status(200).send(res)
             }
         })
     }
@@ -61,7 +62,24 @@ module.exports = (db) => {
             listing_id: request.params.listingid
 
         }
-        console.log(chatInfo)
+        modelChatFuncs.getChatId(chatInfo, (err, res)=>{
+            if(err)
+                response.status(500).send("Error occurred.")
+            else {
+                response.status(200).send(res)
+            }
+        })
+    }
+
+
+    let getChatIdsByInfo = (request, response) => {
+        console.log("I'm in controller")
+        let chatInfo = {
+            buyer_id: request.params.buyerid,
+            owner_id: request.userId,
+            listing_id: request.params.listingid
+
+        }
         modelChatFuncs.getChatId(chatInfo, (err, res)=>{
             if(err)
                 response.status(500).send("Error occurred.")
@@ -78,7 +96,8 @@ return {
     postMessage,
     getChat,
     getMessages,
-    getChatIdByInfo
+    getChatIdByInfo,
+    getChatIdsByInfo
 
 }
 

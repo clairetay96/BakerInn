@@ -11,6 +11,7 @@ import Auth from './Auth';
 import AddListingPage from './Pages/AddListingPage'
 import ProtectedRoute from './Components/ProtectedRoute';
 import Test from './Pages/tempTest'
+import Test2 from './Pages/tempTest2'
 
 class App extends React.Component {
   constructor() {
@@ -76,7 +77,11 @@ class App extends React.Component {
         </Route>
 
         <Route path="/test">
-            <Test listingId="5f64b6beda9369c9936bebfd"/>
+            <Test listingId="5f658546a4be83df4ea3f41d"/>
+        </Route>
+
+        <Route path="/test2">
+            <Test2 listingId="5f658546a4be83df4ea3f41d"/>
         </Route>
 
           {/* redirect all non-specified routes. maybe have a 404 page*/}

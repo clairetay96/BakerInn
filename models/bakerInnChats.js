@@ -9,7 +9,9 @@ module.exports = (db) => {
     let newChat = (newChatInfo, callback) => {
         db.collection("chats").insertOne(newChatInfo)
             .then(res=> {
-                return db.collection("users").updateMany(
+                let queries = [res]
+
+                 queries.push(db.collection("users").updateMany(
                     {_id:
                         {
                             $in: [ ObjectId(newChatInfo.owner_id),
@@ -17,8 +19,11 @@ module.exports = (db) => {
                         }
                     },
                     { $push: { chats: res.insertedId }})
+                        .then(res1 => res1))
+
+                 return Promise.all(queries)
             })
-            .then(res1=> {callback(null, res1)})
+            .then(res2=> {callback(null, res2[0])})
             .catch(err => {callback(err,null)})
     }
 
@@ -70,7 +75,7 @@ module.exports = (db) => {
                 res1[0].owner_username = res1[1]
                 res1[0].buyer_username = res1[2]
                 res1[0].listing_item = res1[3]
-                callback(null, res1)
+                callback(null, res1[0])
             })
             .catch(err => {callback(err, null)})
     }
@@ -78,12 +83,35 @@ module.exports = (db) => {
 
     let getChatMessages = (chat_id, callback) => {
         db.collection("messages").find({chat_id: chat_id}).sort({ _id: 1}).toArray()
+            .then(res => {
+                let allQueries = []
+                let senderNames = [] //store sender names of chat - once there are 2 stop querying the database and just compare against stored values
+                res.forEach((message)=>{
+                    if(senderNames.length < 2){
+                        allQueries.push(
+                            db.collection("users").findOne({_id: ObjectId(message.user_id)})
+                                .then(res1 => {
+                                    senderNames.push({sender_name: res1.username, sender_id: res1._id})
+                                    message.sender_name = res1.username
+                                    return message
+                                })
+                        )
+                    } else if (senderNames.length == 2){
+                        message.sender_name = message.user_id==senderNames[0].sender_id ? senderNames[0].sender_name : senderNames[1].sender_name
+
+                    }
+
+                })
+                return Promise.all(allQueries)
+            })
             .then(res => callback(null, res))
             .catch(err => callback(err, null))
 
     }
 
+    //find one chat
     let getChatId = (chatInfo, callback) => {
+        console.log("I'm in models")
         db.collection("chats").findOne(chatInfo)
             .then(res=>callback(null, res))
             .catch(err=>callback(err, null))
