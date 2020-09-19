@@ -4,6 +4,7 @@ import { Route, Link } from 'react-router-dom';
 //remove Link
 
 import Carousel from '../../Components/Carousel';
+import Discovery from '../../Components/Discovery';
 import IntroBanner from '../../Components/IntroBanner';
 import SearchBar from '../../Components/SearchBar';
 import CategoryPage from '../CategoryPage';
@@ -58,10 +59,17 @@ export default class HomePage extends Component {
 
         <Switch style={{paddingLeft: '0'}}>
           <Route exact path="/homepage">  
+
             {isLoggedIn 
-              ? null
+              ? (<Discovery />)
               : (<IntroBanner />) 
             }
+
+            {/* 
+              Carousel listings need to updated with proper fetches
+              Suggestions carousel need to have an algorithm choosing
+              the listing
+            */}
 
             <Carousel title="Freshest offers"
                       lastestListing={this.state.lastestListing}/>
@@ -72,6 +80,9 @@ export default class HomePage extends Component {
             
             <Carousel title="New equipment"
                       headerLink="/homepage/equipment"
+                      lastestListing={this.state.lastestListing}/>
+            
+            <Carousel title="Suggestions"
                       lastestListing={this.state.lastestListing}/>
           </Route>
 

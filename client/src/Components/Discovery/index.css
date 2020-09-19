@@ -1,0 +1,9 @@
+.discovery {
+  height: 240px;
+  margin: 15px 0;
+  border: 1px solid rebeccapurple;
+}
+
+.discovery > * {
+  border: 1px solid goldenrod;
+}
