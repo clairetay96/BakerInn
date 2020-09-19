@@ -17,8 +17,8 @@ export default class EditSingleListingPage extends Component {
         </Row>
         <Row>
           <Col>
-            Image here! 
-            <br/>
+            Image here!
+            <br />
             Edittttttttttt
           </Col>
           <Col>

@@ -5,17 +5,17 @@ import ListingTabs from '../../Components/ListingTabs'
 import SearchBar from '../../Components/SearchBar'
 
 export default class DashboardPage extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.state = {
       search: '',
       user: '5f6347cd5ed305cd33dda22f',
       userLendingListings: {
-        available: [1,2,3,4,5],
-        loan: [6,7,8,9,10],
+        available: [1, 2, 3, 4, 5],
+        loan: [6, 7, 8, 9, 10],
       },
-      userBorrowing: [11,12,13,14,15],
+      userBorrowing: [11, 12, 13, 14, 15],
     }
   }
 
@@ -33,7 +33,7 @@ export default class DashboardPage extends Component {
 
   fetchUserPostedListing = async () => {
     const url = `/api/listings/user/${this.state.user}`;
-    
+
     let res = await fetch(url)
     // res = await res.json()
     console.log(res);
@@ -50,11 +50,11 @@ export default class DashboardPage extends Component {
   handleChange = (e) => {
     this.setState({
       search: e.target.value,
-    })  
+    })
   }
 
   handleSearch = (e) => {
-    if (e.keyCode === 13 && e.target.value !== ''){
+    if (e.keyCode === 13 && e.target.value !== '') {
       console.log(this.state.search);
       this.setState({
         search: '',
@@ -64,16 +64,18 @@ export default class DashboardPage extends Component {
 
   render() {
     return (
-      <div>
+      <div className="container text-center">
         <h1>Welcome back User</h1>
 
         <SearchBar scope={"dashboard"}
-                   onChange={this.handleChange}
-                   onKeyUp={this.handleSearch}
-                   value={this.state.search}/>
+          onChange={this.handleChange}
+          onKeyUp={this.handleSearch}
+          value={this.state.search} />
 
-        <ListingTabs listingData={{...this.state.userLendingListings,
-                                    userBorrowing: this.state.userBorrowing}}/>        
+        <ListingTabs listingData={{
+          ...this.state.userLendingListings,
+          userBorrowing: this.state.userBorrowing
+        }} />
       </div>
     )
   }
