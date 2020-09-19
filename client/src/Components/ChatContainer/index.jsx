@@ -30,11 +30,39 @@ export default function ChatContainer({ socket }) {
   let [activeChat, setActiveChat] = useState([])
   
   // populate active chat
-  const handleAddWindow = () => {
-    let chats = allChats.map((chat,index) => {
-      return (<Chat key={index} chat_id={chat} user_id={user_id} socket={socket}/>)
+  const handleAddWindow = (e) => {
+    e.preventDefault()
+    // take the id of the chat
+    let id = e.target.id
+
+    if (activeChat.includes(id)) {
+      return // do nothing
+    }
+
+    // add it to the active chats
+    setActiveChat([...activeChat, id])
+  }
+
+  //rerender 
+  let [renderActive, setRenderActive] = useState([])
+  useEffect(() => {
+    setRenderActive(activeChat.map((id) => {
+      return (<Chat chat_id={id} 
+                        key={id}
+                        user_id={user_id} 
+                        onClose={handleDeleteWindow}
+                        socket={socket}/>)
+    }))
+  },[activeChat])
+
+  // delete when you click on x
+  const handleDeleteWindow = (id) => {
+    let filter = activeChat.filter((item) => {
+        console.log(item, '-- item');
+        return item !== id
     })
-    setActiveChat(chats)
+
+    setActiveChat(filter)
   }
 
   // helper function to return desired rendering
@@ -46,7 +74,11 @@ export default function ChatContainer({ socket }) {
     } else {
       if (allChats.length > 0) {
         let output = allChats.map((chat, index)=>{
-            return (<li key={index}>chat</li>)
+            return (<li onClick={handleAddWindow} 
+                        id={chat} 
+                        key={index}>
+                        chat
+                    </li>)
         })
         return output
       } else {
@@ -55,10 +87,6 @@ export default function ChatContainer({ socket }) {
     }
   }
 
-  // handle the opening and closing of tabs
-
-  //
-
   return (
     <div className="chat-container">
       <div className="chat-list">
@@ -66,9 +94,8 @@ export default function ChatContainer({ socket }) {
         <ul>
           {allChatsHelper()}
         </ul>
-      <button onClick={handleAddWindow}>Magic button</button>
       </div>
-      { activeChat }
+      { renderActive }
     </div>
   )
 }

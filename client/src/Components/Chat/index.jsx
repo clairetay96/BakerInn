@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './index.css'
 
-export default function Chat({ chat_id, user_id, socket }) {
+export default function Chat({ chat_id, user_id, socket, onClose }) {
   //where chat_id is the chat_id and user_id is the logged in user_id
   
   
@@ -180,15 +180,23 @@ const sendMessage = (event) => {
     setMessage("")
 }
 
-
-
+  const [toggle, setToggle] = useState(true)
+  const toggleChat = () => {
+    setToggle(!toggle)
+  }  
 
   return (
-    <div className="chat-root">
+    <>
+    <div className={toggle ? "chat-root" : "chat-root min-chat"}>
       <div className="chat-window">
-        <div>{chat_id}</div>
+        <button className="on-close" 
+                onClick={()=>onClose(chat_id)}>
+            Close
+        </button>
+        <button onClick={toggleChat}>Minimize</button>
+        <div className="on-close">{chat_id}</div>
         {error 
-         ? error
+         ? (<p>{error}</p>)
          : null
         }
         <div className="message-board">{messageHTML}</div>
@@ -198,5 +206,6 @@ const sendMessage = (event) => {
         </form>
       </div>
     </div>
+    </>
   )
 }
