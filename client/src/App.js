@@ -96,7 +96,7 @@ class App extends React.Component {
             ? (<ChatContainer socket={this.state.socket} />)
             : null
           }
-          <Container style={{ marginTop: '66px' }}>
+          <Container style={{ marginTop: '66px', textAlign: "center" }}>
             <Route path="/signup" exact component={Register} />
 
             <Route path="/login"

@@ -4,9 +4,6 @@ import './index.css'
 import { Tab, Tabs, Button, Modal, CardDeck } from "react-bootstrap";
 import ListingDetail from '../ListingDetail';
 import { Link } from 'react-router-dom';
-import ListingDetailPage from '../../Pages/ListingDetailPage';
-import EditSingleListingPage from '../../Pages/EditSingleListingPage';
-import ProtectedRoute from '../ProtectedRoute';
 
 import AddListingPage from "../../Pages/AddListingPage";
 
@@ -49,9 +46,9 @@ export default function ListingTabs(props) {
           </div>
           <div>
             <Button variant="primary" onClick={handleShow}>Add New Listing</Button>
-            <Modal show={show} onHide={handleClose}>
+            <Modal size="lg" show={show} onHide={handleClose}>
               <Modal.Header closeButton>
-                <Modal.Title>Add Listing</Modal.Title>
+                <Modal.Title >Add Listing</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <AddListingPage />
