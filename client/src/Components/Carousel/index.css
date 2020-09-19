@@ -1,5 +1,6 @@
 .carousel-container {
   height: 200px;
+  margin-bottom: 10px;
   background-color: gainsboro;
 }
 
@@ -10,4 +11,8 @@
 .carousel-item {
   height: 100%;
   border: 1px solid black;
+}
+
+.empty-carousel {
+  height: 200px;
 }

@@ -13,12 +13,12 @@ export default function Chat({ chat_id }) {
   const cookie = document.cookie
   const user_id = JSON.parse(atob(cookie.split(".")[1])).userId
 
-  const [message, setMessage] = useState('')
+  // const [message, setMessage] = useState('')
 
-  const [messages, setMessages] = useState([])
-  const [sender, setSender] = useState({}) //object containing user_id, username and whether this user is the owner of the item
-  const [receiver, setReceiver] = useState({})
-  const [listing, setListing] = useState({}) //object containing listing_id, listing name
+  // const [messages, setMessages] = useState([])
+  // const [sender, setSender] = useState({}) //object containing user_id, username and whether this user is the owner of the item
+  // const [receiver, setReceiver] = useState({})
+  // const [listing, setListing] = useState({}) //object containing listing_id, listing name
 
 
 
@@ -68,62 +68,62 @@ export default function Chat({ chat_id }) {
 
   // }, [])
 
-  useEffect(()=>{
-    //socket to join chat room - emit
-    socket = io(ENDPOINT)
-    console.log("This is io!", socket)
-    socket.emit('join', { room_id: 'room' + chat_id })
+  // useEffect(()=>{
+  //   //socket to join chat room - emit
+  //   socket = io(ENDPOINT)
+  //   console.log("This is io!", socket)
+  //   socket.emit('join', { room_id: 'room' + chat_id })
 
-  }, [ENDPOINT])
-
-
-  useEffect(()=>{
-    //socket to  receive message - on
-    socket.on('receiveMessage', ( { message, sender_name } )=>{
-        setMessages([...messages, { message, sender_name }])
-    })
+  // }, [ENDPOINT])
 
 
-  }, [])
+  // useEffect(()=>{
+  //   //socket to  receive message - on
+  //   socket.on('receiveMessage', ( { message, sender_name } )=>{
+  //       setMessages([...messages, { message, sender_name }])
+  //   })
+
+
+  // }, [])
 
 
 const sendMessage = (event) => {
-    event.preventDefault()
+//     event.preventDefault()
 
-    let messageInfo = {
-        message,
-        sender_name: sender.username,
-        chatroom_id: 'room' + chat_id,
-        userroom_id: 'user' + receiver.user_id
-    }
+//     let messageInfo = {
+//         message,
+//         sender_name: sender.username,
+//         chatroom_id: 'room' + chat_id,
+//         userroom_id: 'user' + receiver.user_id
+//     }
 
-    //emit message
-    socket.emit('sendMessage', messageInfo)
+//     //emit message
+//     socket.emit('sendMessage', messageInfo)
 
-    //write message to database
-    let url = `/api/chats/${chat_id}/new-message`
-    let requestOptions = {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            message,
-            user_id,
-            chat_id
-        })
-    }
+//     //write message to database
+//     let url = `/api/chats/${chat_id}/new-message`
+//     let requestOptions = {
+//         method: "POST",
+//         headers: {
+//             Accept: "application/json",
+//             "Content-Type": "application/json"
+//         },
+//         body: JSON.stringify({
+//             message,
+//             user_id,
+//             chat_id
+//         })
+//     }
 
-    fetch(url, requestOptions)
-        .then(res => {
-            if(res.status===200){
-                console.log("message stored in database")
-            } else {
-                console.log("help...")
-            }
-        })
-        .catch(err => console.log(err))
+//     fetch(url, requestOptions)
+//         .then(res => {
+//             if(res.status===200){
+//                 console.log("message stored in database")
+//             } else {
+//                 console.log("help...")
+//             }
+//         })
+//         .catch(err => console.log(err))
 
 }
 
@@ -143,8 +143,8 @@ const sendMessage = (event) => {
         <div>Room name</div>
         <div className="message-board">Message</div>
         <form onSubmit={(event)=>{sendMessage(event)}}>
-          <input type="text" name="message" onChange={(event)=>{setMessage(event.target.value)}}/>
-          <input type="submit" value="Send" />
+          {/* <input type="text" name="message" onChange={(event)=>{setMessage(event.target.value)}}/>
+          <input type="submit" value="Send" /> */}
         </form>
       </div>
     </div>

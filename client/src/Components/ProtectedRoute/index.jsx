@@ -4,15 +4,14 @@ import Auth from '../../Auth';
 
 
 function ProtectedRoute({ children, ...rest }) {
-  let history = useHistory()
   return (
         <Route
             {...rest}
             render={({ location }) =>{
                 return Auth.authenticate() 
                 ? (children) 
-                : (<Redirect to="/homepage"></Redirect>)
-              }}
+                : (<Redirect to="/homepage"/>)
+                }}
         />
     )
 }
