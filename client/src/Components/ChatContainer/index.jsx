@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import Chat from '../Chat'
 import './index.css'
 
-export default function ChatContainer() {
+export default function ChatContainer({ socket }) {
 
   const cookie = document.cookie
   const user_id = JSON.parse(atob(cookie.split(".")[1])).userId
@@ -10,7 +11,6 @@ export default function ChatContainer() {
   // initialize the list of chats when first rendered
 
   // show loading when the chats are loading
-  let [allChats, setAllChats] = useState(null)
 
   // one time fetch for existing chatroom
   useEffect(() => {
@@ -27,8 +27,19 @@ export default function ChatContainer() {
   }, [])
 
   // track addition of more chatroom
+  let [activeChat, setActiveChat] = useState([])
+  
+  // populate active chat
+  const handleAddWindow = () => {
+    let chats = allChats.map((chat,index) => {
+      return (<Chat key={index} chat_id={chat} user_id={user_id} socket={socket}/>)
+    })
+    setActiveChat(chats)
+  }
 
   // helper function to return desired rendering
+  let [allChats, setAllChats] = useState(null)
+
   const allChatsHelper = () => {
     if (!allChats) {
       return 'loading spinner should exist here'
@@ -44,6 +55,10 @@ export default function ChatContainer() {
     }
   }
 
+  // handle the opening and closing of tabs
+
+  //
+
   return (
     <div className="chat-container">
       <div className="chat-list">
@@ -51,7 +66,9 @@ export default function ChatContainer() {
         <ul>
           {allChatsHelper()}
         </ul>
+      <button onClick={handleAddWindow}>Magic button</button>
       </div>
+      { activeChat }
     </div>
   )
 }

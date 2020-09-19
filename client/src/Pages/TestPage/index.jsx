@@ -21,8 +21,8 @@ export default class Test extends Component {
     render() {
         return (
             <div>
-                {this.state.message}
-                <CarouselV2 />
+                {/* {this.state.message} */}
+                {/* <CarouselV2 /> */}
             </div>
         )
     }

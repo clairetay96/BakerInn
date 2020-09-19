@@ -14,3 +14,8 @@
   width: 265px;
   border: 1px solid rebeccapurple;
 }
+
+.chat-placeholder {
+  height: 350px;
+  width: 265px;
+}

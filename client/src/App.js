@@ -12,13 +12,16 @@ import { Container } from 'react-bootstrap';
 import Footer from './Components/Footer';
 import Test from './Pages/TestPage';
 import ChatContainer from './Components/ChatContainer';
+import io from 'socket.io-client'
+
 
 class App extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      loggedIn: false
+      loggedIn: false,
+      socket: null
     }
   }
 
@@ -33,14 +36,19 @@ class App extends React.Component {
   // delete all personalised content
   // remove token
   signout = () => {
+    this.state.socket.close()
+    console.log('user disconnected');
     this.setState({
-      loggedIn: false
+      loggedIn: false,
+      socket: null
     })
   }
 
   loggedIn = () => {
+    let socket = this.setupSocket()
     this.setState({
-      loggedIn: true
+      loggedIn: true,
+      socket: socket
     })
   }
 
@@ -49,10 +57,31 @@ class App extends React.Component {
     // authenticate the token
     Auth.authenticate()
     .then(valid=>{
-      this.setState({
-        loggedIn: valid
-      })
+      if (valid) {
+        let socket = this.setupSocket()
+        this.setState({
+          loggedIn: valid,
+          socket: socket
+        })
+      } else {
+        this.setState({
+          loggedIn: valid
+        })
+      }
     })
+    .catch(err=>console.log(err, '-- authenticate'))
+  }
+
+  // open socket only when authenticated and logged in
+  // check when app opens
+  // check when user logs in
+  setupSocket = () => {
+    const ENDPOINT = "localhost:5000"
+    let socket = io(ENDPOINT)
+    socket.on('connect', ()=> {
+      console.log('user connected');
+    })
+    return socket
   }
 
   render() {
@@ -64,7 +93,7 @@ class App extends React.Component {
 
           {/* conditionally render chat-overlay, show only when logged in */}
           { this.state.loggedIn
-            ? (<ChatContainer/>)
+            ? (<ChatContainer socket={this.state.socket}/>)
             : null 
           }
         <Container style={{marginTop: '66px'}}>
