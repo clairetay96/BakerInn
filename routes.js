@@ -48,7 +48,13 @@ module.exports = (app, db) => {
   app.delete('/api/listings/:id/delete')
 
   //when user expresses interest, create chat
-  app.post('/api/chats/new', bakerInChats.createChat)
+  app.post('/api/chats/new', withAuth, bakerInChats.createChat)
+
+  //get one chat from owner/listing/buyer id - called once when buyer wants to access a chat
+  app.get('/api/chats/find/:ownerid/:listingid', withAuth, bakerInChats.getChatIdByInfo)
+
+  //get chat from buyer/listing/owner id - called multiple times when owner wants to see chats for a given listing.
+  app.get('/api/chats/find/buyers/:buyerid/:listingid', withAuth, bakerInChats.getChatIdsByInfo)
 
   //to get basic information on existing chat
   app.get('/api/chats/:id', bakerInChats.getChat)

@@ -1,5 +1,9 @@
 // node modules
 /node_modules
 
-// dev database 
-.env  
+//Claire testing env
+/client/src/Pages/tempTest.js
+/client/src/Pages/tempTest2.js
+
+// dev database
+.env
