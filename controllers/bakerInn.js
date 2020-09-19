@@ -57,7 +57,7 @@ module.exports = (db) => {
         console.log("userLoginInfo", userLoginInfo)
         modelFuncs.userLogin(userLoginInfo, (err, res) => {
             if (err) {
-                response.status(500).send(err)
+                response.status(500).send("user not found")
             } else {
                 if (res.result) {
                     // issue token

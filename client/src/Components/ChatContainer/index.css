@@ -1,0 +1,16 @@
+.chat-container {
+  position: fixed;
+  display: flex;
+  flex-direction: row-reverse;
+  width: 100%;
+  right: 0;
+  bottom: 20px;
+  z-index: 20;
+  border: 1px solid rebeccapurple;
+}
+
+.chat-list {
+  height: 350px;
+  width: 265px;
+  border: 1px solid rebeccapurple;
+}

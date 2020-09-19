@@ -6,11 +6,10 @@ import Register from "./Pages/RegisterPage/"
 import NavBar from './Components/NavBar';
 import DashboardPage from './Pages/DashboardPage';
 import HomePage from './Pages/HomePage';
-// import Chat from './Components/Chat';
 import Auth from './Auth';
 import AddListingPage from './Pages/AddListingPage'
 import ProtectedRoute from './Components/ProtectedRoute';
-import Test from './Pages/tempTest'
+import ChatContainer from './Components/ChatContainer';
 
 class App extends React.Component {
   constructor() {
@@ -58,10 +57,10 @@ class App extends React.Component {
             signout={this.signout} />
 
           {/* conditionally render chat-overlay, show only when logged in */}
-          {/* {this.state.loggedIn
-            ? (<Chat />)
+          {this.state.loggedIn
+            ? (<ChatContainer />)
             : null
-          } */}
+          }
 
           <Route path="/signup" exact component={Register} />
           <Route path="/login"

@@ -4,14 +4,11 @@ import io from 'socket.io-client'
 
 let socket;
 
-export default function Chat({ chat_id }) {
+export default function Chat({ chat_id, user_id }) {
 
   //where chat_id is the chat_id and user_id is the logged in user_id
 
   const ENDPOINT = "localhost:5000"
-
-  const cookie = document.cookie
-  const user_id = JSON.parse(atob(cookie.split(".")[1])).userId
 
   const [message, setMessage] = useState('')
 
