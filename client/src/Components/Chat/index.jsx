@@ -172,7 +172,6 @@ const sendMessage = (event) => {
 
     // set message to empty
     setMessage("")
-
 }
 
 
