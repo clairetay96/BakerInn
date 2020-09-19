@@ -10,6 +10,8 @@ import Chat from './Components/Chat';
 import Auth from './Auth';
 import ProtectedRoute from './Components/ProtectedRoute';
 import { Container } from 'react-bootstrap';
+import Footer from './Components/Footer';
+import Test from './Pages/TestPage';
 
 class App extends React.Component {
   constructor() {
@@ -25,7 +27,11 @@ class App extends React.Component {
       loggedIn: true
     })
   }
-
+  
+  // change state
+  // close socket
+  // delete all personalised content
+  // remove token
   signout = () => {
     this.setState({
       loggedIn: false
@@ -77,11 +83,17 @@ class App extends React.Component {
           <Route path="/homepage">             
             <HomePage isLoggedIn={this.state.loggedIn}/>
           </Route>
-
+          
+          {/* blank page for testing*/}
+          <Route path="/test">             
+            <Test />
+          </Route>
+          
           {/* redirect all non-specified routes. maybe have a 404 page*/}
           <Route exact path="/">
             <Redirect to="/homepage" />
           </Route>
+          <Footer />
         </Container>
         </Router>
       </div>
