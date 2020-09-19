@@ -17,7 +17,7 @@ class NavBar extends Component {
     let { isLoggedIn } = this.props;
 
     return (
-      <Navbar bg="dark" variant="dark">
+      <Navbar bg="dark" variant="dark" fixed="top">
         <Link to='/homepage'>
           <Navbar.Brand>
             BakeInn

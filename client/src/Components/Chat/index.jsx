@@ -170,7 +170,7 @@ const sendMessage = (event) => {
         })
         .catch(err => console.log(err))
 
-    //set message to empty
+    // set message to empty
     setMessage("")
 
 }

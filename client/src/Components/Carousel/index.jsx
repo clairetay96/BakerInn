@@ -5,11 +5,14 @@ import { Link } from 'react-router-dom'
 import './index.css'
 
 export default function Carousel(props) {
-  let { title, lastestListing=null } = props;
+  let { title, lastestListing=null, headerLink=null} = props;
 
   return (
-    <div>
-      <h2>{ title }</h2>
+    <>
+      {headerLink
+        ? (<Link to={headerLink}><h4>{ title }</h4></Link>)
+        : (<h4>{ title }</h4>)
+      }
       {lastestListing
         ? ( <BCarousel className="border carousel-container"
                        pause="hover">
@@ -35,9 +38,11 @@ export default function Carousel(props) {
               })}
             </BCarousel>
           )
-        : ("No items to show here")
+        : (<div className="empty-carousel">
+             No listing available
+           </div>)
       }
-    </div>
+    </>
   )
 }
 

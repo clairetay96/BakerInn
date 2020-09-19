@@ -7,8 +7,10 @@ import NavBar from './Components/NavBar';
 import DashboardPage from './Pages/DashboardPage';
 import HomePage from './Pages/HomePage';
 import Auth from './Auth';
-import AddListingPage from './Pages/AddListingPage'
 import ProtectedRoute from './Components/ProtectedRoute';
+import { Container } from 'react-bootstrap';
+import Footer from './Components/Footer';
+import Test from './Pages/TestPage';
 import ChatContainer from './Components/ChatContainer';
 
 class App extends React.Component {
@@ -25,7 +27,11 @@ class App extends React.Component {
       loggedIn: true
     })
   }
-
+  
+  // change state
+  // close socket
+  // delete all personalised content
+  // remove token
   signout = () => {
     this.setState({
       loggedIn: false
@@ -54,40 +60,42 @@ class App extends React.Component {
       <div className="App">
         <Router>
           <NavBar isLoggedIn={this.state.loggedIn}
-            signout={this.signout} />
+                  signout={this.signout}/>
 
           {/* conditionally render chat-overlay, show only when logged in */}
-          {this.state.loggedIn
-            ? (<ChatContainer />)
-            : null
+          { this.state.loggedIn
+            ? (<ChatContainer/>)
+            : null 
           }
-
+        <Container style={{marginTop: '66px'}}>
           <Route path="/signup" exact component={Register} />
-          <Route path="/login"
-            exact
-            component={() => <Login loggedIn={this.loggedIn} />} />
 
+          <Route path="/login" 
+                exact 
+                component={()=><Login loggedIn={this.loggedIn}/>} />
+        
           {/* this route must protected */}
-          <ProtectedRoute path="/dashboard">
-            <DashboardPage />
+          <ProtectedRoute path="/dashboard">             
+            <DashboardPage/>
           </ProtectedRoute>
 
           {/* this route must have protected actions*/}
-          <Route path="/homepage">
-            <HomePage isLoggedIn={this.state.loggedIn} />
+          <Route path="/homepage">             
+            <HomePage isLoggedIn={this.state.loggedIn}/>
           </Route>
-
+          
+          {/* blank page for testing*/}
+          <Route path="/test">             
+            <Test />
+          </Route>
+          
           {/* redirect all non-specified routes. maybe have a 404 page*/}
           <Route exact path="/">
             <Redirect to="/homepage" />
           </Route>
-
-          <AddListingPage />
-
-
+          <Footer />
+        </Container>
         </Router>
-
-
       </div>
     );
   }

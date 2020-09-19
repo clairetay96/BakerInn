@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import CarouselV2 from '../../Components/Carousel/test'
 
 export default class Test extends Component {
     constructor() {
@@ -21,6 +22,7 @@ export default class Test extends Component {
         return (
             <div>
                 {this.state.message}
+                <CarouselV2 />
             </div>
         )
     }
