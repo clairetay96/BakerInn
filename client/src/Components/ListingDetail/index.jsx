@@ -13,7 +13,7 @@ export default function ListingDetail(props) {
         ? props.allListings.map((listing, index) => {
           return (
             <div className="test">
-              <Link key={index} to={`${path}${listing}`}>
+              <Link key={index} to={`${path}${listing}`} style={{ textDecoration: "none" }}>
                 <ListingCard listing={listing} />
               </Link>
             </div>
