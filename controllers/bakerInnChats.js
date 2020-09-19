@@ -36,6 +36,7 @@ module.exports = (db) => {
         let chat_id = request.params.id
         modelChatFuncs.getChatInfo(chat_id, (err, res)=> {
             if(err){
+                console.log(err);
                 response.status(500).send("Error occurred.")
             } else {
                 response.status(200).send(res)

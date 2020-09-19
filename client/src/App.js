@@ -6,17 +6,22 @@ import Register from "./Pages/RegisterPage/"
 import NavBar from './Components/NavBar';
 import DashboardPage from './Pages/DashboardPage';
 import HomePage from './Pages/HomePage';
-// import Chat from './Components/Chat';
 import Auth from './Auth';
-import AddListingPage from './Pages/AddListingPage'
 import ProtectedRoute from './Components/ProtectedRoute';
+import { Container } from 'react-bootstrap';
+import Footer from './Components/Footer';
+import Test from './Pages/TestPage';
+import ChatContainer from './Components/ChatContainer';
+import io from 'socket.io-client'
+
 
 class App extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      loggedIn: false
+      loggedIn: false,
+      socket: null
     }
   }
 
@@ -26,15 +31,24 @@ class App extends React.Component {
     })
   }
 
+  // change state
+  // close socket
+  // delete all personalised content
+  // remove token
   signout = () => {
+    this.state.socket.close()
+    console.log('user disconnected');
     this.setState({
-      loggedIn: false
+      loggedIn: false,
+      socket: null
     })
   }
 
   loggedIn = () => {
+    let socket = this.setupSocket()
     this.setState({
-      loggedIn: true
+      loggedIn: true,
+      socket: socket
     })
   }
 
@@ -43,10 +57,31 @@ class App extends React.Component {
     // authenticate the token
     Auth.authenticate()
       .then(valid => {
-        this.setState({
-          loggedIn: valid
-        })
+        if (valid) {
+          let socket = this.setupSocket()
+          this.setState({
+            loggedIn: valid,
+            socket: socket
+          })
+        } else {
+          this.setState({
+            loggedIn: valid
+          })
+        }
       })
+      .catch(err => console.log(err, '-- authenticate'))
+  }
+
+  // open socket only when authenticated and logged in
+  // check when app opens
+  // check when user logs in
+  setupSocket = () => {
+    const ENDPOINT = "localhost:5000"
+    let socket = io(ENDPOINT)
+    socket.on('connect', () => {
+      console.log('user connected');
+    })
+    return socket
   }
 
   render() {
@@ -57,17 +92,17 @@ class App extends React.Component {
             signout={this.signout} />
 
           {/* conditionally render chat-overlay, show only when logged in */}
-          {/* {this.state.loggedIn
-            ? (<Chat />)
+          {this.state.loggedIn
+            ? (<ChatContainer socket={this.state.socket} />)
             : null
-          } */}
+          }
+          <Container style={{ marginTop: '66px' }}>
+            <Route path="/signup" exact component={Register} />
 
-          <Route path="/signup" exact component={Register} />
-          <Route path="/login"
-            exact
-            component={() => <Login loggedIn={this.loggedIn} />} />
+            <Route path="/login"
+              exact
+              component={() => <Login loggedIn={this.loggedIn} />} />
 
-          <div className="container">
             {/* this route must protected */}
             <ProtectedRoute path="/dashboard">
               <DashboardPage />
@@ -78,14 +113,17 @@ class App extends React.Component {
               <HomePage isLoggedIn={this.state.loggedIn} />
             </Route>
 
+            {/* blank page for testing*/}
+            <Route path="/test">
+              <Test />
+            </Route>
+
             {/* redirect all non-specified routes. maybe have a 404 page*/}
             <Route exact path="/">
               <Redirect to="/homepage" />
             </Route>
-          </div>
-
-
-
+            <Footer />
+          </Container>
         </Router>
       </div>
     );

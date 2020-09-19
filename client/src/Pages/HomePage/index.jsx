@@ -4,8 +4,10 @@ import { Route, Link } from 'react-router-dom';
 //remove Link
 
 import Carousel from '../../Components/Carousel';
+import Discovery from '../../Components/Discovery';
 import IntroBanner from '../../Components/IntroBanner';
 import SearchBar from '../../Components/SearchBar';
+import CategoryPage from '../CategoryPage';
 import SingleListingPage from '../SingeListingPage';
 
 export default class HomePage extends Component {
@@ -55,25 +57,47 @@ export default class HomePage extends Component {
           onKeyUp={this.handleSearch}
           value={this.state.search} />
 
-        <Switch>
+        <Switch style={{ paddingLeft: '0' }}>
           <Route exact path="/homepage">
 
             {isLoggedIn
-              ? null
+              ? (<Discovery />)
               : (<IntroBanner />)
-
             }
-            <Carousel title={"New listing for ingredients and equipment"}
+
+            {/* 
+              Carousel listings need to updated with proper fetches
+              Suggestions carousel need to have an algorithm choosing
+              the listing
+            */}
+
+            <Carousel title="Freshest offers"
+              lastestListing={this.state.lastestListing} />
+
+            <Carousel title="New ingredients"
+              headerLink="/homepage/ingredient"
+              lastestListing={this.state.lastestListing} />
+
+            <Carousel title="New equipment"
+              headerLink="/homepage/equipment"
+              lastestListing={this.state.lastestListing} />
+
+            <Carousel title="Suggestions"
               lastestListing={this.state.lastestListing} />
           </Route>
+
           <Route path="/homepage/listing/:id">
             <SingleListingPage />
+          </Route>
 
+          <Route path="/homepage/ingredient">
+            <CategoryPage />
+          </Route>
+          <Route path="/homepage/equipment">
+            <CategoryPage />
           </Route>
         </Switch>
       </>
-
-
     )
   }
 }

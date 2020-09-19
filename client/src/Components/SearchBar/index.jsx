@@ -8,9 +8,10 @@ export default function SearchBar(props) {
     <div className={`search ${scope}`} style={{ display: "flex", justifyContent: "center" }}>
       <Form.Control onChange={props.onChange}
         onKeyUp={props.onKeyUp}
-        value={props.value} />
+        value={props.value}
+        placeholder="Keyword search" />
+      <p>maybe add filters here</p>
     </div>
-
   )
 }
 

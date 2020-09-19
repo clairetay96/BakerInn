@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
 
-
 import ListingTabs from '../../Components/ListingTabs'
 import SearchBar from '../../Components/SearchBar'
+import ListingDetailPage from '../../Pages/ListingDetailPage';
+import EditSingleListingPage from '../../Pages/EditSingleListingPage';
+import { Switch, Route } from 'react-router-dom';
+import ProtectedRoute from '../../Components/ProtectedRoute';
+import AddListingPage from '../AddListingPage'
 
 export default class DashboardPage extends Component {
   constructor(props) {
@@ -71,11 +75,29 @@ export default class DashboardPage extends Component {
           onChange={this.handleChange}
           onKeyUp={this.handleSearch}
           value={this.state.search} />
+        <Switch>
+          <ProtectedRoute exact path="/dashboard">
+            <ListingTabs listingData={{
+              ...this.state.userLendingListings,
+              userBorrowing: this.state.userBorrowing
+            }} />
+          </ProtectedRoute>
+          <Route path="/dashboard/borrowing">
+            <ListingDetailPage allListings={this.state.userBorrowing}
+              nextpage={"lending"}
+              edit={false} />
+          </Route>
+          <Route path="/dashboard/lending">
+            <ListingDetailPage allListings={this.state.userLendingListings.loan}
+              nextpage={"borrowing"}
+              edit={true} />
+          </Route>
+          <Route path="/dashboard/listing/:id">
+            <EditSingleListingPage />
+          </Route>
 
-        <ListingTabs listingData={{
-          ...this.state.userLendingListings,
-          userBorrowing: this.state.userBorrowing
-        }} />
+        </Switch>
+
       </div>
     )
   }
