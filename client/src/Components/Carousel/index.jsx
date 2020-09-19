@@ -8,8 +8,8 @@ export default function Carousel(props) {
   let { title, lastestListing=null } = props;
 
   return (
-    <div>
-      <h2>{ title }</h2>
+    <>
+      <h4>{ title }</h4>
       {lastestListing
         ? ( <BCarousel className="border carousel-container"
                        pause="hover">
@@ -39,7 +39,7 @@ export default function Carousel(props) {
              No listing available
            </div>)
       }
-    </div>
+    </>
   )
 }
 

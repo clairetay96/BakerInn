@@ -133,7 +133,7 @@ module.exports = (db) => {
         let userID = request.params.userid
         modelFuncs.getUserListing(userID, false, (err, res) => {
             if (err) {
-                console.log(error)
+                console.log(err)
                 response.send("Error occurred.")
             } else {
                 response.send(res)

@@ -9,6 +9,7 @@ import HomePage from './Pages/HomePage';
 import Chat from './Components/Chat';
 import Auth from './Auth';
 import ProtectedRoute from './Components/ProtectedRoute';
+import { Container } from 'react-bootstrap';
 
 class App extends React.Component {
   constructor() {
@@ -54,7 +55,7 @@ class App extends React.Component {
             ? (<Chat/>)
             : null 
           }
-
+        <Container>
           <Route path="/signup" exact component={Register} />
 
           <Route path="/login" 
@@ -75,7 +76,7 @@ class App extends React.Component {
           <Route exact path="/">
             <Redirect to="/homepage" />
           </Route>
-        
+        </Container>
         </Router>
       </div>
     );
