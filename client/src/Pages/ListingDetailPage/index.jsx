@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Row, Col, CardDeck, Button, Navbar } from 'react-bootstrap'
+import { CardDeck, Button, Navbar } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import ListingDetail from '../../Components/ListingDetail'
 

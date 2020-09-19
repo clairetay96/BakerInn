@@ -64,7 +64,7 @@ export default class DashboardPage extends Component {
 
   render() {
     return (
-      <div className="container text-center">
+      <div>
         <h1>Welcome back User</h1>
 
         <SearchBar scope={"dashboard"}

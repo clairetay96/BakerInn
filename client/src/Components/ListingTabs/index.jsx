@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './index.css'
 
-import { Tab, Tabs, Row, Col, Button, Modal } from "react-bootstrap";
+import { Tab, Tabs, Button, Modal, CardDeck } from "react-bootstrap";
 import ListingDetail from '../ListingDetail';
 import { Link, Route, Switch } from 'react-router-dom';
 import ListingDetailPage from '../../Pages/ListingDetailPage';
@@ -25,45 +25,50 @@ export default function ListingTabs(props) {
         <Tabs defaultActiveKey="listing-status" transition={false} id="noanim-tab-listing" className="listing-tabs">
           <Tab eventKey="listing-status" title="Listing Status">
             Links to user borrowing from other users and user lending to other users
-            <Row>
-              <Col className="listing-selection">
-                Lending
-                <div>
+            <div className="listing-selection-box">
+              <div className="listing-selection">
+                <h3>Lending</h3>
+                <p >
                   <Link to="/dashboard/lending">
                     x items
                   </Link>
-                </div>
-              </Col>
-              <Col className="listing-selection">
-                Borrowing
-                <div>
+                </p>
+              </div>
+              <div className="listing-selection">
+                <h3>Borrowing</h3>
+                <p >
                   <Link to="/dashboard/borrowing">
                     x items
                   </Link>
-                </div>
-              </Col>
-            </Row>
+                </p>
+              </div>
+            </div>
           </Tab>
           <Tab eventKey="user-listing" title="My Available Listing">
-            <div>
-              <Row className="ml-2 mr-2">
-                <div>
-                  Total listing: xxx
-                </div>
+            <div style={{ display: "flex", justifyContent: "space-between", justifyItems: "center", marginTop: "35px" }}>
+              <div>
+                <p>Total listing: xxx</p>
+              </div>
+              <div>
                 <Button variant="primary" onClick={handleShow}>Add New Listing</Button>
                 <Modal show={show} onHide={handleClose}>
                   <Modal.Header closeButton>
                     <Modal.Title>Add Listing</Modal.Title>
                   </Modal.Header>
-                  <Modal.Body><AddListingPage /></Modal.Body>
+                  <Modal.Body>
+                    <AddListingPage />
+                  </Modal.Body>
                   <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>Close</Button>
                   </Modal.Footer>
                 </Modal>
-              </Row>
+              </div>
+            </div>
+
+            <CardDeck className="container" style={{ display: "flex", justifyContent: "start" }}>
               <ListingDetail allListings={available}
                 edit={true} />
-            </div>
+            </CardDeck>
           </Tab>
         </Tabs>
       </ProtectedRoute>
@@ -80,7 +85,6 @@ export default function ListingTabs(props) {
       <Route path="/dashboard/listing/:id">
         <EditSingleListingPage />
       </Route>
-      {/* <Route path="/dashboard/addlisting" component={AddListingPage} /> */}
     </Switch>
   )
 }

@@ -48,7 +48,7 @@ export default class HomePage extends Component {
   render() {
     let { isLoggedIn } = this.props;
     return (
-      <div>
+      <>
         {/* search all pages and listings */}
         <SearchBar scope={"homepage"}
           onChange={this.handleChange}
@@ -71,7 +71,7 @@ export default class HomePage extends Component {
 
           </Route>
         </Switch>
-      </div>
+      </>
 
 
     )

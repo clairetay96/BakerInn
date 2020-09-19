@@ -67,20 +67,23 @@ class App extends React.Component {
             exact
             component={() => <Login loggedIn={this.loggedIn} />} />
 
-          {/* this route must protected */}
-          <ProtectedRoute path="/dashboard">
-            <DashboardPage />
-          </ProtectedRoute>
+          <div className="container">
+            {/* this route must protected */}
+            <ProtectedRoute path="/dashboard">
+              <DashboardPage />
+            </ProtectedRoute>
 
-          {/* this route must have protected actions*/}
-          <Route path="/homepage">
-            <HomePage isLoggedIn={this.state.loggedIn} />
-          </Route>
+            {/* this route must have protected actions*/}
+            <Route path="/homepage">
+              <HomePage isLoggedIn={this.state.loggedIn} />
+            </Route>
 
-          {/* redirect all non-specified routes. maybe have a 404 page*/}
-          <Route exact path="/">
-            <Redirect to="/homepage" />
-          </Route>
+            {/* redirect all non-specified routes. maybe have a 404 page*/}
+            <Route exact path="/">
+              <Redirect to="/homepage" />
+            </Route>
+          </div>
+
 
 
         </Router>
