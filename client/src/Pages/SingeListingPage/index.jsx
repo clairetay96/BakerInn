@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap'
 import { withRouter } from 'react-router-dom'
 
 class SingleListingPage extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
       data: null,
@@ -23,14 +23,14 @@ class SingleListingPage extends Component {
     // need seller data
     const url = `/api/listings/${listing_id}`
     fetch(url)
-    .then(res=>res.json())
-    .then(res=>{
-      this.setState({
-        data: res,
-        loading: false
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          data: res,
+          loading: false
+        })
       })
-    })
-    .catch(err=>console.log(err))
+      .catch(err => console.log(err))
   }
 
   render() {
@@ -51,7 +51,7 @@ class SingleListingPage extends Component {
               <img src="https://apprecs.org/gp/images/app-icons/300/41/com.mybox.tothetop.jpg" style={{ width: "100px", height: "100px" }} />
             </div>
             <div className="text-left col user">
-              <h4>{this.state.loading ? null : this.state.data.owner_info.username }</h4>
+              <h4>{this.state.loading ? null : this.state.data.owner_info.username}</h4>
               <p>Item location: {this.state.loading ? null : this.state.data.location}</p>
             </div>
           </div>
@@ -59,7 +59,7 @@ class SingleListingPage extends Component {
             <h3>{this.state.loading ? null : this.state.data.item}</h3>
             <p>{this.state.loading ? null : this.state.data.description}</p>
             <Button disabled={this.state.loading}
-                    onClick={()=>this.props.createChat(this.state.data)}>
+              onClick={() => this.props.createChat(this.state.data)}>
               Chat
             </Button>
           </div>

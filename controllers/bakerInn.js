@@ -134,7 +134,7 @@ module.exports = (db) => {
         modelFuncs.getUserListing(userID, false, (err, res) => {
             if (err) {
                 console.log(err)
-                response.send("Error occurred.")
+                response.status(500).send(err)
             } else {
                 response.send(res)
             }
@@ -148,7 +148,7 @@ module.exports = (db) => {
         modelFuncs.getUserListing(userID, true, (err, res) => {
             if (err) {
                 console.log(err)
-                response.send("Error occurred.")
+                response.send("Error occurred in get borrowlisting.")
             } else {
                 response.send(res)
             }
@@ -170,8 +170,8 @@ module.exports = (db) => {
     let expressInterest = (request, response) => {
         let listingID = request.params.id
         let userID = request.userId
-        modelFuncs.expressInterest(listingID, userID, (err, res)=>{
-            if(err){
+        modelFuncs.expressInterest(listingID, userID, (err, res) => {
+            if (err) {
                 console.log(err)
                 response.status(500).send("Error occurred.")
             } else {

@@ -129,22 +129,29 @@ module.exports = (db) => {
     let getUserListing = (userID, borrowed, callback) => {
         db.collection("users").findOne({ _id: ObjectId(userID) })
             .then(res => {
+                console.log("FIRST RES", res)
                 let userListings = borrowed ? res.borrowed : res.listings
                 let allQueries = []
                 userListings.forEach((listingID) => {
                     allQueries.push(
                         db.collection("listings").findOne({ _id: ObjectId(listingID) })
-                            .then(res1 => {
-                                let allQueries = []
-
-                                allQueries.push(res1)
-                                allQueries.push( db.collection("users").findOne({ _id: ObjectId(res1.user_id) }) )
-
-                                return Promise.all(allQueries)
+                            .then(res1 => { //res1 is the listing object from listings collection
+                                if (res1) {
+                                    let allSubQueries = []
+                                    allSubQueries.push(res1)
+                                    allSubQueries.push(db.collection("users").findOne({ _id: ObjectId(res1.owner_id) }))
+                                    return Promise.all(allSubQueries)
+                                } else {
+                                    return null
+                                }
                             })
-                            .then(res2 => {
-                                res2[0].owner_info = { username: res2[1].username, user_id: res2[1]._id }
-                                return res2[0]
+                            .then(res2 => { //res2 is a list [listingobject, userobject]
+                                if (res2) {
+                                    res2[0].owner_info = { username: res2[1].username }
+                                    return res2[0]
+                                } else {
+                                    return null
+                                }
                             })
                             .catch(err => { throw err })
                     )
@@ -178,12 +185,12 @@ module.exports = (db) => {
     }
 
     //add user interest to listing.
-    let expressInterest = (listingID, userID, callback) =>{
-        db.collection("listings").updateOne({_id: ObjectId(listingID)}, {$push: {interested: userID} })
+    let expressInterest = (listingID, userID, callback) => {
+        db.collection("listings").updateOne({ _id: ObjectId(listingID) }, { $push: { interested: userID } })
             .then(res => {
                 callback(null, res)
             })
-            .catch(err => {callback(err, null)})
+            .catch(err => { callback(err, null) })
 
     }
 

@@ -24,6 +24,7 @@ class App extends React.Component {
       socket: null,
       newChatData: null,
       username: null,
+      userId: null
     }
   }
 
@@ -74,12 +75,15 @@ class App extends React.Component {
         if (valid) {
           const cookie = document.cookie
           const username = JSON.parse(atob(cookie.split(".")[1])).username
+          const userId = JSON.parse(atob(cookie.split(".")[1])).userId
+          console.log(userId)
 
           let socket = this.setupSocket(username)
           this.setState({
             loggedIn: valid,
             socket: socket,
-            username: username
+            username: username,
+            userId: userId
           })
         } else {
           this.setState({
@@ -97,7 +101,7 @@ class App extends React.Component {
 
     //query to send the username
     const ENDPOINT = "localhost:5000"
-    let socket = io(ENDPOINT, {query: `username=${username}`})
+    let socket = io(ENDPOINT, { query: `username=${username}` })
     socket.on('connect', () => {
       console.log(username, 'connected');
     })
@@ -109,13 +113,13 @@ class App extends React.Component {
       <div className="App">
         <Router>
           <NavBar isLoggedIn={this.state.loggedIn}
-                  user={this.state.username}
-                  signout={this.signout} />
+            user={this.state.username}
+            signout={this.signout} />
 
           {/* conditionally render chat-overlay, show only when logged in */}
           {this.state.loggedIn
-            ? (<ChatContainer socket={this.state.socket} 
-                              newChatData={this.state.newChatData}/>)
+            ? (<ChatContainer socket={this.state.socket}
+              newChatData={this.state.newChatData} />)
             : null
           }
           <Container style={{ marginTop: '66px', textAlign: "center" }}>
@@ -127,13 +131,13 @@ class App extends React.Component {
 
             {/* this route must protected */}
             <ProtectedRoute path="/dashboard">
-              <DashboardPage />
+              <DashboardPage userId={this.state.userId} />
             </ProtectedRoute>
 
             {/* this route must have protected actions*/}
             <Route path="/homepage">
-              <HomePage isLoggedIn={this.state.loggedIn} 
-                        createChat={this.createChat}/>
+              <HomePage isLoggedIn={this.state.loggedIn}
+                createChat={this.createChat} />
             </Route>
 
             {/* blank page for testing*/}

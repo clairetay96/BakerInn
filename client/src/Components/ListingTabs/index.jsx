@@ -9,6 +9,9 @@ import AddListingPage from "../../Pages/AddListingPage";
 
 
 export default function ListingTabs(props) {
+
+  console.log("LISTING TABS", props)
+
   let { available = null } = props.listingData
 
   const [show, setShow] = useState(false);
