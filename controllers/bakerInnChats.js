@@ -49,7 +49,7 @@ module.exports = (db) => {
         modelChatFuncs.getChatMessages(chat_id, (err,res)=>{
             if(err){
                 console.log(err)
-                response.status(500).send("Error occurred.")
+                response.status(500).send("Error occurred")
             } else {
                 response.status(200).send(res)
             }

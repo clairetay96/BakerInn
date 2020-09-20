@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Switch from 'react-bootstrap/esm/Switch';
-import { Route, Link } from 'react-router-dom';
-//remove Link
+import { Route } from 'react-router-dom';
 
 import Carousel from '../../Components/Carousel';
 import Discovery from '../../Components/Discovery';
