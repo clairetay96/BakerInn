@@ -194,6 +194,17 @@ module.exports = (db) => {
 
     }
 
+    // update listing info
+    let updateListingInfo = (updatedInfo, listingID, callback) => {
+        db.collection("listings").updateOne({ _id: ObjectId(listingID) }, { $set: updatedInfo })
+            .then(res => {
+                callback(null, res)
+            })
+            .catch(err => {
+                callback(err, null)
+            })
+    }
+
 
     return {
         getAllUsers,
@@ -205,7 +216,8 @@ module.exports = (db) => {
         getUserListing,
         getOneListing,
         userLogin,
-        expressInterest
+        expressInterest,
+        updateListingInfo
 
     }
 }

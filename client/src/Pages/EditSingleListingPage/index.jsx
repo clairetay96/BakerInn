@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './index.css'
+import EditListing from '../../Components/EditListing'
 
 import { Button, Modal } from 'react-bootstrap'
 // import { withRouter } from 'react-router-dom'
@@ -14,6 +15,10 @@ function EditSingleListingPage({ match }) {
   const [listing, setListing] = useState({
     owner_info: {}
   })
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const fetchListing = async () => {
     const listing_id = match.params.id
@@ -53,7 +58,18 @@ function EditSingleListingPage({ match }) {
 
           <div className="buttons">
             {/* <Button >Confirm</Button> */}
-            <Button >Edit</Button>
+            <Button variant="primary" onClick={handleShow}>Edit</Button>
+            <Modal size="lg" show={show} onHide={handleClose}>
+              <Modal.Header closeButton>
+                <Modal.Title >Edit Listing</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <EditListing listingInfo={listing} />
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>Close</Button>
+              </Modal.Footer>
+            </Modal>
             <Button >Delete</Button>
           </div>
 

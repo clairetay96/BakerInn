@@ -42,7 +42,7 @@ module.exports = (app, db) => {
   app.put('/api/listings/:id/interested', withAuth, bakerIn.expressInterest)
 
   //make changes to specific listing
-  app.put('/api/listings/:id/edit')
+  app.put('/api/listings/:id/edit', bakerIn.editListing)
 
   //delete specific listing
   app.delete('/api/listings/:id/delete')

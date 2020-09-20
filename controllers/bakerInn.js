@@ -182,6 +182,21 @@ module.exports = (db) => {
         })
     }
 
+    // edit listing info
+    let editListing = (request, response) => {
+        let listingID = request.params.id
+        let updatedListingInfo = request.body
+        console.log("EDIT LISTING INFO IN CONTROLLER", updatedListingInfo)
+        modelFuncs.updateListingInfo(updatedListingInfo, listingID, (err, res) => {
+            if (err) {
+                console.log(err)
+                response.send("error occurred.")
+            } else {
+                response.send("Update Listing successfully")
+            }
+        })
+    }
+
     return {
         ping,
         getAllUsers,
@@ -196,7 +211,8 @@ module.exports = (db) => {
         getListingInfo,
         login,
         validate,
-        expressInterest
+        expressInterest,
+        editListing
     }
 
 };
