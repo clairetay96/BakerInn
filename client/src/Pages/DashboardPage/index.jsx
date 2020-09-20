@@ -15,7 +15,7 @@ export default class DashboardPage extends Component {
 
     this.state = {
       search: '',
-      user: props.userId,
+      userId: props.userId,
       userLendingListings: {
         available: [],
         loan: [6, 7, 8, 9, 10],
@@ -37,7 +37,7 @@ export default class DashboardPage extends Component {
   }
 
   fetchUserPostedListing = async () => {
-    const url = `/api/listings/user/${this.state.user}`;
+    const url = `/api/listings/user/${this.state.userId}`;
 
     let res = await fetch(url)
     let userListings = await res.json()
