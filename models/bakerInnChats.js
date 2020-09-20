@@ -65,17 +65,20 @@ module.exports = (db) => {
                         db.collection(item.table).findOne({_id: ObjectId(item.id)})
                             .then(res => {
                                 let resultArray = item.fields.map((field)=>{
-                                    return res[field]
+                                    if(res){
+                                        return res[field]
+                                    } else {
+                                        return null
+                                    }
                                 })
-
                                 return resultArray
-
                             })
                             .catch(err => {throw err}))
+
                 })
 
 
-                return Promise.all(allQueries) //returns a list with [chatInfo, ownerName, buyerName, listingName]
+                return Promise.all(allQueries) //returns a list with [chatInfo, ownerName, buyerName, listingName, listingState, listingOption]
 
             })
             .then(res1 => {

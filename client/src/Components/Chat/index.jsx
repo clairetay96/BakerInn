@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import './index.css'
-import io from 'socket.io-client'
 
-let socket;
-
-export default function Chat({ chat_id }) {
-
+export default function Chat({ chat_id, user_id, socket, onClose }) {
   //where chat_id is the chat_id and user_id is the logged in user_id
 
-  const ENDPOINT = "http://localhost:5000"
 
-  const cookie = document.cookie
-  const user_id = JSON.parse(atob(cookie.split(".")[1])).userId
+  ///////////////
+  // debugging code here
+  socket.on('disconnect', ()=>{
+    console.log(chat_id, '-- chat dc');
+  })
+
+
+  const [error, setError] = useState(null)
+  // end of debugging code
+  ///////////////
+
 
   const [message, setMessage] = useState('')
 
@@ -21,15 +25,16 @@ export default function Chat({ chat_id }) {
   const [receiver, setReceiver] = useState({})
   const [listing, setListing] = useState({}) //object containing listing_id, listing name
   const [messageKey, setMessageKey] = useState(0)
-
   const [transactionOption, setTransactionOption] = useState(null)
 
+
   useEffect(()=>{
-    //fetch chat data from database
+    //fetch chat users data/listing from database
     let abortController = new AbortController()
     fetch(`/api/chats/${chat_id}`, { signal: abortController.signal})
         .then(res=>res.json())
         .then(res => {
+            console.log(res);
             let sender_id = res.buyer_id
             let sender_username = res.buyer_username
             let receiver_id = res.owner_id
@@ -69,6 +74,7 @@ export default function Chat({ chat_id }) {
 
         })
         .catch(err => {
+            setError('error detected')
             if(!abortController.signal.aborted){
                 console.log(err)
             }
@@ -105,20 +111,18 @@ export default function Chat({ chat_id }) {
         return ()=>{
             abortController1.abort()
         }
-  })
+  },[])
 
   useEffect(()=>{
     //socket to join chat room - emit
-    socket = io(ENDPOINT)
-    console.log("This is io client!")
-    socket.emit('join', { room_id: 'room' + chat_id })
-
-  }, [ENDPOINT])
+    socket.emit('join', { room_id: chat_id })
+  }, [])
 
 
   useEffect(()=>{
     //socket to  receive message - on
-    socket.on('receiveMessage', ( { message, sender_name } )=>{
+    socket.on('receiveMessage' + chat_id, ( { message, sender_name } )=>{
+        console.log(sender_name, '-- receive');
 
         setMessages( messages =>[...messages, { message, sender_name }])
         setMessageKey( messageKey => messageKey+1)
@@ -167,11 +171,12 @@ export default function Chat({ chat_id }) {
 
 const sendMessage = (event) => {
     event.preventDefault()
+    console.log(sender.username, '-- sendMessage');
 
     let messageInfo = {
         message,
         sender_name: sender.username,
-        chatroom_id: 'room' + chat_id,
+        chatroom_id: chat_id,
         userroom_id: 'user' + receiver.user_id
     }
 
@@ -203,10 +208,10 @@ const sendMessage = (event) => {
         })
         .catch(err => console.log(err))
 
-    //set message to empty
+    // set message to empty
     setMessage("")
-
 }
+
 
 
 //have option for buyer to make the listing unavailable (for purchasable items) - form submit
@@ -242,18 +247,26 @@ useEffect(()=>{
 
 
 
-  return (
-    <div className="chat-root">
-      {/* <div className="to-do">
-      <h5>this is the beningging of the end</h5>
-      <p>show a list of past chats (side tab / toggle)</p>
-      <p>have a chat window open (bottom tab / toggle)</p>
-      <p>have a input field to post a new message</p>
-      <p>think of more functions</p>
-      </div> */}
-      <div className="chat-window">
-        <div>{chat_id}</div>
+  const [toggle, setToggle] = useState(true)
+  const toggleChat = () => {
+    setToggle(!toggle)
+  }
 
+
+  return (
+    <>
+    <div className={toggle ? "chat-root" : "chat-root min-chat"}>
+      <div className="chat-window">
+        <button className="on-close"
+                onClick={()=>onClose(chat_id)}>
+            Close
+        </button>
+        <button onClick={toggleChat}>Minimize</button>
+        <div className="on-close">{chat_id}</div>
+        {error
+         ? (<p>{error}</p>)
+         : null
+        }
         <div className="message-board">{messageHTML}</div>
         <form onSubmit={sendMessage}>
           <input type="text" value={message} onChange={(event)=>{setMessage(event.target.value)}}/>
@@ -261,5 +274,6 @@ useEffect(()=>{
         </form>
       </div>
     </div>
+    </>
   )
 }

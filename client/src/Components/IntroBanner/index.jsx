@@ -6,12 +6,13 @@ export default function IntroBanner() {
   return (
     <Row className="intro-banner">
       <Col xs={12}>
-        <h1>What we offer</h1>
+        <h3>What we offer</h3>
+        <p>need make fancy cards</p>
       </Col>
       
-      <Col xs={4}>explain to them</Col>
-      <Col xs={4}>all bout our fancy</Col>
-      <Col xs={4}>features•••</Col>
+      <Col xs={4}>Share your extra items</Col>
+      <Col xs={4}>Looking for something</Col>
+      <Col xs={4}>Connect with the community</Col>
     </Row>
   )
 }

@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { Row, Col } from 'react-bootstrap'
+import { CardDeck, Button, Navbar } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import ListingDetail from '../../Components/ListingDetail'
 
 export default function ListingDetailPage(props) {
   let history = useHistory()
-  let {nextpage : next, allListings, edit} = props
+  let { nextpage: next, allListings, edit } = props
 
   const handleBack = () => {
     history.push("/dashboard")
@@ -17,17 +17,15 @@ export default function ListingDetailPage(props) {
   }
 
   return (
-    <Row className="justify-content-around">
-      <Col>
-        <button onClick={handleBack}>Back</button>
-      </Col>
-      <Col>
-        <button onClick={handleNext}>{next}</button>
-      </Col>
-      <Col xs={12}>
+    <>
+      <Navbar bg="light" style={{ display: "flex", justifyContent: "space-between" }}>
+        <Button variant="light" onClick={handleBack}>Back</Button>
+        <Button variant="light" onClick={handleNext}>{next}</Button>
+      </Navbar>
+      <CardDeck className="container" style={{ display: "flex", justifyContent: "start" }}>
         <ListingDetail allListings={allListings}
-                       edit={edit}/>
-      </Col>
-    </Row>
+          edit={edit} />
+      </CardDeck>
+    </>
   )
 }

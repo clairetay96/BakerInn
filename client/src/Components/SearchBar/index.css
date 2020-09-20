@@ -2,6 +2,11 @@
   padding: 10px 0;
   margin: 14px 0;
   border: 2px solid lightgrey;
+  height: 170px;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .search > input {

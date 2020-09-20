@@ -1,7 +1,4 @@
-.col, .row  {
-  border: 1px solid steelblue;
-}
-
-.p-Icon {
-  display: inline;
+.buttons > button {
+  width: 100px;
+  margin-right: 40px;
 }

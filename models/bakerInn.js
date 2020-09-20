@@ -66,20 +66,24 @@ module.exports = (db) => {
         let emailResult = await db.collection("users").find({ email: userLoginInfo.email }).toArray()
 
         // result returns true if the password matches
-        bcrypt.compare(userLoginInfo.password, emailResult[0].password, (err, result) => {
-            if (err) {
-                console.log("err in userLogin model", err)
-                callback(err, null)
-            } else {
-                let data = {
-                    email: emailResult[0].email,
-                    username: emailResult[0].username,
-                    id: emailResult[0]._id,
-                    result
+        try {
+            bcrypt.compare(userLoginInfo.password, emailResult[0].password, (err, result) => {
+                if (err) {
+                    console.log("err in userLogin model", err)
+                    callback(err, null)
+                } else {
+                    let data = {
+                        email: emailResult[0].email,
+                        username: emailResult[0].username,
+                        id: emailResult[0]._id,
+                        result
+                    }
+                    callback(null, data)
                 }
-                callback(null, data)
-            }
-        })
+            })
+        } catch (err) {
+            callback(true, null)
+        }
 
     }
 

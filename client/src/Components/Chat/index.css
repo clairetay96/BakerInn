@@ -1,13 +1,9 @@
 .chat-root {
-  display: flex;
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  z-index: 20;
+  z-index: 30;
 }
 
 .chat-window {
-  height: 350px;
+  height: 400px;
   width: 265px;
   border: 1px solid rebeccapurple;
 }
@@ -18,4 +14,19 @@
   width: 250px;
   border: 1px solid rebeccapurple;
   overflow: auto;
+}
+
+.open-button {
+  background-color: #555;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  width: 265px;
+  z-index: 20;
+}
+
+.min-chat {
+  transform: translateY(350px)
 }
