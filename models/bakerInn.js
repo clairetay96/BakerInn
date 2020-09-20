@@ -6,7 +6,7 @@ const ObjectId = mongo.ObjectId
 module.exports = (db) => {
 
     let getAllUsers = (callback) => {
-        db.collection("users").find({}).toArray()
+        db.collection("users").aggregate([{$project: {password: 0}}]).toArray()
             .then(res => {
                 callback(null, res)
             })
@@ -18,6 +18,7 @@ module.exports = (db) => {
     let getUserFromID = (userID, callback) => {
         db.collection("users").findOne({ _id: ObjectId(userID) })
             .then(res => {
+                delete res.password
                 callback(null, res)
             })
             .catch(err => {
@@ -183,6 +184,12 @@ module.exports = (db) => {
 
     }
 
+    let makeUnavailable = (listingID, callback) => {
+        db.collection("listings").updateOne({_id: ObjectId(listingID)}, {$set: {"state": "unavailable"}})
+            .then(res => callback(null, res))
+            .catch(err => callback(err, null))
+    }
+
 
     return {
         getAllUsers,
@@ -194,7 +201,8 @@ module.exports = (db) => {
         getUserListing,
         getOneListing,
         userLogin,
-        expressInterest
+        expressInterest,
+        makeUnavailable
 
     }
 }

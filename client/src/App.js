@@ -11,6 +11,7 @@ import Auth from './Auth';
 import AddListingPage from './Pages/AddListingPage'
 import ProtectedRoute from './Components/ProtectedRoute';
 import Test from './Pages/tempTest'
+import Test2 from './Pages/tempTest2'
 
 class App extends React.Component {
   constructor() {
@@ -82,8 +83,19 @@ class App extends React.Component {
           <Route exact path="/">
             <Redirect to="/homepage" />
           </Route>
-
+          <Route path="/add-listing">
           <AddListingPage />
+          </Route>
+
+          <Route path="/test">
+            <Test listingId="5f65855ea4be83df4ea3f41e"/>
+          </Route>
+
+          <Route path="/test2">
+            <Test2 listingId="5f65855ea4be83df4ea3f41e"/>
+          </Route>
+
+
 
 
         </Router>

@@ -182,6 +182,19 @@ module.exports = (db) => {
         })
     }
 
+    let makeUnavailable = (request, response) => {
+        let listingID = request.params.id
+        modelFuncs.makeUnavailable(listingID, (err, res)=>{
+            if(err){
+                console.log(err)
+                response.status(500).send("Error occurred.")
+            } else {
+                response.status(200).send("Listing made unavailable")
+            }
+        })
+
+    }
+
     return {
         ping,
         getAllUsers,
@@ -196,7 +209,8 @@ module.exports = (db) => {
         getListingInfo,
         login,
         validate,
-        expressInterest
+        expressInterest,
+        makeUnavailable
     }
 
 };

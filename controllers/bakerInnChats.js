@@ -36,6 +36,7 @@ module.exports = (db) => {
         let chat_id = request.params.id
         modelChatFuncs.getChatInfo(chat_id, (err, res)=> {
             if(err){
+                console.log(err)
                 response.status(500).send("Error occurred.")
             } else {
                 response.status(200).send(res)
@@ -63,8 +64,10 @@ module.exports = (db) => {
 
         }
         modelChatFuncs.getChatId(chatInfo, (err, res)=>{
-            if(err)
+            if(err){
+                console.log(err)
                 response.status(500).send("Error occurred.")
+            }
             else {
                 response.status(200).send(res)
             }
@@ -73,7 +76,6 @@ module.exports = (db) => {
 
 
     let getChatIdsByInfo = (request, response) => {
-        console.log("I'm in controller")
         let chatInfo = {
             buyer_id: request.params.buyerid,
             owner_id: request.userId,
@@ -81,8 +83,10 @@ module.exports = (db) => {
 
         }
         modelChatFuncs.getChatId(chatInfo, (err, res)=>{
-            if(err)
+            if(err){
+                console.log(err)
                 response.status(500).send("Error occurred.")
+            }
             else {
                 console.log(res)
                 response.status(200).send(res)

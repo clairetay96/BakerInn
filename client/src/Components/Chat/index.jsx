@@ -8,7 +8,7 @@ export default function Chat({ chat_id }) {
 
   //where chat_id is the chat_id and user_id is the logged in user_id
 
-  const ENDPOINT = "localhost:5000"
+  const ENDPOINT = "http://localhost:5000"
 
   const cookie = document.cookie
   const user_id = JSON.parse(atob(cookie.split(".")[1])).userId
@@ -22,9 +22,10 @@ export default function Chat({ chat_id }) {
   const [listing, setListing] = useState({}) //object containing listing_id, listing name
   const [messageKey, setMessageKey] = useState(0)
 
+  const [transactionOption, setTransactionOption] = useState(null)
+
   useEffect(()=>{
     //fetch chat data from database
-    //fetch previous messages from database
     let abortController = new AbortController()
     fetch(`/api/chats/${chat_id}`, { signal: abortController.signal})
         .then(res=>res.json())
@@ -41,6 +42,8 @@ export default function Chat({ chat_id }) {
                 receiver_username = res.buyer_username
 
             }
+
+            console.log(res)
 
             setSender(
                 {
@@ -59,7 +62,9 @@ export default function Chat({ chat_id }) {
             setListing(
             {
                 listing_id: res.listing_id,
-                listing_item: res.listing_item
+                item: res.listing_item,
+                option: res.listing_option,
+                state: res.listing_state
             })
 
         })
@@ -72,10 +77,9 @@ export default function Chat({ chat_id }) {
         return () => {
             abortController.abort()
         }
-
-
   }, [])
 
+  //fetch messages from the database
   useEffect(()=>{
     let abortController1 = new AbortController()
     //set messages state to contain messages.
@@ -134,6 +138,32 @@ export default function Chat({ chat_id }) {
 
   }, [])
 
+  //populate the options available to the user - after setListing,setSender,setReceiver have been changed.
+  useEffect(()=>{
+
+    if(listing.state === "available"){
+        if(listing.option=="loan"){
+            //make button for loan on both ends
+
+        } else if(listing.option=="sale"){
+            //make button for seller to make the item "unavailable"/confirm transaction ie purchase has gone thru
+
+        }
+
+    } else if (listing.state==="unavailable") {
+        //if the buyer in the chat is not the buyer in the database, notify
+
+        //if buyer in the chat is buyer in the database, notify
+
+    } else if (listing.state==="on loan"){
+        //make button for returning on both ends
+
+
+    }
+
+
+
+  }, [sender, receiver, listing])
 
 const sendMessage = (event) => {
     event.preventDefault()
@@ -177,6 +207,37 @@ const sendMessage = (event) => {
     setMessage("")
 
 }
+
+
+//have option for buyer to make the listing unavailable (for purchasable items) - form submit
+//emit notification that exchange has been made
+//socket on to receive confirmation that exchange has been made
+//update state in database to unavailable
+function makeUnavailable()=>{
+
+}
+
+//for borrowable items.
+
+//have option for buyer and seller to make the listing "on loan"  - form submit
+//emit a loan confirmation - setState
+//pending state OR loan confirmed
+function agreeToLoan(event)=>{
+
+}
+
+
+//listen for a loan confirmation from opposite side -- use effect, socket on
+//receive a loan confirmation - setState
+useEffect(()=>{
+
+}, [])
+
+
+//update database from buyer side when both states are set - use effect, fetch request
+useEffect(()=>{
+
+}, [])
 
 
 

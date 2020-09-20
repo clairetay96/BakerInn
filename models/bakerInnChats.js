@@ -44,17 +44,17 @@ module.exports = (db) => {
 
                 let queryParams = [
                 {
-                    field: "username",
+                    fields: ["username"],
                     table: "users",
                     id: ownerID
                 },
                 {
-                    field: "username",
+                    fields:[ "username"],
                     table: "users",
                     id: buyerID
                 },
                 {
-                    field: "item",
+                    fields: ["item", "state", "option"],
                     table: "listings",
                     id: listingID
                 }]
@@ -63,7 +63,14 @@ module.exports = (db) => {
                 queryParams.forEach((item) => {
                     allQueries.push(
                         db.collection(item.table).findOne({_id: ObjectId(item.id)})
-                            .then(res => res[item.field])
+                            .then(res => {
+                                let resultArray = item.fields.map((field)=>{
+                                    return res[field]
+                                })
+
+                                return resultArray
+
+                            })
                             .catch(err => {throw err}))
                 })
 
@@ -72,9 +79,11 @@ module.exports = (db) => {
 
             })
             .then(res1 => {
-                res1[0].owner_username = res1[1]
-                res1[0].buyer_username = res1[2]
-                res1[0].listing_item = res1[3]
+                res1[0].owner_username = res1[1][0]
+                res1[0].buyer_username = res1[2][0]
+                res1[0].listing_item = res1[3][0]
+                res1[0].listing_state = res1[3][1]
+                res1[0].listing_option = res1[1][2]
                 callback(null, res1[0])
             })
             .catch(err => {callback(err, null)})
