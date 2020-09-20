@@ -76,10 +76,14 @@ class App extends React.Component {
   // check when app opens
   // check when user logs in
   setupSocket = () => {
+    const cookie = document.cookie
+    const username = JSON.parse(atob(cookie.split(".")[1])).username
+
+    //query to send the username
     const ENDPOINT = "localhost:5000"
-    let socket = io(ENDPOINT)
+    let socket = io(ENDPOINT, {query: `username=${username}`})
     socket.on('connect', () => {
-      console.log('user connected');
+      console.log(username, 'connected');
     })
     return socket
   }

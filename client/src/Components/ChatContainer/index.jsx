@@ -6,7 +6,6 @@ export default function ChatContainer({ socket }) {
 
   const cookie = document.cookie
   const user_id = JSON.parse(atob(cookie.split(".")[1])).userId
-  console.log(JSON.parse(atob(cookie.split(".")[1])), 'payload');
 
   // add more chats when the user clicks on the chat button
   // initialize the list of chats when first rendered

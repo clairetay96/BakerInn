@@ -47,8 +47,9 @@ const io = require('socket.io')(server);
 
 
 //connect socket io
+//handshake from client App.js to see who is user is
 io.on('connection', (socket) => {
-  console.log('user connected');
+  console.log(socket.handshake.query.username , 'connected');
 
   //socket joins a room
   socket.on('join', ({room_id})=>{

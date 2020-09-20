@@ -178,11 +178,15 @@ const sendMessage = (event) => {
     // set message to empty
     setMessage("")
 }
-
+  
   const [toggle, setToggle] = useState(true)
   const toggleChat = () => {
     setToggle(!toggle)
   }  
+
+  const scrollBottom = (e) => {
+      console.log(e);
+  }
 
   return (
     <>
@@ -198,7 +202,7 @@ const sendMessage = (event) => {
          ? (<p>{error}</p>)
          : null
         }
-        <div className="message-board">{messageHTML}</div>
+        <div className="message-board" onChange={scrollBottom}>{messageHTML}</div>
         <form onSubmit={sendMessage}>
           <input type="text" value={message} onChange={(event)=>{setMessage(event.target.value)}}/>
           <input type="submit" value="Send" />
