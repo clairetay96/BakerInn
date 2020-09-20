@@ -74,7 +74,7 @@ export default function ChatContainer({ socket, newChatData }) {
 
   // track addition of more chatrooms from list
   const [activeChat, setActiveChat] = useState([])
-  
+
   // populate active chat
   const handleAddWindow = (e) => {
     e.preventDefault()
@@ -89,13 +89,15 @@ export default function ChatContainer({ socket, newChatData }) {
     setActiveChat([...activeChat, id])
   }
 
+
   //rerender 
   const [renderActive, setRenderActive] = useState([])
+
   useEffect(() => {
     setRenderActive(activeChat.map((id) => {
-      return (<Chat chat_id={id} 
+      return (<Chat chat_id={id}
                         key={id}
-                        user_id={user_id} 
+                        user_id={user_id}
                         onClose={handleDeleteWindow}
                         socket={socket}/>)
     }))
@@ -130,7 +132,7 @@ export default function ChatContainer({ socket, newChatData }) {
         return output
       } else {
         return 'U hav no frens how sad :('
-      }    
+      }
     }
   }
 

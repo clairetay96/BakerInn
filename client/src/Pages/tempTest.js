@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Chat from '../Components/Chat'
+import ChatContainer from '../Components/ChatContainer'
 
 //page for listing - can be seen by potential buyers, interested people and owner
-let Test = ({ listingId }) => {
+let Test = ({ listingId, socket }) => {
 
     const [listingDetails, setListingDetails] = useState({})
     const [isInterested, setInterest] = useState(false)
@@ -13,9 +14,6 @@ let Test = ({ listingId }) => {
     const user_id = JSON.parse(atob(cookie.split(".")[1])).userId
 
     //get listing information
-
-
-
     useEffect(()=>{
 
         const abortController = new AbortController()
@@ -46,13 +44,14 @@ let Test = ({ listingId }) => {
     useEffect(()=>{
         if(listingDetails.owner_id==user_id){
             setOwner(true)
-            setBuyerInterestChat(<div> I own this item! <div><Chat chat_id="5f6585b01d3053e0d534b852"/></div> </div>)
+            setBuyerInterestChat(<div> I own this item! <div></div> </div>)
         } else {
             if(listingDetails.interested && listingDetails.interested.includes(user_id)){
                 setInterest(true)
-                setBuyerInterestChat(<div><div>I have already expressed interest.</div><Chat chat_id="5f6585b01d3053e0d534b852"/></div>)
+                setBuyerInterestChat(<div><div>I have already expressed interest.</div></div>)
             } else {
-                setBuyerInterestChat(<form onSubmit={submitHandlerInterest}><input type="submit" value="express interest" /></form>)
+                //to be added later: only show purchase for sale items, not loan items.
+                setBuyerInterestChat(<div><form onSubmit={submitHandlerInterest}><input type="submit" value="express interest" /></form><form onSubmit={submitHandlerPurchase}><input type="submit" value="Purchase Item"/></form></div>)
             }
         }
 
@@ -151,11 +150,93 @@ let Test = ({ listingId }) => {
             .then(res => {
                 if(res){
                     let chatID = res.insertedId
-                    setBuyerInterestChat(<div><div>I have already expressed interest.</div><Chat chat_id={chatID}/></div>)
+                    setBuyerInterestChat(<div><div>I have already expressed interest.</div><Chat chat_id={chatID} socket={socket}/></div>)
                     console.log(res)
                 }
             })
             .catch(err => console.log(err))
+    }
+
+
+    function submitHandlerPurchase(event) {
+        event.preventDefault()
+
+        //change state to unavailable
+        let changeStateUrl = "/api/listings/"+listingDetails._id+"/unavailable"
+        let changeStateOptions = {
+            method: "PUT",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                listing_id: listingDetails._id
+            })
+        }
+
+        fetch(changeStateUrl, changeStateOptions)
+            .then(res => res.text())
+            .then(res => {console.log(res)})
+            .catch(err => {console.log(err, "---error in change state")})
+
+
+        //add user to interested listing
+        //add user to 'interested' of the listing
+        let url = "/api/listings/"+listingId+"/interested"
+        let requestOptions = {
+            method: "PUT",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json" }
+        }
+
+        fetch(url, requestOptions)
+            .then(res=> {
+                if(res.status===200){
+                    console.log(res)
+                } else if (res.status===500) {
+                    console.log("panic!")
+                }
+            })
+            .catch(err=> console.log(err))
+
+
+        //create chat to discuss collection of item, then open the chat
+        let makeChatUrl = "/api/chats/new"
+        let chatRequestOptions = {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                listing_id: listingDetails._id,
+                owner_id: listingDetails.owner_id,
+            })
+        }
+
+        fetch(makeChatUrl, chatRequestOptions)
+            .then(res => {
+                if(res.status===200){
+                    console.log(res)
+                    return res.json()
+                } else if(res.status===500){
+                    console.log("chat not made?!")
+                } else {
+                    console.log("help")
+                }
+
+            })
+            .then(res => {
+                if(res){
+                    let chatID = res.insertedId
+                    setBuyerInterestChat(<div><div>I have purchased this item.</div><Chat chat_id={chatID}/></div>)
+                    console.log(res)
+                }
+            })
+            .catch(err => console.log(err))
+
+
     }
 
 
@@ -165,6 +246,7 @@ let Test = ({ listingId }) => {
     return (
             <div>
             {listingDetails.item}, {listingDetails.price}, {listingDetails._id}
+
             {buyerInterestChat}
 
             </div>)

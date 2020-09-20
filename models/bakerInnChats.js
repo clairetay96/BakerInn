@@ -44,17 +44,17 @@ module.exports = (db) => {
 
                 let queryParams = [
                 {
-                    field: "username",
+                    fields: ["username"],
                     table: "users",
                     id: ownerID
                 },
                 {
-                    field: "username",
+                    fields:[ "username"],
                     table: "users",
                     id: buyerID
                 },
                 {
-                    field: "item",
+                    fields: ["item", "state", "option", "buyer_id"],
                     table: "listings",
                     id: listingID
                 }]
@@ -63,28 +63,31 @@ module.exports = (db) => {
                 queryParams.forEach((item) => {
                     allQueries.push(
                         db.collection(item.table).findOne({_id: ObjectId(item.id)})
-                            .then(res2 => {
-                                if (res2) {
-                                    return res2[item.field]
-                                } else {
-                                    return null
-                                }
+                            .then(res => {
+                                let resultArray = item.fields.map((field)=>{
+                                    if(res){
+                                        return res[field]
+                                    } else {
+                                        return null
+                                    }
+                                })
+                                return resultArray
                             })
-                            .catch(err => {
-                                console.log(err);
-                                throw new Error( '-- for each failed at getChatInfo')
-                            })
-                        )
+                            .catch(err => {throw err}))
+
                 })
 
 
-                return Promise.all(allQueries) //returns a list with [chatInfo, ownerName, buyerName, listingName]
+                return Promise.all(allQueries) //returns a list with [chatInfo, ownerName, buyerName, listingName, listingState, listingOption]
 
             })
             .then(res1 => {
-                res1[0].owner_username = res1[1]
-                res1[0].buyer_username = res1[2]
-                res1[0].listing_item = res1[3]
+                res1[0].owner_username = res1[1][0]
+                res1[0].buyer_username = res1[2][0]
+                res1[0].listing_item = res1[3][0]
+                res1[0].listing_state = res1[3][1]
+                res1[0].listing_option = res1[3][2]
+                res1[0].successful_buyer_id = res1[3][3]
                 callback(null, res1[0])
             })
             .catch(err => {callback(err, null)})
@@ -121,7 +124,6 @@ module.exports = (db) => {
 
     //find one chat
     let getChatId = (chatInfo, callback) => {
-        console.log("I'm in models")
         db.collection("chats").findOne(chatInfo)
             .then(res=>callback(null, res))
             .catch(err=>callback(err, null))
