@@ -101,9 +101,9 @@ export default class DashboardPage extends Component {
               nextpage={"borrowing"}
               edit={true} />
           </Route>
-          <Route path="/dashboard/listing/:id">
-            <EditSingleListingPage />
-          </Route>
+          <Route path="/dashboard/listing/:id" component={EditSingleListingPage} />
+          {/* <EditSingleListingPage />
+          </Route> */}
 
         </Switch>
 
