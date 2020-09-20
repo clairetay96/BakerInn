@@ -61,7 +61,7 @@ io.on('connection', (socket) => {
     //if there are 2 people in the room, send the message to the room. Else send a notification.
     if(noOfClientsInRoom(chatroom_id) == 2) {
         console.log(sender_name)
-        io.to(chatroom_id).emit('receiveMessage', { message, sender_name } )
+        io.to(chatroom_id).emit('receiveMessage' + chatroom_id , { message, sender_name } )
 
     } else if (noOfClientsInRoom(chatroom_id) < 2) {
 

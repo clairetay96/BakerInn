@@ -3,7 +3,7 @@
 }
 
 .chat-window {
-  height: 100%;
+  height: 400px;
   width: 265px;
   border: 1px solid rebeccapurple;
 }

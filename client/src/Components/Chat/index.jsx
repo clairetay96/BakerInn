@@ -27,8 +27,7 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
 
 
   useEffect(()=>{
-    //fetch chat data from database
-    //fetch previous messages from database
+    //fetch chat users data/listing from database
     let abortController = new AbortController()
     fetch(`/api/chats/${chat_id}`, { signal: abortController.signal})
         .then(res=>res.json())
@@ -109,13 +108,13 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
 
   useEffect(()=>{
     //socket to join chat room - emit
-    socket.emit('join', { room_id: 'room' + chat_id })
+    socket.emit('join', { room_id: chat_id })
   }, [])
 
 
   useEffect(()=>{
     //socket to  receive message - on
-    socket.on('receiveMessage', ( { message, sender_name } )=>{
+    socket.on('receiveMessage' + chat_id, ( { message, sender_name } )=>{
         console.log(sender_name, '-- receive');
 
         setMessages( messages =>[...messages, { message, sender_name }])
@@ -144,7 +143,7 @@ const sendMessage = (event) => {
     let messageInfo = {
         message,
         sender_name: sender.username,
-        chatroom_id: 'room' + chat_id,
+        chatroom_id: chat_id,
         userroom_id: 'user' + receiver.user_id
     }
 
