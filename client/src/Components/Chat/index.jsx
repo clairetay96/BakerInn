@@ -32,7 +32,6 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
     fetch(`/api/chats/${chat_id}`, { signal: abortController.signal})
         .then(res=>res.json())
         .then(res => {
-            console.log(res);
             let sender_id = res.buyer_id
             let sender_username = res.buyer_username
             let receiver_id = res.owner_id
@@ -94,6 +93,7 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
 
             setMessageHTML(messageHTMLtemp)
 
+
         })
         .catch(err=>{
             if(!abortController1.signal.aborted){
@@ -105,6 +105,14 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
             abortController1.abort()
         }
   },[])
+
+  // when a new message renders, autoscroll to the bottom
+  const text = document.getElementsByClassName('message-board');
+  useEffect(()=>{
+    if (messageHTML.length > 0) {
+    text[0].scrollTop = text[0].scrollHeight
+    }
+  }, [messageHTML])
 
   useEffect(()=>{
     //socket to join chat room - emit
@@ -202,7 +210,7 @@ const sendMessage = (event) => {
          ? (<p>{error}</p>)
          : null
         }
-        <div className="message-board" onChange={scrollBottom}>{messageHTML}</div>
+        <div className="message-board">{messageHTML}</div>
         <form onSubmit={sendMessage}>
           <input type="text" value={message} onChange={(event)=>{setMessage(event.target.value)}}/>
           <input type="submit" value="Send" />
