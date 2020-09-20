@@ -21,7 +21,9 @@ class App extends React.Component {
 
     this.state = {
       loggedIn: false,
-      socket: null
+      socket: null,
+      newChatData: null,
+      username: null,
     }
   }
 
@@ -40,28 +42,44 @@ class App extends React.Component {
     console.log('user disconnected');
     this.setState({
       loggedIn: false,
-      socket: null
+      socket: null,
+      username: null
     })
   }
 
   loggedIn = () => {
+    const cookie = document.cookie
+    const username = JSON.parse(atob(cookie.split(".")[1])).username
+
     let socket = this.setupSocket()
     this.setState({
       loggedIn: true,
-      socket: socket
+      socket: socket,
+      username: username
+    })
+  }
+
+  createChat = (data) => {
+    this.setState({
+      newChatData: data
     })
   }
 
   componentDidMount() {
+
     // check on first opening if the user has logged in before
     // authenticate the token
     Auth.authenticate()
       .then(valid => {
         if (valid) {
-          let socket = this.setupSocket()
+          const cookie = document.cookie
+          const username = JSON.parse(atob(cookie.split(".")[1])).username
+
+          let socket = this.setupSocket(username)
           this.setState({
             loggedIn: valid,
-            socket: socket
+            socket: socket,
+            username: username
           })
         } else {
           this.setState({
@@ -75,9 +93,7 @@ class App extends React.Component {
   // open socket only when authenticated and logged in
   // check when app opens
   // check when user logs in
-  setupSocket = () => {
-    const cookie = document.cookie
-    const username = JSON.parse(atob(cookie.split(".")[1])).username
+  setupSocket = (username) => {
 
     //query to send the username
     const ENDPOINT = "localhost:5000"
@@ -93,11 +109,13 @@ class App extends React.Component {
       <div className="App">
         <Router>
           <NavBar isLoggedIn={this.state.loggedIn}
-            signout={this.signout} />
+                  user={this.state.username}
+                  signout={this.signout} />
 
           {/* conditionally render chat-overlay, show only when logged in */}
           {this.state.loggedIn
-            ? (<ChatContainer socket={this.state.socket} />)
+            ? (<ChatContainer socket={this.state.socket} 
+                              newChatData={this.state.newChatData}/>)
             : null
           }
           <Container style={{ marginTop: '66px', textAlign: "center" }}>
@@ -114,7 +132,8 @@ class App extends React.Component {
 
             {/* this route must have protected actions*/}
             <Route path="/homepage">
-              <HomePage isLoggedIn={this.state.loggedIn} />
+              <HomePage isLoggedIn={this.state.loggedIn} 
+                        createChat={this.createChat}/>
             </Route>
 
             {/* blank page for testing*/}

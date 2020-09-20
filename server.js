@@ -48,6 +48,7 @@ const io = require('socket.io')(server);
 
 //connect socket io
 //handshake from client App.js to see who is user is
+//to improve security we could check token here to verify socket connection
 io.on('connection', (socket) => {
   console.log(socket.handshake.query.username , 'connected');
 

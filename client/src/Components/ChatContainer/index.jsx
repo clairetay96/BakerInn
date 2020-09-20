@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Chat from '../Chat'
 import './index.css'
 
-export default function ChatContainer({ socket }) {
+export default function ChatContainer({ socket, newChatData }) {
 
   const cookie = document.cookie
   const user_id = JSON.parse(atob(cookie.split(".")[1])).userId
@@ -26,8 +26,54 @@ export default function ChatContainer({ socket }) {
     .catch(err=>console.log(err))
   }, [])
 
-  // track addition of more chatroom
-  let [activeChat, setActiveChat] = useState([])
+  // track creation of rooms from single lising page
+  useEffect(()=>{
+    // info from single listing page
+    // -- seller id
+    // -- listing id
+
+    // info from the token
+    // -- user id
+
+    // how to handle if the user clicks on his own chat???
+    // current limitation if the chat button is clicked twice it cant register
+    // a change in the newChatData
+    // no new chat window is opened
+
+    // if data exist then run this
+    if (newChatData) {
+      const url = `/api/chats/find/${newChatData.owner_id}/${newChatData._id}`
+
+      fetch(url)
+      .then(res=>res.json())
+      .then(res=>{
+        console.log(res, '-- fetch chat');
+        let { _id, listing_id, owner_id, buyer_id } = res
+
+        if (!activeChat.includes(_id) && !allChats.includes(_id)) {
+          // create new in db
+          // add new chat in allchats
+          // open new chat window
+          console.log('create new chat room everywhere')
+        } else if (allChats.includes(_id)) {
+          // open new chat window
+          setActiveChat([...activeChat, _id])
+        }
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+    }
+
+    // for debug
+    if (newChatData) {
+      console.log('lets make a newChat room from: ')
+      console.log(newChatData);
+    }
+  }, [newChatData])
+
+  // track addition of more chatrooms from list
+  const [activeChat, setActiveChat] = useState([])
   
   // populate active chat
   const handleAddWindow = (e) => {
@@ -44,7 +90,7 @@ export default function ChatContainer({ socket }) {
   }
 
   //rerender 
-  let [renderActive, setRenderActive] = useState([])
+  const [renderActive, setRenderActive] = useState([])
   useEffect(() => {
     setRenderActive(activeChat.map((id) => {
       return (<Chat chat_id={id} 
@@ -74,11 +120,12 @@ export default function ChatContainer({ socket }) {
     } else {
       if (allChats.length > 0) {
         let output = allChats.map((chat, index)=>{
-            return (<li onClick={handleAddWindow} 
+            return (<div onClick={handleAddWindow} 
                         id={chat} 
+                        className="chat-list-item"
                         key={index}>
                         chat
-                    </li>)
+                    </div>)
         })
         return output
       } else {
@@ -87,15 +134,23 @@ export default function ChatContainer({ socket }) {
     }
   }
 
+  const [toggle, setToggle] = useState(true)
+
+  const toggleChat = () => {
+    setToggle(!toggle)
+  }
+
   return (
-    <div className="chat-container">
+    <>
+    <button onClick={toggleChat} className="show-container">Show chat</button>
+    <div className={toggle ? "chat-container" : "chat-container hide-container"}>
       <div className="chat-list">
-        <h4>List of all chats</h4>
-        <ul>
+        <button onClick={toggleChat}>minimize</button>
+        <h4>BakerInn Chats</h4>
           {allChatsHelper()}
-        </ul>
       </div>
       { renderActive }
     </div>
+    </>
   )
 }
