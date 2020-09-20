@@ -17,18 +17,59 @@
   height: 200px;
 }
 
-
-.carousel-wrapper {
-  width: 300px;
-  height: 100px;
-  border: 1px solid olive;
-  display: flex;
-  flex-wrap: nowrap;
-  overflow: hidden;
+/* experimental */
+.next-right {
+  text-align: center;
+  height: 50px;
+  width: 50px;
+  border: 1px solid palevioletred;
+  border-radius: 50%;
+  position: relative;
+  left: 20px;
 }
 
-.carousel-wrapper > div {
+.next-left {
+  text-align: center;
+  height: 50px;
+  width: 50px;
+  border: 1px solid palevioletred;
+  border-radius: 50%;
+  position: relative;
+  right: 20px;
+}
+
+.next:hover {
+  cursor: pointer;
+  transform: scale(1.5);
+}
+
+.next:active {
+  background-color: peachpuff;
+}
+
+.carousel-wrapper {
+  width: 510px;
+  height: 102px;
+  overflow: hidden;
+  display: block;
+  border: 1px solid olive;
+}
+
+.carousel-body {
   width: 100px;
-  height: 100px;
+  height: 100%;
+  padding: 0;
+  display: flex;
+}
+
+.carousel-body > li {
+  list-style: none;
+  height: 100%;
+  border: 1px solid blueviolet;
+}
+
+.carousel-body div {
+  width: 100px;
+  height: 100%;
   border: 1px solid olivedrab;
 }
