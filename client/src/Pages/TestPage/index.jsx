@@ -21,7 +21,7 @@ export default class Test extends Component {
     render() {
         return (
             <div>
-                <CarouselV2 />
+                {/* <CarouselV2 title="Test"/> */}
             </div>
         )
     }

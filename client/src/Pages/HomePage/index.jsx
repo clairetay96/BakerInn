@@ -3,6 +3,7 @@ import Switch from 'react-bootstrap/esm/Switch';
 import { Route } from 'react-router-dom';
 
 import Carousel from '../../Components/Carousel';
+import CarouselV2 from '../../Components/Carousel/test';
 import Discovery from '../../Components/Discovery';
 import IntroBanner from '../../Components/IntroBanner';
 import SearchBar from '../../Components/SearchBar';
@@ -72,6 +73,9 @@ export default class HomePage extends Component {
 
             <Carousel title="Freshest offers"
               lastestListing={this.state.lastestListing} />
+
+            <CarouselV2 title="Freshest offers"
+              lastestListing={[1,2,3,4,5,6,7,8,9,10,11]}/>
 
             <Carousel title="New ingredients"
               headerLink="/homepage/ingredient"

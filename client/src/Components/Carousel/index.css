@@ -18,25 +18,6 @@
 }
 
 /* experimental */
-.next-right {
-  text-align: center;
-  height: 50px;
-  width: 50px;
-  border: 1px solid palevioletred;
-  border-radius: 50%;
-  position: relative;
-  left: 20px;
-}
-
-.next-left {
-  text-align: center;
-  height: 50px;
-  width: 50px;
-  border: 1px solid palevioletred;
-  border-radius: 50%;
-  position: relative;
-  right: 20px;
-}
 
 .next:hover {
   cursor: pointer;
@@ -47,29 +28,11 @@
   background-color: peachpuff;
 }
 
-.carousel-wrapper {
-  width: 510px;
-  height: 102px;
-  overflow: hidden;
-  display: block;
-  border: 1px solid olive;
-}
-
-.carousel-body {
-  width: 100px;
-  height: 100%;
-  padding: 0;
-  display: flex;
-}
-
-.carousel-body > li {
-  list-style: none;
-  height: 100%;
-  border: 1px solid blueviolet;
-}
-
 .carousel-body div {
-  width: 100px;
-  height: 100%;
-  border: 1px solid olivedrab;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  border: 1px solid grey;
 }
