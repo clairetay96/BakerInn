@@ -107,11 +107,12 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
   },[])
 
   // when a new message renders, autoscroll to the bottom
-  const text = document.getElementsByClassName('message-board');
+  const id = `message-board-${chat_id}`
+  const text = document.getElementById(id);
   useEffect(()=>{
-    if (messageHTML.length > 0) {
-    text[0].scrollTop = text[0].scrollHeight
-    }
+      if (text && messageHTML.length > 0){   
+        text.scrollTop = text.scrollHeight
+      }
   }, [messageHTML])
 
   useEffect(()=>{
@@ -210,7 +211,10 @@ const sendMessage = (event) => {
          ? (<p>{error}</p>)
          : null
         }
-        <div className="message-board">{messageHTML}</div>
+        <div className="message-board" 
+             id={`message-board-${chat_id}`}>
+            {messageHTML}
+        </div>
         <form onSubmit={sendMessage}>
           <input type="text" value={message} onChange={(event)=>{setMessage(event.target.value)}}/>
           <input type="submit" value="Send" />
