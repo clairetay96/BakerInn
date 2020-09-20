@@ -64,13 +64,19 @@ module.exports = (db) => {
             listing_id: request.params.listingid
 
         }
+        console.table(chatInfo);
         modelChatFuncs.getChatId(chatInfo, (err, res)=>{
             if(err){
                 console.log(err)
                 response.status(500).send("Error occurred. - in getChatIdByInfo")
             }
             else {
-                response.status(200).send(res)
+                console.log(res, '-- getChatIdByInfo');
+                if (res) {
+                  response.status(200).send(res)
+                } else {
+                  response.status(404).send('chat not found')
+                }
             }
         })
     }
@@ -89,6 +95,7 @@ module.exports = (db) => {
                 response.status(500).send("Error occurred. - in getChatIdsByInfo")
             }
             else {
+                console.log(res, '-- getChatIdsByInfo');
                 response.status(200).send(res)
             }
         })

@@ -32,7 +32,7 @@ class NavBar extends Component {
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
             {isLoggedIn 
-              ? (<>icon <button onClick={this.signout}>Sign out</button></>) 
+              ? (<>Hi! {this.props.user} <button onClick={this.signout}>Sign out</button></>) 
               : (<Link to="/login">Log In</Link>)}
           </Navbar.Text>
         </Navbar.Collapse>
