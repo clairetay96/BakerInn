@@ -1,7 +1,40 @@
-.col, .row  {
-  border: 1px solid steelblue;
+.col, .row {
+    border-style: none;
 }
 
-.p-Icon {
-  display: inline;
+.singleListing {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+    border: 1px solid lightgrey;
+    height: 500px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.userInfo {
+    margin-top: 45px;
+    margin-bottom: 20px;
+    margin-left: 0;
+}
+
+.user {
+    padding: 20px;
+}
+
+.itemInfo > p {
+    margin-bottom: 40px;
+}
+
+image {
+    display: block;
+    margin: auto;
+    width: 50%;
+}
+
+.itemImage {
+    padding-top: 50px;
+}
+
+button {
+    width: 100px;
 }

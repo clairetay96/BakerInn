@@ -1,9 +1,23 @@
-import React from 'react'
-import { useForm } from './useForm'
+import React, { useState } from 'react'
+import { Form, Row, Col, Button } from 'react-bootstrap'
+import './index.css'
 
 const AddListing = () => {
 
-    const [values, handleChange] = useForm({ item: "", description: "", price: "", category: "", option: "", location: "" })
+    const [item, setItem] = useState("")
+    const [description, setDescription] = useState("")
+    const [price, setPrice] = useState("")
+    const [category, setCategory] = useState("")
+    const [option, setOption] = useState("")
+    const [location, setLocation] = useState("")
+    const [success, setSuccess] = useState(false)
+
+    const priceInput = (e) => {
+        const re = /^[0-9\b]+$/;
+        if (e.target.value === '' || re.test(e.target.value)) {
+            setPrice(e.target.value)
+        }
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -15,69 +29,129 @@ const AddListing = () => {
                 Accept: "application/json",
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ item: values.item, description: values.description, price: values.price, category: values.category, option: values.option, location: values.location })
+            body: JSON.stringify({ item, description, price, category, option, location })
         })
             .then((res) => console.log(res))
             .catch((err) => console.log(err))
+        setItem("")
+        setDescription("")
+        setPrice("")
+        setCategory("")
+        setOption("")
+        setLocation("")
+        setSuccess(true)
+        setTimeout(() => {
+            setSuccess(false);
+        }, 3000);
     }
 
 
     return (
         <div>
             <div className="addListing">
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <label >Item:</label>
-                        <input type="text"
-                            name="item"
-                            value={values.item}
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <label >Description:</label>
-                        <input type="text"
-                            name="description"
-                            value={values.description}
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <label >Price:</label>
-                        <input type="text"
-                            name="price"
-                            value={values.price}
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <label >Category:</label>
-                        <select name="category" onChange={handleChange}>
-                            <option value="">Please select</option>
-                            <option value="ingredient">Ingredient</option>
-                            <option value="equipment">Equipment</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label >For Loan/Sale:</label>
-                        <select name="option" onChange={handleChange}>
-                            <option value="">Please select</option>
-                            <option value="loan">For loan</option>
-                            <option value="sale">For sale</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label >Location:</label>
-                        <select name="location" onChange={handleChange}>
-                            <option value="">Please select</option>
-                            <option value="north">North</option>
-                            <option value="east">East</option>
-                            <option value="south">South</option>
-                            <option value="west">West</option>
-                        </select>
-                    </div>
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group as={Row} style={{ borderStyle: "none" }}>
+                        <Form.Label column sm={2}>Item:</Form.Label>
+                        <Col sm={10}>
+                            <Form.Control
+                                name="item"
+                                type="text"
+                                value={item}
+                                onChange={(e) => { setItem(e.target.value) }}
+                                required />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} style={{ borderStyle: "none" }}>
+                        <Form.Label column sm={2}>Description:</Form.Label>
+                        <Col sm={10}>
+                            <Form.Control
+                                name="description"
+                                as="textarea"
+                                value={description}
+                                onChange={(e) => { setDescription(e.target.value) }}
+                                required />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} style={{ borderStyle: "none" }}>
+                        <Form.Label column sm={2}>Price:</Form.Label>
+                        <Col sm={10}>
+                            <Form.Control
+                                name="price"
+                                type="text"
+                                value={price}
+                                onChange={(e) => { priceInput(e) }}
+                                required />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} style={{ borderStyle: "none" }}>
+                        <Form.Label column sm={2}>Category:</Form.Label>
+                        <Col sm={10} style={{ display: "flex", justifyContent: "start", justifyItems: "center" }}>
+                            <Form.Check
+                                inline
+                                label="Ingredient"
+                                name="category"
+                                type="radio"
+                                value="ingredient"
+                                onChange={(e) => { setCategory(e.target.value) }}
+                                required />
+                            <Form.Check
+                                inline
+                                label="Equipment"
+                                name="category"
+                                type="radio"
+                                value="equipment"
+                                onChange={(e) => { setCategory(e.target.value) }}
+                                required />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} style={{ borderStyle: "none" }}>
+                        <Form.Label column sm={2}>For Loan/Sale:</Form.Label>
+                        <Col sm={10} style={{ display: "flex", justifyContent: "start", justifyItems: "center" }}>
+                            <Form.Check
+                                inline
+                                label="For Loan"
+                                name="option"
+                                type="radio"
+                                value="loan"
+                                onChange={(e) => { setOption(e.target.value) }}
+                                required />
+                            <Form.Check
+                                inline
+                                label="For Sale"
+                                name="option"
+                                type="radio"
+                                value="sale"
+                                onChange={(e) => { setOption(e.target.value) }}
+                                required />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} style={{ borderStyle: "none" }}>
+                        <Form.Label column sm={2}>Location:</Form.Label>
+                        <Col sm={10}>
+                            <Form.Control
+                                name="location"
+                                as="select"
+                                value={location}
+                                onChange={(e) => { setLocation(e.target.value) }}
+                                required>
+                                <option value="">Please select a location</option>
+                                <option value="north">North</option>
+                                <option value="east">East</option>
+                                <option value="south">South</option>
+                                <option value="west">West</option>
+                            </Form.Control>
+                        </Col>
+                    </Form.Group>
                     <div>Upload photo area</div>
-                    <button type="submit">Add Listing</button>
-                </form>
+                    <Button type="submit" block>Add Listing</Button>
+                    <div style={success
+                        ? { visibility: 'visible', color: "green", marginTop: "10px", textAlign: "center" }
+                        : { visibility: 'hidden', marginTop: "10px" }} >
+                        {`Added Successfully!`}
+                    </div>
+                </Form>
             </div >
-        </div>
+        </div >
     )
 }
 

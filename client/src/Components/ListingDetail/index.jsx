@@ -8,16 +8,18 @@ export default function ListingDetail(props) {
 
   // link path needs to be updated to be using item id
   return (
-    <div>
-      {props.allListings 
-      ? props.allListings.map((listing, index)=>{
+    <>
+      {props.allListings
+        ? props.allListings.map((listing, index) => {
           return (
-            <Link key={index} to={`${path}${listing}`}>
-              <ListingCard listing={listing}/>
-            </Link>
+            <div className="test">
+              <Link key={index} to={`${path}${listing}`} style={{ textDecoration: "none" }}>
+                <ListingCard listing={listing} />
+              </Link>
+            </div>
           )
-        }) 
-      : "nothing to show here"}
-    </div>
+        })
+        : "nothing to show here"}
+    </>
   )
 }

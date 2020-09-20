@@ -10,7 +10,7 @@ import CategoryPage from '../CategoryPage';
 import SingleListingPage from '../SingeListingPage';
 
 export default class HomePage extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -26,7 +26,7 @@ export default class HomePage extends Component {
   }
 
   handleSearch = (e) => {
-    if (e.keyCode === 13 && e.target.value !== ''){
+    if (e.keyCode === 13 && e.target.value !== '') {
       console.log(this.state.search);
       this.setState({
         search: '',
@@ -36,14 +36,14 @@ export default class HomePage extends Component {
 
   componentDidMount() {
     const url = '/api/listings'
-    
+
     fetch(url)
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        lastestListing: res
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          lastestListing: res
+        })
       })
-    })
   }
 
   render() {
@@ -52,16 +52,16 @@ export default class HomePage extends Component {
       <>
         {/* search all pages and listings */}
         <SearchBar scope={"homepage"}
-                   onChange={this.handleChange}
-                   onKeyUp={this.handleSearch}
-                   value={this.state.search}/>
+          onChange={this.handleChange}
+          onKeyUp={this.handleSearch}
+          value={this.state.search} />
 
-        <Switch style={{paddingLeft: '0'}}>
-          <Route exact path="/homepage">  
+        <Switch style={{ paddingLeft: '0' }}>
+          <Route exact path="/homepage">
 
-            {isLoggedIn 
+            {isLoggedIn
               ? (<Discovery />)
-              : (<IntroBanner />) 
+              : (<IntroBanner />)
             }
 
             {/* 
@@ -71,22 +71,22 @@ export default class HomePage extends Component {
             */}
 
             <Carousel title="Freshest offers"
-                      lastestListing={this.state.lastestListing}/>
-            
+              lastestListing={this.state.lastestListing} />
+
             <Carousel title="New ingredients"
-                      headerLink="/homepage/ingredient"
-                      lastestListing={this.state.lastestListing}/>
-            
+              headerLink="/homepage/ingredient"
+              lastestListing={this.state.lastestListing} />
+
             <Carousel title="New equipment"
-                      headerLink="/homepage/equipment"
-                      lastestListing={this.state.lastestListing}/>
-            
+              headerLink="/homepage/equipment"
+              lastestListing={this.state.lastestListing} />
+
             <Carousel title="Suggestions"
-                      lastestListing={this.state.lastestListing}/>
+              lastestListing={this.state.lastestListing} />
           </Route>
 
           <Route path="/homepage/listing/:id">
-            <SingleListingPage/>
+            <SingleListingPage />
           </Route>
 
           <Route path="/homepage/ingredient">
