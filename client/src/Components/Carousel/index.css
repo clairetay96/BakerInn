@@ -1,5 +1,6 @@
 .carousel-container {
   height: 200px;
+  margin-bottom: 10px;
   background-color: gainsboro;
 }
 
@@ -10,4 +11,24 @@
 .carousel-item {
   height: 100%;
   border: 1px solid black;
+}
+
+.empty-carousel {
+  height: 200px;
+}
+
+
+.carousel-wrapper {
+  width: 300px;
+  height: 100px;
+  border: 1px solid olive;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.carousel-wrapper > div {
+  width: 100px;
+  height: 100px;
+  border: 1px solid olivedrab;
 }

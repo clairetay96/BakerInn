@@ -58,9 +58,11 @@ const authenticate = async (cb) => {
     if (response.status === 200) {
       return true
     } else {
+      console.log('bad response');
       return false
     }
   } catch (err) {
+    console.log('err not authorized');
     return false
   }
 }

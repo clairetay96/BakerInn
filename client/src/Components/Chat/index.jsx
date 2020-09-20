@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import './index.css'
-import io from 'socket.io-client'
 
-let socket;
-
-export default function Chat({ chat_id }) {
-
+export default function Chat({ chat_id, user_id, socket }) {
   //where chat_id is the chat_id and user_id is the logged in user_id
+  
+  
+  ///////////////
+  // debugging code here
+  socket.on('disconnect', ()=>{
+    console.log(chat_id, '-- chat dc');
+  })
 
-  const ENDPOINT = "localhost:5000"
+  const [error, setError] = useState(null)
+  // end of debugging code
+  ///////////////
 
-  const cookie = document.cookie
-  const user_id = JSON.parse(atob(cookie.split(".")[1])).userId
 
   const [message, setMessage] = useState('')
 
@@ -22,6 +25,7 @@ export default function Chat({ chat_id }) {
   const [listing, setListing] = useState({}) //object containing listing_id, listing name
   const [messageKey, setMessageKey] = useState(0)
 
+
   useEffect(()=>{
     //fetch chat data from database
     //fetch previous messages from database
@@ -29,6 +33,7 @@ export default function Chat({ chat_id }) {
     fetch(`/api/chats/${chat_id}`, { signal: abortController.signal})
         .then(res=>res.json())
         .then(res => {
+            console.log(res);
             let sender_id = res.buyer_id
             let sender_username = res.buyer_username
             let receiver_id = res.owner_id
@@ -64,6 +69,7 @@ export default function Chat({ chat_id }) {
 
         })
         .catch(err => {
+            setError('error detected')
             if(!abortController.signal.aborted){
                 console.log(err)
             }
@@ -72,8 +78,6 @@ export default function Chat({ chat_id }) {
         return () => {
             abortController.abort()
         }
-
-
   }, [])
 
   useEffect(()=>{
@@ -101,20 +105,18 @@ export default function Chat({ chat_id }) {
         return ()=>{
             abortController1.abort()
         }
-  })
+  },[])
 
   useEffect(()=>{
     //socket to join chat room - emit
-    socket = io(ENDPOINT)
-    console.log("This is io client!")
     socket.emit('join', { room_id: 'room' + chat_id })
-
-  }, [ENDPOINT])
+  }, [])
 
 
   useEffect(()=>{
     //socket to  receive message - on
     socket.on('receiveMessage', ( { message, sender_name } )=>{
+        console.log(sender_name, '-- receive');
 
         setMessages( messages =>[...messages, { message, sender_name }])
         setMessageKey( messageKey => messageKey+1)
@@ -137,6 +139,7 @@ export default function Chat({ chat_id }) {
 
 const sendMessage = (event) => {
     event.preventDefault()
+    console.log(sender.username, '-- sendMessage');
 
     let messageInfo = {
         message,
@@ -173,9 +176,8 @@ const sendMessage = (event) => {
         })
         .catch(err => console.log(err))
 
-    //set message to empty
+    // set message to empty
     setMessage("")
-
 }
 
 
@@ -183,16 +185,12 @@ const sendMessage = (event) => {
 
   return (
     <div className="chat-root">
-      {/* <div className="to-do">
-      <h5>this is the beningging of the end</h5>
-      <p>show a list of past chats (side tab / toggle)</p>
-      <p>have a chat window open (bottom tab / toggle)</p>
-      <p>have a input field to post a new message</p>
-      <p>think of more functions</p>
-      </div> */}
       <div className="chat-window">
         <div>{chat_id}</div>
-
+        {error 
+         ? error
+         : null
+        }
         <div className="message-board">{messageHTML}</div>
         <form onSubmit={sendMessage}>
           <input type="text" value={message} onChange={(event)=>{setMessage(event.target.value)}}/>

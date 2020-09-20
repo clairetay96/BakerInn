@@ -37,6 +37,7 @@ module.exports = (db) => {
     let getChatInfo = (chatID, callback) => {
         db.collection("chats").findOne({_id: ObjectId(chatID)})
             .then(res => {
+                console.log(res, 'first layer')
                 let allQueries = [res]
                 let ownerID = res.owner_id
                 let buyerID = res.buyer_id
@@ -63,8 +64,14 @@ module.exports = (db) => {
                 queryParams.forEach((item) => {
                     allQueries.push(
                         db.collection(item.table).findOne({_id: ObjectId(item.id)})
-                            .then(res => res[item.field])
-                            .catch(err => {throw err}))
+                            .then(res => {
+                                res[item.field]
+                            })
+                            .catch(err => {
+                                console.table(res)
+                                throw new Error( '-- for each failed')
+                            })
+                        )
                 })
 
 

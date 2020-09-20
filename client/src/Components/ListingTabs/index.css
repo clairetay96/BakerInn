@@ -4,8 +4,16 @@
 
 .listing-selection {
   border: 1px solid lightgrey;
+  height: 300px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-items: center;
+
 }
 
-.listing-selection > div {
-  border: 1px solid lightgrey;
+.listing-selection-box {
+  display: flex;
+  justify-content: space-evenly;
 }
