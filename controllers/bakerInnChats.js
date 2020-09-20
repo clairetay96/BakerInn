@@ -13,7 +13,7 @@ module.exports = (db) => {
         modelChatFuncs.newChat(newChatInfo, (err, res)=>{
             if(err){
                 console.log(err)
-                response.status(500).send("Error occurred.")
+                response.status(500).send("Error occurred in create chat")
             } else {
                 response.status(200).send(res)
             }
@@ -25,7 +25,8 @@ module.exports = (db) => {
         let messageInfo = request.body
         modelChatFuncs.postMessage(messageInfo, (err, res)=>{
             if(err){
-                response.status(500).send("Error occurred.")
+                console.log(err)
+                response.status(500).send("Error occurred. - in posting message ")
             } else {
                 response.status(200).send("New message successfully posted.")
             }
@@ -37,7 +38,7 @@ module.exports = (db) => {
         modelChatFuncs.getChatInfo(chat_id, (err, res)=> {
             if(err){
                 console.log(err);
-                response.status(500).send("Error occurred.")
+                response.status(500).send("Error occurred. - in getting chat info")
             } else {
                 response.status(200).send(res)
             }
@@ -49,7 +50,7 @@ module.exports = (db) => {
         modelChatFuncs.getChatMessages(chat_id, (err,res)=>{
             if(err){
                 console.log(err)
-                response.status(500).send("Error occurred")
+                response.status(500).send("Error occurred - in getting messages")
             } else {
                 response.status(200).send(res)
             }
@@ -66,7 +67,7 @@ module.exports = (db) => {
         modelChatFuncs.getChatId(chatInfo, (err, res)=>{
             if(err){
                 console.log(err)
-                response.status(500).send("Error occurred.")
+                response.status(500).send("Error occurred. - in getChatIdByInfo")
             }
             else {
                 response.status(200).send(res)
@@ -85,10 +86,9 @@ module.exports = (db) => {
         modelChatFuncs.getChatId(chatInfo, (err, res)=>{
             if(err){
                 console.log(err)
-                response.status(500).send("Error occurred.")
+                response.status(500).send("Error occurred. - in getChatIdsByInfo")
             }
             else {
-                console.log(res)
                 response.status(200).send(res)
             }
         })

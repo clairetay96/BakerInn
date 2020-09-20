@@ -27,6 +27,13 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
   const [messageKey, setMessageKey] = useState(0)
   const [transactionOption, setTransactionOption] = useState(null)
 
+  const [senderLoanRequest, setSenderLoanReq] = useState(null)
+  const [receiverLoanRequest, setReceiverLoanReq] = useState(null)
+
+
+  const [senderReturnRequest, setSenderReturnReq] = useState(null)
+  const [receiverReturnRequest, setReceiverReturnReq] = useState(null)
+
 
   useEffect(()=>{
     //fetch chat users data/listing from database
@@ -34,7 +41,7 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
     fetch(`/api/chats/${chat_id}`, { signal: abortController.signal})
         .then(res=>res.json())
         .then(res => {
-            console.log(res);
+
             let sender_id = res.buyer_id
             let sender_username = res.buyer_username
             let receiver_id = res.owner_id
@@ -48,19 +55,18 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
 
             }
 
-            console.log(res)
 
             setSender(
                 {
                     user_id: sender_id,
-                    isOwner: sender_id ===user_id,
+                    isOwner: sender_id === res.owner_id,
                     username: sender_username
                 })
 
             setReceiver(
                 {
                     user_id: receiver_id,
-                    isOwner: receiver_id===user_id,
+                    isOwner: receiver_id === res.owner_id,
                     username: receiver_username
                 })
 
@@ -69,7 +75,8 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
                 listing_id: res.listing_id,
                 item: res.listing_item,
                 option: res.listing_option,
-                state: res.listing_state
+                state: res.listing_state,
+                successful_buyer_id: res.successful_buyer_id
             })
 
         })
@@ -131,7 +138,7 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
     })
 
     return () => {
-        socket.off('receiveMessage', ( { message, sender_name } )=>{
+        socket.off('receiveMessage' + chat_id, ( { message, sender_name } )=>{
 
         setMessages( messages =>[...messages, { message, sender_name }])
         setMessageKey( messageKey => messageKey+1)
@@ -144,34 +151,48 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
 
   //populate the options available to the user - after setListing,setSender,setReceiver have been changed.
   useEffect(()=>{
-
+    console.log(sender)
     if(listing.state === "available"){
         if(listing.option=="loan"){
-            //make button for loan on both ends
-
+            setTransactionOption(<button onClick={agreeToLoan}>Transfer Item</button>)
         } else if(listing.option=="sale"){
-            //make button for seller to make the item "unavailable"/confirm transaction ie purchase has gone thru
+            if(sender.isOwner){
+                setTransactionOption(<form onSubmit={makeUnavailable}><input type="submit" value="Agree to sell" /></form>)
+            }
 
         }
-
     } else if (listing.state==="unavailable") {
-        //if the buyer in the chat is not the buyer in the database, notify
-
-        //if buyer in the chat is buyer in the database, notify
+        //if the buyer in the chat is not the buyer in the database, notify that item is unavailable. If the buyer in the chat is the buyer in the database, notify that they are in possession of the item. If user is the owner of the item let them know the item who they sold it to.
+        if(!sender.isOwner) {
+            if(listing.successful_buyer_id !== sender.user_id){
+                setTransactionOption("item now unavailable")
+            } else {
+                setTransactionOption("you are currently in possession of this item.")
+            }
+        } else {
+            setTransactionOption("This item is owned by" + listing.successful_buyer_id)
+        }
 
     } else if (listing.state==="on loan"){
-        //make button for returning on both ends
+        //make button for returning on both ends, if item is currently owned and the chat contains the loaner.
+        if([sender.user_id, receiver.user_id].includes(listing.successful_buyer_id)){
+            setTransactionOption(<button onClick={agreeToReturn}>Return Item</button>)
+        } else {
+            if(!sender.isOwner){ //if the sender is not the owner, let them know the item is out on loan
+            setTransactionOption("item is on loan to someone else at the moment.")
 
-
+            } else { //if the sender is the owner, let them know who the item is currently on loan to.
+                setTransactionOption("This item is on loan by" + listing.successful_buyer_id)
+            }
+        }
     }
-
-
 
   }, [sender, receiver, listing])
 
 const sendMessage = (event) => {
     event.preventDefault()
     console.log(sender.username, '-- sendMessage');
+    console.log(user_id, '--user id sendMessage');
 
     let messageInfo = {
         message,
@@ -218,33 +239,243 @@ const sendMessage = (event) => {
 //emit notification that exchange has been made
 //socket on to receive confirmation that exchange has been made
 //update state in database to unavailable
-function makeUnavailable()=>{
+function makeUnavailable(event){
+    event.preventDefault()
+
+    //fetch PUT request to update state
+    let url = "/api/listings/"+listing.listing_id+"/update-state"
+    let requestOptions = {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "state": "unavailable",
+            "buyer_id": receiver.user_id
+        })
+    }
+
+    fetch(url, requestOptions)
+        .then(res => {
+            if(res.status===200){
+                console.log("item made unavailable")
+
+                //emit change in state let receiver know they own the item.
+                socket.emit('transferOwnership', {chat_id})
+
+            } else {
+                console.log("error in making listing unavailable.")
+            }
+
+        })
+        .catch(err => {
+            console.log(err, "---- error in fetch request to make listing unavailable")
+        })
 
 }
+
+//listen for a transfer ownership event, then make updates accordingly.
+useEffect(()=>{
+
+    socket.on('receiveOwnership' + chat_id, ()=>{
+        console.log('receive ownership');
+        if(sender.isOwner){
+            setTransactionOption("Item is owned by " + receiver.username)
+            setListing({state: "unavailable", "successful_buyer_id": receiver.user_id})
+
+        } else {
+            setListing({state: "unavailable", "successful_buyer_id": sender.user_id})
+            setTransactionOption("you are currently in possession of this item.")
+        }
+
+    })
+
+    return () => {
+        socket.off('receiveOwnership' + chat_id, ()=>{
+            console.log('ownership received.');
+            setTransactionOption("you are currently in possession of this item.")
+    })
+    }
+
+}, [])
+
 
 //for borrowable items.
 
 //have option for buyer and seller to make the listing "on loan"  - form submit
 //emit a loan confirmation - setState
 //pending state OR loan confirmed
-function agreeToLoan(event)=>{
+function agreeToLoan(event){
+    setSenderLoanReq(true)
+    setTransactionOption("loan request sent...")
 
+    socket.emit("sendLoanConfirmation", {chat_id})
+
+}
+
+
+function agreeToReturn(event){
+    setSenderReturnReq(true)
+    setTransactionOption("return request sent...")
+
+    socket.emit("sendReturnConfirmation", {chat_id})
 }
 
 
 //listen for a loan confirmation from opposite side -- use effect, socket on
 //receive a loan confirmation - setState
 useEffect(()=>{
+    socket.on('receiveLoanConfirmation' + chat_id, ()=>{
+        console.log('received loan confirmation from other party');
+        setReceiverLoanReq(true)
+
+    })
+
+    return () => {
+        socket.off('receiveLoanConfirmation' + chat_id, ()=>{
+            console.log('received loan confirmation');
+            setReceiverLoanReq(true)
+    })
+    }
+}, [])
+
+//same as above but for receiving return confirmation
+useEffect(()=>{
+    socket.on('receiveReturnConfirmation' + chat_id, ()=>{
+        console.log('received return confirmation from other party');
+        setReceiverReturnReq(true)
+
+    })
+
+    return () => {
+        socket.off('receiveReturnConfirmation' + chat_id, ()=>{
+            console.log('received return confirmation');
+            setReceiverReturnReq(true)
+    })
+    }
+}, [])
+
+
+//update state in database from available to on loan from owner side when both states are set - use effect, fetch request
+useEffect(()=>{
+    if(sender.isOwner&&senderLoanRequest&&receiverLoanRequest){
+        let abortController2 = new AbortController()
+
+        let url = "/api/listings/"+listing.listing_id+"/update-state"
+        let requestOptions = {
+            method: "PUT",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "state": "on loan",
+                "buyer_id": receiver.user_id
+            }),
+            signal: abortController2.signal
+        }
+
+        fetch(url, requestOptions)
+            .then(res => {
+                if(res.status===200){
+                    console.log("state updated to on loan by " + receiver.user_id)
+                    socket.emit("loanFinalised", {chat_id})
+                } else {
+                    console.log("Some error in updating state to on loan")
+                }
+            })
+            .catch(err => {
+                console.log(err, "Some error in fetch request to updating state to on loan.")
+            })
+    }
+
+
+}, [senderLoanRequest, receiverLoanRequest])
+
+//same as above but reverse - update state in database from on loan to available from owner side when both states are set
+useEffect(()=>{
+    if(sender.isOwner&&senderReturnRequest&&receiverReturnRequest){
+        let abortController2 = new AbortController()
+
+        let url = "/api/listings/"+listing.listing_id+"/update-state"
+        let requestOptions = {
+            method: "PUT",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "state": "available",
+                "buyer_id": null,
+                "previous_borrower_id": receiver.user_id
+            }),
+            signal: abortController2.signal
+        }
+
+        fetch(url, requestOptions)
+            .then(res => {
+                if(res.status===200){
+                    console.log("state updated to available")
+                    socket.emit("returnFinalised", {chat_id})
+                } else {
+                    console.log("Some error in updating state to available.")
+                }
+            })
+            .catch(err => {
+                console.log(err, "Some error in fetch request to updating state to on loan.")
+            })
+    }
+
+
+}, [senderReturnRequest, receiverReturnRequest])
+
+
+//receive loan finalised - for borrower
+
+useEffect(()=>{
+    socket.on('receiveLoanFinalised'+chat_id, ()=>{
+        console.log("loan is finalised.")
+        setTransactionOption(<button onClick={agreeToReturn}>Return Item</button>)
+        setSenderReturnReq(null)
+        setReceiverReturnReq(null)
+    })
+
+    return () => {
+        socket.off('receiveLoanFinalised'+chat_id, ()=>{
+            console.log("loan is finalised.")
+            setTransactionOption(<button onClick={agreeToReturn}>Return Item</button>)
+        })
+
+    }
+
+
 
 }, [])
 
 
-//update database from buyer side when both states are set - use effect, fetch request
+//same as above but for returning. Receive returned finalised - for borrower
+
 useEffect(()=>{
 
+    socket.on('receiveReturnFinalised'+chat_id, ()=>{
+        console.log("return is finalised.")
+        setTransactionOption(<button onClick={agreeToLoan}>Transfer Item</button>)
+        setSenderLoanReq(null)
+        setReceiverLoanReq(null)
+    })
+
+    return () => {
+        socket.off('receiveReturnFinalised'+chat_id, ()=>{
+            console.log("return is finalised.")
+            setTransactionOption(<button onClick={agreeToLoan}>Transfer Item</button>)
+        })
+
+    }
+
+
+
 }, [])
-
-
 
 
   const [toggle, setToggle] = useState(true)
@@ -262,7 +493,7 @@ useEffect(()=>{
             Close
         </button>
         <button onClick={toggleChat}>Minimize</button>
-        <div className="on-close">{chat_id}</div>
+        <div className="on-close">{chat_id} {transactionOption}</div>
         {error
          ? (<p>{error}</p>)
          : null

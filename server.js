@@ -71,6 +71,30 @@ io.on('connection', (socket) => {
 
   })
 
+  //notification of transferring ownership ONLY FOR SALE ITEMS
+  socket.on('transferOwnership', ({chat_id})=>{
+    io.to(chat_id).emit('receiveOwnership'+chat_id)
+  })
+
+  //sending loan confirmation from buyer to seller and vice versa FOR LOAN ITEMS
+  socket.on('sendLoanConfirmation', ({chat_id}) => {
+    socket.to(chat_id).emit('receiveLoanConfirmation'+chat_id)
+  })
+
+  socket.on('sendReturnConfirmation', ({chat_id}) => {
+    socket.to(chat_id).emit('receiveReturnConfirmation'+chat_id)
+  })
+
+  socket.on('loanFinalised', ({chat_id}) => {
+    io.to(chat_id).emit('receiveLoanFinalised'+chat_id)
+  })
+
+  socket.on('returnFinalised', ({chat_id}) => {
+    io.to(chat_id).emit('receiveReturnFinalised'+chat_id)
+  })
+
+
+
 
   socket.on('disconnect', () => {
     console.log('user disconnected');

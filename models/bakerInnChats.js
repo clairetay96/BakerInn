@@ -54,7 +54,7 @@ module.exports = (db) => {
                     id: buyerID
                 },
                 {
-                    fields: ["item", "state", "option"],
+                    fields: ["item", "state", "option", "buyer_id"],
                     table: "listings",
                     id: listingID
                 }]
@@ -86,7 +86,8 @@ module.exports = (db) => {
                 res1[0].buyer_username = res1[2][0]
                 res1[0].listing_item = res1[3][0]
                 res1[0].listing_state = res1[3][1]
-                res1[0].listing_option = res1[1][2]
+                res1[0].listing_option = res1[3][2]
+                res1[0].successful_buyer_id = res1[3][3]
                 callback(null, res1[0])
             })
             .catch(err => {callback(err, null)})
@@ -123,7 +124,6 @@ module.exports = (db) => {
 
     //find one chat
     let getChatId = (chatInfo, callback) => {
-        console.log("I'm in models")
         db.collection("chats").findOne(chatInfo)
             .then(res=>callback(null, res))
             .catch(err=>callback(err, null))

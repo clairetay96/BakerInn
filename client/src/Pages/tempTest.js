@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Chat from '../Components/Chat'
+import ChatContainer from '../Components/ChatContainer'
 
 //page for listing - can be seen by potential buyers, interested people and owner
-let Test = ({ listingId }) => {
+let Test = ({ listingId, socket }) => {
 
     const [listingDetails, setListingDetails] = useState({})
     const [isInterested, setInterest] = useState(false)
@@ -11,7 +12,6 @@ let Test = ({ listingId }) => {
     const [buyerInterestChat, setBuyerInterestChat] = useState(null)
     const cookie = document.cookie
     const user_id = JSON.parse(atob(cookie.split(".")[1])).userId
-    console.log(user_id)
 
     //get listing information
     useEffect(()=>{
@@ -44,11 +44,11 @@ let Test = ({ listingId }) => {
     useEffect(()=>{
         if(listingDetails.owner_id==user_id){
             setOwner(true)
-            setBuyerInterestChat(<div> I own this item! <div><Chat chat_id="5f65871cd1d90ee137152e9b"/></div> </div>)
+            setBuyerInterestChat(<div> I own this item! <div></div> </div>)
         } else {
             if(listingDetails.interested && listingDetails.interested.includes(user_id)){
                 setInterest(true)
-                setBuyerInterestChat(<div><div>I have already expressed interest.</div><Chat chat_id="5f65871cd1d90ee137152e9b"/></div>)
+                setBuyerInterestChat(<div><div>I have already expressed interest.</div></div>)
             } else {
                 //to be added later: only show purchase for sale items, not loan items.
                 setBuyerInterestChat(<div><form onSubmit={submitHandlerInterest}><input type="submit" value="express interest" /></form><form onSubmit={submitHandlerPurchase}><input type="submit" value="Purchase Item"/></form></div>)
@@ -150,7 +150,7 @@ let Test = ({ listingId }) => {
             .then(res => {
                 if(res){
                     let chatID = res.insertedId
-                    setBuyerInterestChat(<div><div>I have already expressed interest.</div><Chat chat_id={chatID}/></div>)
+                    setBuyerInterestChat(<div><div>I have already expressed interest.</div><Chat chat_id={chatID} socket={socket}/></div>)
                     console.log(res)
                 }
             })
@@ -246,6 +246,7 @@ let Test = ({ listingId }) => {
     return (
             <div>
             {listingDetails.item}, {listingDetails.price}, {listingDetails._id}
+
             {buyerInterestChat}
 
             </div>)

@@ -8,13 +8,12 @@ import DashboardPage from './Pages/DashboardPage';
 import HomePage from './Pages/HomePage';
 import Auth from './Auth';
 import ProtectedRoute from './Components/ProtectedRoute';
-import Test from './Pages/tempTest'
-import Test2 from './Pages/tempTest2'
 import { Container } from 'react-bootstrap';
 import Footer from './Components/Footer';
-import Test from './Pages/TestPage';
+import Test from './Pages/tempTest.js';
 import ChatContainer from './Components/ChatContainer';
 import io from 'socket.io-client'
+
 
 
 class App extends React.Component {
@@ -119,7 +118,7 @@ class App extends React.Component {
 
             {/* blank page for testing*/}
             <Route path="/test">
-              <Test />
+              <Test listingId="5f670aebb063fffb5a0d183f" socket={this.state.socket}/>
             </Route>
 
             {/* redirect all non-specified routes. maybe have a 404 page*/}

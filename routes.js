@@ -42,7 +42,7 @@ module.exports = (app, db) => {
   app.put('/api/listings/:id/interested', withAuth, bakerIn.expressInterest)
 
   //update listing to unavailable
-  app.put('/api/listings/:id/unavailable', withAuth, bakerIn.makeUnavailable)
+  app.put('/api/listings/:id/update-state', withAuth, bakerIn.makeTransaction)
 
   //make changes to specific listing
   app.put('/api/listings/:id/edit')

@@ -1,5 +1,6 @@
 .chat-root {
   z-index: 30;
+  overflow: auto;
 }
 
 .chat-window {
