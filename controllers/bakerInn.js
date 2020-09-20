@@ -197,6 +197,18 @@ module.exports = (db) => {
         })
     }
 
+    let deleteListing = (request, response) => {
+        let listingID = request.params.id
+        modelFuncs.deleteListing(listingID, (err, res) => {
+            if (err) {
+                console.log(err)
+                response.send("error occurred.")
+            } else {
+                response.send("Redirect to homepage.")
+            }
+        })
+    }
+
     return {
         ping,
         getAllUsers,
@@ -212,7 +224,8 @@ module.exports = (db) => {
         login,
         validate,
         expressInterest,
-        editListing
+        editListing,
+        deleteListing
     }
 
 };

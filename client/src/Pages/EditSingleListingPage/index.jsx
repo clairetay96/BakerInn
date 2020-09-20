@@ -32,6 +32,22 @@ function EditSingleListingPage({ match }) {
     console.log(listing)
   }
 
+  const handleDelete = (e) => {
+    e.preventDefault();
+
+    const listingId = listing._id
+    const url = `/api/listings/${listingId}/delete`
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
+  }
+
   return (
     <div className="container singleListing" >
       <div className="col">
@@ -70,7 +86,7 @@ function EditSingleListingPage({ match }) {
                 <Button variant="secondary" onClick={handleClose}>Close</Button>
               </Modal.Footer>
             </Modal>
-            <Button >Delete</Button>
+            <Button onClick={(e) => { handleDelete(e) }}>Delete</Button>
           </div>
 
         </div>

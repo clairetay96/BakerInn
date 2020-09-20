@@ -205,6 +205,27 @@ module.exports = (db) => {
             })
     }
 
+    let deleteListing = (listingID, callback) => {
+        db.collection("users").updateMany(
+            {},
+            { $pull: { listings: ObjectId(listingID) } },
+            { multi: true }
+        )
+            .then(res => {
+                callback(null, res)
+            })
+            .catch(err => {
+                callback(err, null)
+            })
+        db.collection("listings").deleteOne({ _id: ObjectId(listingID) })
+            .then(res => {
+                callback(null, res)
+            })
+            .catch(err => {
+                callback(err, null)
+            })
+    }
+
 
     return {
         getAllUsers,
@@ -217,7 +238,7 @@ module.exports = (db) => {
         getOneListing,
         userLogin,
         expressInterest,
-        updateListingInfo
-
+        updateListingInfo,
+        deleteListing
     }
 }
