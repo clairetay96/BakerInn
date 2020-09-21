@@ -45,10 +45,10 @@ module.exports = (app, db) => {
   app.put('/api/listings/:id/update-state', withAuth, bakerIn.makeTransaction)
 
   //make changes to specific listing
-  app.put('/api/listings/:id/edit')
+  app.put('/api/listings/:id/edit', bakerIn.editListing)
 
   //delete specific listing
-  app.delete('/api/listings/:id/delete')
+  app.delete('/api/listings/:id/delete', bakerIn.deleteListing)
 
   //when user expresses interest, create chat
   app.post('/api/chats/new', withAuth, bakerInChats.createChat)

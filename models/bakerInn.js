@@ -164,7 +164,6 @@ module.exports = (db) => {
                         )
                     })
                 }
-
                 return Promise.all(allQueries)
             })
             .then(allListings => { callback(null, allListings) }) //a list of containing objects, where each object represents a listing.
@@ -194,13 +193,45 @@ module.exports = (db) => {
     }
 
     //add user interest to listing.
-    let expressInterest = (listingID, userID, callback) =>{
-        db.collection("listings").updateOne({_id: ObjectId(listingID)}, {$push: {interested: userID} })
+    let expressInterest = (listingID, userID, callback) => {
+        db.collection("listings").updateOne({ _id: ObjectId(listingID) }, { $push: { interested: userID } })
             .then(res => {
                 callback(null, res)
             })
-            .catch(err => {callback(err, null)})
+            .catch(err => { callback(err, null) })
 
+    }
+
+    // update listing info
+    let updateListingInfo = (updatedInfo, listingID, callback) => {
+        db.collection("listings").updateOne({ _id: ObjectId(listingID) }, { $set: updatedInfo })
+            .then(res => {
+                callback(null, res)
+            })
+            .catch(err => {
+                callback(err, null)
+            })
+    }
+
+    let deleteListing = (listingID, callback) => {
+        db.collection("users").updateMany(
+            {},
+            { $pull: { listings: ObjectId(listingID) } },
+            { multi: true }
+        )
+            .then(res => {
+                callback(null, res)
+            })
+            .catch(err => {
+                callback(err, null)
+            })
+        db.collection("listings").deleteOne({ _id: ObjectId(listingID) })
+            .then(res => {
+                callback(null, res)
+            })
+            .catch(err => {
+                callback(err, null)
+            })
     }
 
     //update listing and either push to buyers borrowed, or bought, or remove from borrowed.
@@ -245,7 +276,8 @@ module.exports = (db) => {
         getOneListing,
         userLogin,
         expressInterest,
+        updateListingInfo,
+        deleteListing,
         makeTransaction
-
     }
 }

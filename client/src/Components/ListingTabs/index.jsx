@@ -9,12 +9,19 @@ import AddListingPage from "../../Pages/AddListingPage";
 
 
 export default function ListingTabs(props) {
+
+  console.log("LISTING TABS", props)
+
   let { available = null } = props.listingData
 
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const refreshPage = () => {
+    window.location.reload();
+  }
 
   return (
     <Tabs defaultActiveKey="listing-status" transition={false} id="noanim-tab-listing" className="listing-tabs">
@@ -54,7 +61,10 @@ export default function ListingTabs(props) {
                 <AddListingPage />
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>Close</Button>
+                <Button variant="secondary" onClick={() => {
+                  handleClose();
+                  refreshPage();
+                }}>Close</Button>
               </Modal.Footer>
             </Modal>
           </div>

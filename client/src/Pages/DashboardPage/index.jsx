@@ -6,20 +6,25 @@ import ListingDetailPage from '../../Pages/ListingDetailPage';
 import EditSingleListingPage from '../../Pages/EditSingleListingPage';
 import { Switch, Route } from 'react-router-dom';
 import ProtectedRoute from '../../Components/ProtectedRoute';
-import AddListingPage from '../AddListingPage'
 
 export default class DashboardPage extends Component {
-  constructor(props) {
-    super(props);
+
+  constructor() {
+    super();
+
+    // retrieve userID in cookie
+    const cookie = document.cookie
+    const userId = JSON.parse(atob(cookie.split(".")[1])).userId
 
     this.state = {
       search: '',
-      user: '5f6347cd5ed305cd33dda22f',
+      userId: userId,
       userLendingListings: {
-        available: [1, 2, 3, 4, 5],
+        available: [],
         loan: [6, 7, 8, 9, 10],
       },
       userBorrowing: [11, 12, 13, 14, 15],
+      refreshPage: false
     }
   }
 
@@ -32,23 +37,30 @@ export default class DashboardPage extends Component {
   pingServer = async () => {
     const res = await fetch('/api')
     const data = await res.text()
-    console.log(data);
+    console.log("pingserver", data);
   }
 
   fetchUserPostedListing = async () => {
-    const url = `/api/listings/user/${this.state.user}`;
+    const url = `/api/listings/user/${this.state.userId}`;
 
     let res = await fetch(url)
-    // res = await res.json()
-    console.log(res);
+    let userListings = await res.json()
+
+    this.setState((prevState) => ({
+      userLendingLists: prevState.userLendingListings.available = userListings
+    }))
+
+    console.log("USERLISTING", userListings)
+
   }
 
   fetchUserBorrowesListing = async () => {
     const url = `/api/listings/user/${this.state.user}/borrowed`;
 
     let res = await fetch(url)
-    // res = await res.json()
-    console.log(res);
+    // let borrowedListing = await res.json()
+
+    // console.log(borrowedListing);
   }
 
   handleChange = (e) => {
@@ -67,6 +79,7 @@ export default class DashboardPage extends Component {
   }
 
   render() {
+    console.log("UPDATED AVAIBLE", this.state.userLendingListings.available)
     return (
       <div>
         <h1>Welcome back User</h1>
@@ -92,9 +105,9 @@ export default class DashboardPage extends Component {
               nextpage={"borrowing"}
               edit={true} />
           </Route>
-          <Route path="/dashboard/listing/:id">
-            <EditSingleListingPage />
-          </Route>
+          <Route path="/dashboard/listing/:id" component={EditSingleListingPage} />
+          {/* <EditSingleListingPage />
+          </Route> */}
 
         </Switch>
 
