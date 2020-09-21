@@ -155,7 +155,7 @@ export default function ChatContainer({ socket, newChatData }) {
     }
   }
 
-  const [toggle, setToggle] = useState(true)
+  const [toggle, setToggle] = useState(false)
 
   const toggleChat = () => {
     setToggle(!toggle)

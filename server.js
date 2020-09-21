@@ -103,7 +103,7 @@ io.on('connection', (socket) => {
 
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log(socket.handshake.query.username, 'disconnected');
   })
 
   function noOfClientsInRoom(room){
