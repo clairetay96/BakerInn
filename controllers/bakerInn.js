@@ -145,14 +145,18 @@ module.exports = (db) => {
     let getUserBorrowed = (request, response) => {
         //some authentication required - only a user can see their borrowed items
         let userID = request.userId
-        modelFuncs.getUserListing(userID, true, (err, res) => {
-            if (err) {
-                console.log(err)
-                response.status(500).send("Error occurred. - cannot get user borrowed listings")
-            } else {
-                response.status(200).send(res)
-            }
-        })
+        if(userID==request.params.userid){
+            modelFuncs.getUserListing(userID, true, (err, res) => {
+                if (err) {
+                    console.log(err)
+                    response.status(500).send("Error occurred. - cannot get user borrowed listings")
+                } else {
+                    response.status(200).send(res)
+                }
+            })
+        } else {
+            response.status(400).send("A user can only see their own borrowed items.")
+        }
     }
 
     let getListingInfo = (request, response) => {

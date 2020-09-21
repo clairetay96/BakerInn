@@ -57,13 +57,17 @@ io.on('connection', (socket) => {
     socket.join(room_id)
   })
 
+  socket.on('leave', ({room_id})=>{
+    socket.leave(room_id)
+  })
+
   //on sendMessage event from client, message gets emitted to the room
-  socket.on('sendMessage', ({ message, sender_name, chatroom_id, userroom_id })=>{
+  socket.on('sendMessage', ({ message, sender_name, chatroom_id, userroom_id, sender_id })=>{
 
     //if there are 2 people in the room, send the message to the room. Else send a notification.
     if(noOfClientsInRoom(chatroom_id) == 2) {
         console.log(sender_name)
-        io.to(chatroom_id).emit('receiveMessage' + chatroom_id , { message, sender_name } )
+        io.to(chatroom_id).emit('receiveMessage' + chatroom_id , { message, sender_name, sender_id } )
 
     } else if (noOfClientsInRoom(chatroom_id) < 2) {
 

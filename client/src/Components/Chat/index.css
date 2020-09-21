@@ -7,14 +7,30 @@
   height: 400px;
   width: 265px;
   border: 1px solid rebeccapurple;
+  background-color: lightgray;
 }
 
 .message-board {
   margin: 10px auto;
-  height: 75%;
+  height: 65%;
   width: 250px;
   border: 1px solid rebeccapurple;
   overflow: auto;
+  background-color: white;
+}
+
+form {
+	display: flex;
+	justify-content: space-between;
+	margin: 0 auto;
+	width: 250px;
+}
+
+input[type="text"]{
+	width: 80%;
+}
+input[type="submit"]{
+	width: 20%;
 }
 
 .open-button {
@@ -30,4 +46,67 @@
 
 .min-chat {
   transform: translateY(350px)
+}
+
+.close-chat-buttons {
+	display: flex;
+	justify-content: flex-end
+}
+
+.close-chat-buttons * {
+	font-size: 15px;
+	width: 10%;
+	border: none;
+	background-color: rgba(0,0,0,0);
+}
+
+.on-close-bottom {
+	display: flex;
+	justify-content: space-between;
+	padding: 3px 10px;
+}
+
+.listing-item {
+	font-size: 15px;
+}
+
+.inline {
+	display: inline;
+}
+
+.receiver-username {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.transaction-option {
+	width: 50%;
+	display: flex;
+	justify-content: flex-end;
+	font-size: 15px;
+}
+
+.single-message {
+	padding: 3px;
+	margin: 1px;
+}
+
+.single-message:not(:last-child) {
+	border-bottom: 0.5px solid lightgray;
+}
+
+.message-sender {
+	font-size: 15px;
+	font-weight: bold;
+	color: darkblue;
+}
+
+.message-receiver {
+	font-size: 15px;
+	font-weight: bold;
+	color: black;
+}
+
+.message-text {
+	font-size: 14px;
 }

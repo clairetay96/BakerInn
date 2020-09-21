@@ -10,7 +10,7 @@ import Auth from './Auth';
 import ProtectedRoute from './Components/ProtectedRoute';
 import { Container } from 'react-bootstrap';
 import Footer from './Components/Footer';
-import Test from './Pages/tempTest.js';
+import Test from './Pages/TestPage';
 import ChatContainer from './Components/ChatContainer';
 import io from 'socket.io-client'
 
@@ -115,7 +115,7 @@ class App extends React.Component {
 
           {/* conditionally render chat-overlay, show only when logged in */}
           {this.state.loggedIn
-            ? (<ChatContainer socket={this.state.socket} 
+            ? (<ChatContainer socket={this.state.socket}
                               newChatData={this.state.newChatData}/>)
             : null
           }
@@ -135,7 +135,7 @@ class App extends React.Component {
 
             {/* this route must have protected actions*/}
             <Route path="/homepage">
-              <HomePage isLoggedIn={this.state.loggedIn} 
+              <HomePage isLoggedIn={this.state.loggedIn}
                         createChat={this.createChat}/>
             </Route>
 
