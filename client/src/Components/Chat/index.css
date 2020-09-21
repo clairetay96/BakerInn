@@ -19,19 +19,6 @@
   background-color: white;
 }
 
-form {
-	display: flex;
-	justify-content: space-between;
-	margin: 0 auto;
-	width: 250px;
-}
-
-input[type="text"]{
-	width: 80%;
-}
-input[type="submit"]{
-	width: 20%;
-}
 
 .open-button {
   background-color: #555;
@@ -109,4 +96,9 @@ input[type="submit"]{
 
 .message-text {
 	font-size: 14px;
+}
+
+.message-input {
+	width: 90%;
+	margin: 0 auto;
 }

@@ -69,6 +69,12 @@ class App extends React.Component {
     })
   }
 
+  clearChatData = () => {
+    this.setState({
+        newChatData: null
+    })
+  }
+
   componentDidMount() {
 
     // check on first opening if the user has logged in before
@@ -111,6 +117,8 @@ class App extends React.Component {
     return socket
   }
 
+
+
   render() {
     return (
       <div className="App">
@@ -122,7 +130,8 @@ class App extends React.Component {
           {/* conditionally render chat-overlay, show only when logged in */}
           {this.state.loggedIn
             ? (<ChatContainer socket={this.state.socket}
-              newChatData={this.state.newChatData} />)
+              newChatData={this.state.newChatData}
+              clearChatData={this.clearChatData}/>)
             : null
           }
 

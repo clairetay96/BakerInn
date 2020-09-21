@@ -171,20 +171,20 @@ module.exports = (db) => {
         })
     }
 
-    let expressInterest = (request, response) => {
-        let listingID = request.params.id
-        let userID = request.userId
-        modelFuncs.expressInterest(listingID, userID, (err, res) => {
-            if (err) {
-                console.log(err)
-                response.status(500).send("Error occurred. - cannot express interest")
-            } else {
-                response.status(200).send("successfully expressed interest.")
-            }
+    // let expressInterest = (request, response) => {
+    //     let listingID = request.params.id
+    //     let userID = request.userId
+    //     modelFuncs.expressInterest(listingID, userID, (err, res) => {
+    //         if (err) {
+    //             console.log(err)
+    //             response.status(500).send("Error occurred. - cannot express interest")
+    //         } else {
+    //             response.status(200).send("successfully expressed interest.")
+    //         }
 
 
-        })
-    }
+    //     })
+    // }
 
 
     // edit listing info
@@ -212,6 +212,7 @@ module.exports = (db) => {
                 response.send("Redirect to homepage.")
             }
         })
+    }
 
     let makeTransaction = (request, response) => {
         let listingID = request.params.id
@@ -241,7 +242,6 @@ module.exports = (db) => {
         getListingInfo,
         login,
         validate,
-        expressInterest,
         editListing,
         deleteListing,
         makeTransaction

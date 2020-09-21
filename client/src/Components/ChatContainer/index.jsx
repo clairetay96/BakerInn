@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Chat from '../Chat'
 import './index.css'
+import { Spinner } from 'react-bootstrap'
 
-export default function ChatContainer({ socket, newChatData }) {
+export default function ChatContainer({ socket, newChatData, clearChatData }) {
 
   const cookie = document.cookie
   const user_id = JSON.parse(atob(cookie.split(".")[1])).userId
@@ -41,6 +42,7 @@ export default function ChatContainer({ socket, newChatData }) {
     .catch(err=>console.log(err))
   }, [])
 
+
   // track creation of rooms from single lising page
   useEffect(()=>{
     // info from single listing page
@@ -57,29 +59,84 @@ export default function ChatContainer({ socket, newChatData }) {
 
     // if data exist then run this
     if (newChatData) {
+
+
+      setToggle(true)
+
       const url = `/api/chats/find/${newChatData.owner_id}/${newChatData._id}`
-
       fetch(url)
-      .then(res=>res.json())
       .then(res=>{
-        console.log(res, '-- fetch chat');
-        let { _id, listing_id, owner_id, buyer_id } = res
+        if(res.status===404){
+            return null
+        } else {
+            return res.json()
+        }
 
-        if (!activeChat.includes(_id) && !allChats.includes(_id)) {
+      })
+      .then(res=> {
+
+        if (!res) {
           // create new in db
-          // add new chat in allchats
-          // open new chat window
+          console.clear();
+          console.log(allChats,"--make a new chat if chat doesn't exist")
+
+          let newChatURL = '/api/chats/new'
+          let requestOptions = {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                listing_id: newChatData._id,
+                owner_id: newChatData.owner_id
+
+            })
+          }
+
+          fetch(newChatURL, requestOptions)
+            .then(res => res.json())
+            .then(res => {
+
+                let newChatID = res.insertedId
+
+                let chatInfoURL = "/api/chats/"+newChatID
+
+                return fetch(chatInfoURL)
+            })
+            .then(res => res.json())
+            .then(res => {
+
+                // add new chat in allchats
+                setAllChats([...allChats, res])
+
+                // open new chat window
+                setActiveChat([...activeChat, res._id])
+
+
+            })
+            .catch(err => {console.log(err)})
+
+
           console.log('create new chat room everywhere')
-        } else if (allChats.includes(_id)) {
-          // open new chat window
+        } else {
+          // open chat window
+
+          console.log(res, '-- fetch chat');
+          let { _id, listing_id, owner_id, buyer_id } = res
+          console.log(allChats, "---chat exists, open")
           setActiveChat([...activeChat, _id])
         }
+
+        console.log(allChats, "---Do nothing because chat is open")
+
       })
       .catch(err=>{
         console.log(err);
       })
     }
 
+    clearChatData()
     // for debug
     if (newChatData) {
       console.log('lets make a newChat room from: ')
@@ -132,7 +189,9 @@ export default function ChatContainer({ socket, newChatData }) {
 
   const allChatsHelper = () => {
     if (!allChats) {
-      return 'loading spinner should exist here'
+      return (<Spinner style={{margin: '0 auto'}} animation="border" role="status">
+              <span className="sr-only">Loading...</span>
+            </Spinner>)
     } else {
       if (allChats.length > 0) {
         let output = allChats.map((chat, index)=>{
