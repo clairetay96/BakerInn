@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Chat from '../Chat'
 import './index.css'
 import { Spinner } from 'react-bootstrap'
+import {ReactComponent as ChatIcon} from '../../chat.svg'
 
 export default function ChatContainer({ socket, newChatData, clearChatData }) {
 
@@ -236,7 +237,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
 
   return (
     <>
-    <button onClick={toggleChat} className="show-container">Show chat</button>
+    <div onClick={toggleChat} className="show-container"><ChatIcon /></div>
     <div className={toggle ? "chat-container" : "chat-container hide-container"}>
       <div className="chat-list">
         <button onClick={toggleChat}>-</button>

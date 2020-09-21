@@ -44,10 +44,14 @@ export default function Discovery() {
         Spice up your baking with the <br/>GREAT SINGAPORE SALE
       </Col>
       <Col xs={4}>
-        <div onClick={()=>redirect("/homepage/ingredient")} style={style.callToAction1}>
+        <div onClick={()=>redirect("/homepage/ingredient")} 
+             className="callToAction"
+             style={style.callToAction1}>
           Check out ingredients
         </div>
-        <div onClick={()=>redirect("/homepage/equipment")} style={style.callToAction2}>
+        <div onClick={()=>redirect("/homepage/equipment")} 
+             className="callToAction"
+             style={style.callToAction2}>
           Find equipment you need
         </div>
       </Col>

@@ -53,9 +53,15 @@
 
 .show-container {
   position: fixed;
-  bottom: 50px;
-  right: 50px;
+  background-color: ghostwhite;
+  border-radius: 50%;
+  box-shadow: 0px 0px 4px 3px rgba(198, 198, 198, 0.39);
+  padding: 15px;
+  width: 75px;
+  bottom: 40px;
+  right: 40px;
   z-index: 10;
+  cursor: pointer;
 }
 
 .chat-container-username {

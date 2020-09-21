@@ -79,7 +79,7 @@ export default function CarouselV2({lastestListing = [], interval = null, column
       padding: 10,
       borderRadius: "50%",
       position: "absolute",
-      left: -30,
+      left: -36,
       zIndex: 5,
       visibility: slide > 0 ? "visible" : "hidden"
     },
@@ -90,7 +90,7 @@ export default function CarouselV2({lastestListing = [], interval = null, column
       padding: 10,
       borderRadius: "50%",
       position: "absolute",
-      right: -30,
+      right: -36,
       zIndex: 5,
       visibility: slide < totalFrames - 1 ? "visible" : "hidden"
     },

@@ -24,17 +24,16 @@ class NavBar extends Component {
           </Navbar.Brand>
         </Link>
         {isLoggedIn 
-         ? (<Nav>
-              <Link to='/dashboard'>Dashboard</Link>
-              <Link to='/homepage'>Homepage</Link>
-            </Nav>)
+         ? (<>
+              <Link className="nav-link" style={{color: "lightgrey"}} to='/dashboard'>Dashboard</Link>
+              <Link className="nav-link" style={{color: "lightgrey"}} to='/homepage'>Homepage</Link>
+            </>
+            )
          : null}
         <Navbar.Collapse className="justify-content-end">
-          <Navbar.Text>
             {isLoggedIn 
-              ? (<>Hi! {this.props.user} <button onClick={this.signout}>Sign out</button></>) 
-              : (<Link to="/login">Log In</Link>)}
-          </Navbar.Text>
+              ? (<><Navbar.Text className="mr-2">Hi! {this.props.user}</Navbar.Text><button onClick={this.signout}>Sign out</button></>) 
+              : (<Link to="/login"><button>Log In</button></Link>)}
         </Navbar.Collapse>
       </Navbar>
     )
