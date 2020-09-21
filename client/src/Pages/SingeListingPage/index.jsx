@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import './index.css'
 
-import { Button } from 'react-bootstrap'
-import { withRouter } from 'react-router-dom'
+import { Breadcrumb, Button } from 'react-bootstrap'
+import { Link, withRouter } from 'react-router-dom'
 
 class SingleListingPage extends Component {
   constructor(props) {
@@ -36,8 +36,24 @@ class SingleListingPage extends Component {
   render() {
     // layout the page
     // get dynamic data for single page
+    let [,path1,path2,path3] = this.props.history.location.pathname.split('/');
+
+    console.log(this.state.data);
 
     return (
+      <>
+      <Breadcrumb>
+        <Breadcrumb.Item href="#">
+          <Link to={`/${path1}`}>{path1}</Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item href="#">
+          <Link to={`/${path1}/${this.state.loading ? null : this.state.data.category}`}>{this.state.loading ? null : this.state.data.category}</Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item active>
+          {this.state.loading ? null : this.state.data.item}
+        </Breadcrumb.Item>
+      </Breadcrumb>
+
       <div className="container singleListing" >
         <div className="col">
           <div className="itemImage">
@@ -65,6 +81,8 @@ class SingleListingPage extends Component {
           </div>
         </div>
       </div>
+      <Link to="/homepage"><Button>Back to home</Button></Link>
+      </>
     )
   }
 }

@@ -212,6 +212,7 @@ module.exports = (db) => {
                 response.send("Redirect to homepage.")
             }
         })
+    }
 
     let makeTransaction = (request, response) => {
         let listingID = request.params.id

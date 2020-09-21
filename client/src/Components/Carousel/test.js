@@ -69,7 +69,7 @@ export default function CarouselV2({lastestListing = [], interval = null, column
       width: "100%",
       alignItems: "center", 
       margin: "0 auto",
-      backgroundColor: 'rgba(192,192,192,0.7)',
+      backgroundColor: 'rgba(240,255,240,1)',
     },
     nextRight: {
       textAlign: "center",

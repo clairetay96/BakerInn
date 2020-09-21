@@ -16,7 +16,9 @@ export default class HomePage extends Component {
 
     this.state = {
       search: '',
-      lastestListing: null
+      lastestListing: null,
+      ingredient: null,
+      equipment: null,
     }
   }
 
@@ -38,11 +40,26 @@ export default class HomePage extends Component {
   componentDidMount() {
     const url = '/api/listings'
 
+    // sort by category
+    // suggestion random ten
+
     fetch(url)
       .then(res => res.json())
       .then(res => {
+        let ingredient = null;
+        let equipment = null;
+        if (res) {
+            ingredient = res.filter((item) => {
+            return item.category === "ingredient"
+          })
+            equipment = res.filter((item) => {
+            return item.category === "equipment"
+          })
+        }
         this.setState({
-          lastestListing: res
+          lastestListing: res,
+          ingredient: ingredient,
+          equipment: equipment
         })
       })
   }
@@ -76,11 +93,11 @@ export default class HomePage extends Component {
             
             <CarouselV2 title="New ingredients"
               headerLink="/homepage/ingredient"
-              lastestListing={this.state.lastestListing}/>
+              lastestListing={this.state.ingredient}/>
 
             <CarouselV2 title="New equipment"
               headerLink="/homepage/equipment"
-              lastestListing={this.state.lastestListing} />
+              lastestListing={this.state.equipment} />
 
             <CarouselV2 title="Suggestions"
               lastestListing={this.state.lastestListing} />
@@ -91,10 +108,10 @@ export default class HomePage extends Component {
           </Route>
 
           <Route path="/homepage/ingredient">
-            <CategoryPage />
+            <CategoryPage listings={this.state.ingredient}/>
           </Route>
           <Route path="/homepage/equipment">
-            <CategoryPage />
+            <CategoryPage listings={this.state.equipment}/>
           </Route>
         </Switch>
       </>
