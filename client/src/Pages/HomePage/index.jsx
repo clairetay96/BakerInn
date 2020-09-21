@@ -86,7 +86,7 @@ export default class HomePage extends Component {
           </Route>
 
           <Route path="/homepage/listing/:id">
-            <SingleListingPage createChat={this.props.createChat}/>
+            <SingleListingPage createChat={this.props.createChat} />
           </Route>
 
           <Route path="/homepage/ingredient">

@@ -170,8 +170,8 @@ module.exports = (db) => {
     let expressInterest = (request, response) => {
         let listingID = request.params.id
         let userID = request.userId
-        modelFuncs.expressInterest(listingID, userID, (err, res)=>{
-            if(err){
+        modelFuncs.expressInterest(listingID, userID, (err, res) => {
+            if (err) {
                 console.log(err)
                 response.status(500).send("Error occurred. - cannot express interest")
             } else {
@@ -181,6 +181,33 @@ module.exports = (db) => {
 
         })
     }
+
+
+    // edit listing info
+    let editListing = (request, response) => {
+        let listingID = request.params.id
+        let updatedListingInfo = request.body
+        console.log("EDIT LISTING INFO IN CONTROLLER", updatedListingInfo)
+        modelFuncs.updateListingInfo(updatedListingInfo, listingID, (err, res) => {
+            if (err) {
+                console.log(err)
+                response.send("error occurred.")
+            } else {
+                response.send("Update Listing successfully")
+            }
+        })
+    }
+
+    let deleteListing = (request, response) => {
+        let listingID = request.params.id
+        modelFuncs.deleteListing(listingID, (err, res) => {
+            if (err) {
+                console.log(err)
+                response.send("error occurred.")
+            } else {
+                response.send("Redirect to homepage.")
+            }
+        })
 
     let makeTransaction = (request, response) => {
         let listingID = request.params.id
@@ -211,6 +238,8 @@ module.exports = (db) => {
         login,
         validate,
         expressInterest,
+        editListing,
+        deleteListing,
         makeTransaction
     }
 
