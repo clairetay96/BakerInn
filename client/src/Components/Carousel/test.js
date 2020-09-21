@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import CarouselCard from '../CarouselCard'
+import {ReactComponent as NextIcon} from '../../arrow.svg';
 import './index.css'
 
 export default function CarouselV2({lastestListing = [], interval = null, columns = null, title, headerLink=null}) {
@@ -73,23 +74,23 @@ export default function CarouselV2({lastestListing = [], interval = null, column
     },
     nextRight: {
       textAlign: "center",
-      height: "50px",
-      width: "50px",
-      border: "1px solid palevioletred",
+      height: "60px",
+      width: "60px",
+      padding: 10,
       borderRadius: "50%",
       position: "absolute",
-      left: -20,
+      left: -30,
       zIndex: 5,
       visibility: slide > 0 ? "visible" : "hidden"
     },
     nextLeft: {
       textAlign: "center",
-      height: "50px",
-      width: "50px",
-      border: "1px solid palevioletred",
+      height: "60px",
+      width: "60px",
+      padding: 10,
       borderRadius: "50%",
       position: "absolute",
-      right: -20,
+      right: -30,
       zIndex: 5,
       visibility: slide < totalFrames - 1 ? "visible" : "hidden"
     },
@@ -126,7 +127,7 @@ export default function CarouselV2({lastestListing = [], interval = null, column
               <div onClick={prevSlide}
                   className="next"
                   style={style.nextRight}>
-                <h1>{`<`}</h1>
+                <NextIcon transform='rotate(-90)'/>
               </div>
         
                 <div onMouseOver={pauseSlide} 
@@ -150,7 +151,7 @@ export default function CarouselV2({lastestListing = [], interval = null, column
               <div onClick={nextSlide} 
                   className="next"
                   style={style.nextLeft}>
-                <h1>{`>`}</h1>
+                <NextIcon transform='rotate(90)'/>
               </div>
             </div>
           )

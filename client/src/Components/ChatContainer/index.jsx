@@ -39,7 +39,10 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
             setAllChats(res1)
         }
     })
-    .catch(err=>console.log(err))
+    .catch(err=>{
+      console.log(err)
+      setAllChats([])
+    })
   }, [])
 
 
@@ -145,7 +148,18 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
   }, [newChatData])
 
   // track addition of more chatrooms from list
-  const [activeChat, setActiveChat] = useState([])
+  const [activeChat, setActiveChatWindow] = useState([])
+  
+  // helper to limit number of chat windows
+  const setActiveChat = (arr) => {
+    if (arr.length > 3) {
+      // remove the lastest
+      arr.splice(0,1)
+      setActiveChatWindow(arr)
+    } else {
+      setActiveChatWindow(arr)
+    }
+  }
 
   // populate active chat
   const handleAddWindow = (id) => {
@@ -187,14 +201,14 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
   // helper function to return desired rendering
   let [allChats, setAllChats] = useState(null)
 
-  const allChatsHelper = () => {
-    if (!allChats) {
+  const allChatsHelper = (_allChats) => {
+    if (!_allChats) {
       return (<Spinner style={{margin: '0 auto'}} animation="border" role="status">
               <span className="sr-only">Loading...</span>
             </Spinner>)
     } else {
-      if (allChats.length > 0) {
-        let output = allChats.map((chat, index)=>{
+      if (_allChats.length > 0) {
+        let output = _allChats.map((chat, index)=>{
 
             return (<div onClick={()=>handleAddWindow(chat._id)}
                         className="chat-list-item"
@@ -227,7 +241,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
       <div className="chat-list">
         <button onClick={toggleChat}>-</button>
         <h4>BakerInn Chats</h4>
-          {allChatsHelper()}
+          {allChatsHelper(allChats)}
       </div>
       { renderActive }
     </div>
