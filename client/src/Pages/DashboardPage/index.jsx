@@ -9,13 +9,16 @@ import ProtectedRoute from '../../Components/ProtectedRoute';
 
 export default class DashboardPage extends Component {
 
+  constructor() {
+    super();
 
-  constructor(props) {
-    super(props);
+    // retrieve userID in cookie
+    const cookie = document.cookie
+    const userId = JSON.parse(atob(cookie.split(".")[1])).userId
 
     this.state = {
       search: '',
-      userId: props.userId,
+      userId: userId,
       userLendingListings: {
         available: [],
         loan: [6, 7, 8, 9, 10],
@@ -24,7 +27,8 @@ export default class DashboardPage extends Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount(props) {
+    console.log("PROPS IN DASHBOARD", props)
     this.pingServer()
     this.fetchUserBorrowesListing()
     this.fetchUserPostedListing()

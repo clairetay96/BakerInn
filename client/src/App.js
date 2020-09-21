@@ -51,12 +51,14 @@ class App extends React.Component {
   loggedIn = () => {
     const cookie = document.cookie
     const username = JSON.parse(atob(cookie.split(".")[1])).username
+    const userId = JSON.parse(atob(cookie.split(".")[1])).userId
 
     let socket = this.setupSocket()
     this.setState({
       loggedIn: true,
       socket: socket,
-      username: username
+      username: username,
+      userId: userId
     })
   }
 
@@ -131,7 +133,7 @@ class App extends React.Component {
 
             {/* this route must protected */}
             <ProtectedRoute path="/dashboard">
-              <DashboardPage userId={this.state.userId} />
+              <DashboardPage />
             </ProtectedRoute>
 
             {/* this route must have protected actions*/}
