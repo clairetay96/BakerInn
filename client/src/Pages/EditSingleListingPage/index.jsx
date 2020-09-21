@@ -3,9 +3,10 @@ import './index.css'
 import EditListing from '../../Components/EditListing'
 
 import { Button, Modal } from 'react-bootstrap'
-// import { withRouter } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
-function EditSingleListingPage({ match }) {
+function EditSingleListingPage({ match, refresh }) {
+  let history = useHistory();
 
   useEffect(() => {
     fetchListing()
@@ -20,6 +21,10 @@ function EditSingleListingPage({ match }) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  // const [refresh, setRefresh] = useState(false);
+
+  // const refreshPage = () => setRefresh(true);
+
   const fetchListing = async () => {
     const listing_id = match.params.id
     const url = `/api/listings/${listing_id}`
@@ -32,12 +37,12 @@ function EditSingleListingPage({ match }) {
     console.log(listing)
   }
 
-  const handleDelete = (e) => {
+  const handleDelete = async (e) => {
     e.preventDefault();
 
     const listingId = listing._id
     const url = `/api/listings/${listingId}/delete`
-    fetch(url, {
+    await fetch(url, {
       method: "DELETE",
       headers: {
         Accept: "application/json",
@@ -46,7 +51,17 @@ function EditSingleListingPage({ match }) {
     })
       .then((res) => console.log(res))
       .catch((err) => console.log(err))
+
+    setTimeout(() => {
+      history.push("/dashboard")
+      window.location.reload();
+    }, 500)
   }
+
+  const refreshPage = () => {
+    window.location.reload();
+  }
+
 
   return (
     <div className="container singleListing" >
@@ -80,13 +95,15 @@ function EditSingleListingPage({ match }) {
                 <Modal.Title >Edit Listing</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <EditListing listingInfo={listing} />
+                <EditListing listingInfo={listing} onClose={handleClose} refreshPage={refreshPage} />
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>Close</Button>
               </Modal.Footer>
             </Modal>
-            <Button onClick={(e) => { handleDelete(e) }}>Delete</Button>
+            <Button onClick={(e) => {
+              handleDelete(e);
+            }}>Delete</Button>
           </div>
 
         </div>

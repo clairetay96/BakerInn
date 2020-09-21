@@ -24,11 +24,11 @@ export default class DashboardPage extends Component {
         loan: [6, 7, 8, 9, 10],
       },
       userBorrowing: [11, 12, 13, 14, 15],
+      refreshPage: false
     }
   }
 
-  componentDidMount(props) {
-    console.log("PROPS IN DASHBOARD", props)
+  componentDidMount() {
     this.pingServer()
     this.fetchUserBorrowesListing()
     this.fetchUserPostedListing()

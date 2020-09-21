@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Form, Row, Col, Button } from 'react-bootstrap'
 import './index.css'
 
-const EditListing = ({ listingInfo }) => {
+const EditListing = ({ listingInfo, onClose, refreshPage }) => {
 
     const [item, setItem] = useState(listingInfo.item)
     const [description, setDescription] = useState(listingInfo.description)
@@ -19,12 +19,12 @@ const EditListing = ({ listingInfo }) => {
         }
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const listingId = listingInfo._id
         const url = `/api/listings/${listingId}/edit`
-        fetch(url, {
+        await fetch(url, {
             method: "PUT",
             headers: {
                 Accept: "application/json",
@@ -34,16 +34,12 @@ const EditListing = ({ listingInfo }) => {
         })
             .then((res) => console.log(res))
             .catch((err) => console.log(err))
-        setItem("")
-        setDescription("")
-        setPrice("")
-        setCategory("")
-        setOption("")
-        setLocation("")
         setSuccess(true)
         setTimeout(() => {
             setSuccess(false);
-        }, 3000);
+            onClose();
+            refreshPage();
+        }, 1000);
     }
 
 
