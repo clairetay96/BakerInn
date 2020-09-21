@@ -3,6 +3,7 @@ import Chat from '../Chat'
 import './index.css'
 import { Spinner } from 'react-bootstrap'
 import {ReactComponent as ChatIcon} from '../../chat.svg'
+import {ReactComponent as MiniIcon} from '../../minimize.svg'
 
 export default function ChatContainer({ socket, newChatData, clearChatData }) {
 
@@ -240,7 +241,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
     <div onClick={toggleChat} className="show-container"><ChatIcon /></div>
     <div className={toggle ? "chat-container" : "chat-container hide-container"}>
       <div className="chat-list">
-        <button onClick={toggleChat}>-</button>
+        <button onClick={toggleChat}><MiniIcon/></button>
         <h4>BakerInn Chats</h4>
           {allChatsHelper(allChats)}
       </div>

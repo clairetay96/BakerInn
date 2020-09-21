@@ -5,7 +5,7 @@
   right: 10px;
   bottom: 20px;
   z-index: 20;
-  border: 1px solid rebeccapurple;
+  border: 1px solid mediumslateblue;
   overflow: hidden;
 }
 
@@ -13,8 +13,8 @@
   height: 400px;
   width: 265px;
   overflow: scroll;
-  border: 1px solid rebeccapurple;
-  background-color: orange;
+  border: 1px solid mediumslateblue;
+  background-color: lightgrey;
   display: flex;
   flex-direction: column;
 }
@@ -23,8 +23,9 @@
 	align-self: flex-end;
 	font-size: 18px;
 	border: none;
-	background-color: rgba(0,0,0,0);
-	width: 10%;
+  background-color: rgba(0,0,0,0);
+  margin-top: 5px;
+	width: 15%;
 }
 
 .chat-list > h4 {
@@ -33,13 +34,13 @@
 
 .chat-list-item {
   cursor: pointer;
-  background-color: orangered;
+  background-color: white;
   margin: 5px 5px;
   padding: 9px
 }
 
 .chat-list-item:hover {
-  background-color: palegreen;
+  background-color: rgb(228, 255, 228);
 }
 
 .chat-placeholder {
