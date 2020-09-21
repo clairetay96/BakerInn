@@ -15,7 +15,7 @@ module.exports = (db) => {
                 console.log(err)
                 response.status(500).send("Error occurred in create chat")
             } else {
-                response.status(200).send(res)
+                response.status(200).send(res[1][0])
             }
         })
     }

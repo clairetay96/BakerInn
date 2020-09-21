@@ -7,7 +7,17 @@ module.exports = (db) => {
 
     //create new chat and then push to both users 'chats'
     let newChat = (newChatInfo, callback) => {
-        db.collection("chats").insertOne(newChatInfo)
+
+        let allQueries = []
+        let listingID = newChatInfo.listing_id
+        let userID = newChatInfo.buyer_id
+
+        allQueries.push(db.collection("listings").updateOne({ _id: ObjectId(listingID) }, { $push: { interested: userID } })
+            .then(res => res)
+            .catch(err => callback(err, null)))
+
+
+        allQueries.push(db.collection("chats").insertOne(newChatInfo)
             .then(res=> {
                 let queries = [res]
 
@@ -23,8 +33,12 @@ module.exports = (db) => {
 
                  return Promise.all(queries)
             })
-            .then(res2=> {callback(null, res2[0])})
-            .catch(err => {callback(err,null)})
+            .then(res2=> res2)
+            .catch(err => callback(err, null)))
+
+        Promise.all(allQueries) //returns an array [[res from update listing], [[new chat info], [res from updating users]]]
+            .then(res => callback(null, res))
+            .catch(err => callback(err, null))
     }
 
     let postMessage = (newMessageInfo, callback) => {

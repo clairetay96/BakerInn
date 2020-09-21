@@ -38,8 +38,8 @@ module.exports = (app, db) => {
   //get specific listing info
   app.get('/api/listings/:id', bakerIn.getListingInfo)
 
-  //update listing's 'interested' list
-  app.put('/api/listings/:id/interested', withAuth, bakerIn.expressInterest)
+  // //update listing's 'interested' list
+  // app.put('/api/listings/:id/interested', withAuth, bakerIn.expressInterest)
 
   //update listing to unavailable
   app.put('/api/listings/:id/update-state', withAuth, bakerIn.makeTransaction)

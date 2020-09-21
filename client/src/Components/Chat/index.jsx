@@ -302,12 +302,9 @@ useEffect(()=>{
     socket.on('receiveOwnership' + chat_id, ()=>{
         console.log('receive ownership');
         if(sender.isOwner){
-            setTransactionOption("Item is owned by " + receiver.username)
-            setListing({state: "unavailable", "successful_buyer_id": receiver.user_id})
-
+            setListing((prevState)=>({...prevState, state: "unavailable", "successful_buyer_id": receiver.user_id}))
         } else {
-            setListing({state: "unavailable", "successful_buyer_id": sender.user_id})
-            setTransactionOption("you are currently in possession of this item.")
+            setListing((prevState)=>({...prevState, state: "unavailable", "successful_buyer_id": sender.user_id}))
         }
 
     })
@@ -315,11 +312,10 @@ useEffect(()=>{
     return () => {
         socket.off('receiveOwnership' + chat_id, ()=>{
             console.log('ownership received.');
-            setTransactionOption("you are currently in possession of this item.")
     })
     }
 
-}, [])
+}, [sender, receiver])
 
 
 //for borrowable items.
@@ -533,7 +529,7 @@ useEffect(()=>{
             {messageHTML}
         </div>
 
-        <form onSubmit={sendMessage}>
+        <form onSubmit={sendMessage} className="message-input">
           <input type="text" value={message} onChange={(event)=>{setMessage(event.target.value)}}/>
           <input type="submit" value="Send" />
         </form>
