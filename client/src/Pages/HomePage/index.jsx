@@ -71,21 +71,18 @@ export default class HomePage extends Component {
               the listing
             */}
 
-            <Carousel title="Freshest offers"
-              lastestListing={this.state.lastestListing} />
-
             <CarouselV2 title="Freshest offers"
-              lastestListing={[1,2,3,4,5,6,7,8,9,10,11]}/>
-
-            <Carousel title="New ingredients"
+              lastestListing={this.state.lastestListing}/>
+            
+            <CarouselV2 title="New ingredients"
               headerLink="/homepage/ingredient"
-              lastestListing={this.state.lastestListing} />
+              lastestListing={this.state.lastestListing}/>
 
-            <Carousel title="New equipment"
+            <CarouselV2 title="New equipment"
               headerLink="/homepage/equipment"
               lastestListing={this.state.lastestListing} />
 
-            <Carousel title="Suggestions"
+            <CarouselV2 title="Suggestions"
               lastestListing={this.state.lastestListing} />
           </Route>
 

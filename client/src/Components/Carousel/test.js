@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import CarouselCard from '../CarouselCard'
 import './index.css'
 
 export default function CarouselV2({lastestListing = [], interval = null, columns = null, title, headerLink=null}) {
@@ -22,7 +23,7 @@ export default function CarouselV2({lastestListing = [], interval = null, column
     length = 0
   }
   let lastFrame = calcLastFrame(length, 5);// last frame position
-  let interval_ = interval || 8000;
+  let interval_ = interval || 5000;
 
   let totalFrames = Math.ceil(length/col)
 
@@ -67,7 +68,8 @@ export default function CarouselV2({lastestListing = [], interval = null, column
       position: "relative",
       width: "100%",
       alignItems: "center", 
-      margin: "0 auto"
+      margin: "0 auto",
+      backgroundColor: 'rgba(192,192,192,0.7)',
     },
     nextRight: {
       textAlign: "center",
@@ -95,7 +97,6 @@ export default function CarouselV2({lastestListing = [], interval = null, column
       width: "100%",
       overflow: "hidden",
       display: "block",
-      border: "1px solid olive"
     },
     carouselBody : {
       height: "100%",
@@ -135,7 +136,11 @@ export default function CarouselV2({lastestListing = [], interval = null, column
                   <ul className="carousel-body" style={style.carouselBody}>
                     {
                       lastestListing.map((item, index)=>(
-                        <li key={index} style={style.carouselItem}><div>{item}</div></li>
+                        <li key={index} style={style.carouselItem}>
+                          <div className="carousel-item-wrapper">
+                            <CarouselCard item={item}/>
+                          </div>
+                        </li>
                       ))
                     }
                   </ul>
