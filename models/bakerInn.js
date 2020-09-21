@@ -130,35 +130,40 @@ module.exports = (db) => {
     let getUserListing = (userID, borrowed, callback) => {
         db.collection("users").findOne({ _id: ObjectId(userID) })
             .then(res => { //the user object whose listings you're trying to retrieve
+
                 let userListings = borrowed ? res.borrowed : res.listings
                 let allQueries = []
-                userListings.forEach((listingID) => {
-                    allQueries.push(
-                        db.collection("listings").findOne({ _id: ObjectId(listingID) })
-                            .then(res1 => { //res1 is the listing object from listings collection
-                                if(res1){
-                                    let allSubQueries = []
 
-                                    allSubQueries.push(res1)
-                                    allSubQueries.push( db.collection("users").findOne({ _id: ObjectId(res1.owner_id) }) )
-                                  
-                                    return Promise.all(allSubQueries)
-                                } else {
-                                    return null
-                                }
+                if(userListings) {
+                    userListings.forEach((listingID) => {
+                        allQueries.push(
+                            db.collection("listings").findOne({ _id: ObjectId(listingID) })
+                                .then(res1 => { //res1 is the listing object from listings collection
+                                    if(res1){
+                                        let allSubQueries = []
 
-                            })
-                            .then(res2 => { //res2 is a list [listingobject, userobject]
-                                if(res2){
-                                    res2[0].owner_info = { username: res2[1].username }
-                                    return res2[0]
-                                } else {
-                                    return null
-                                }
-                            })
-                            .catch(err => { throw err })
-                    )
-                })
+                                        allSubQueries.push(res1)
+                                        allSubQueries.push( db.collection("users").findOne({ _id: ObjectId(res1.owner_id) }) )
+
+                                        return Promise.all(allSubQueries)
+                                    } else {
+                                        return null
+                                    }
+
+                                })
+                                .then(res2 => { //res2 is a list [listingobject, userobject]
+                                    if(res2){
+                                        res2[0].owner_info = { username: res2[1].username }
+                                        return res2[0]
+                                    } else {
+                                        return null
+                                    }
+
+                                })
+                                .catch(err => { throw err })
+                        )
+                    })
+                }
                 return Promise.all(allQueries)
             })
             .then(allListings => { callback(null, allListings) }) //a list of containing objects, where each object represents a listing.

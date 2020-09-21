@@ -18,10 +18,25 @@ export default function ChatContainer({ socket, newChatData }) {
     .then(res=> res.json())
     .then(res=>{
       if (res.chats){
-        setAllChats(res.chats)
+
+        //get data for each chat
+        let allChatData = res.chats.map((chat_id, index)=>{
+            return fetch(`/api/chats/${chat_id}`)
+                    .then(res => res.json())
+                    .catch(err => {throw err})
+        })
+
+        return Promise.all(allChatData)
+
       } else {
         setAllChats([])
+        return null
       }
+    })
+    .then(res1 => {
+        if(res1){
+            setAllChats(res1)
+        }
     })
     .catch(err=>console.log(err))
   }, [])
@@ -76,10 +91,8 @@ export default function ChatContainer({ socket, newChatData }) {
   const [activeChat, setActiveChat] = useState([])
 
   // populate active chat
-  const handleAddWindow = (e) => {
-    e.preventDefault()
+  const handleAddWindow = (id) => {
     // take the id of the chat
-    let id = e.target.id
 
     if (activeChat.includes(id)) {
       return // do nothing
@@ -90,10 +103,11 @@ export default function ChatContainer({ socket, newChatData }) {
   }
 
 
-  //rerender 
+  //rerender
   const [renderActive, setRenderActive] = useState([])
 
   useEffect(() => {
+
     setRenderActive(activeChat.map((id) => {
       return (<Chat chat_id={id}
                         key={id}
@@ -122,11 +136,16 @@ export default function ChatContainer({ socket, newChatData }) {
     } else {
       if (allChats.length > 0) {
         let output = allChats.map((chat, index)=>{
-            return (<div onClick={handleAddWindow} 
-                        id={chat} 
+
+            return (<div onClick={()=>handleAddWindow(chat._id)}
                         className="chat-list-item"
                         key={index}>
-                        chat
+                        <div className="chat-container-username">
+                        {user_id===chat.owner_id ? chat.buyer_username : chat.owner_username}
+                        </div>
+                        <div className="chat-container-listing">
+                         for {chat.listing_item}
+                        </div>
                     </div>)
         })
         return output
@@ -147,7 +166,7 @@ export default function ChatContainer({ socket, newChatData }) {
     <button onClick={toggleChat} className="show-container">Show chat</button>
     <div className={toggle ? "chat-container" : "chat-container hide-container"}>
       <div className="chat-list">
-        <button onClick={toggleChat}>minimize</button>
+        <button onClick={toggleChat}>-</button>
         <h4>BakerInn Chats</h4>
           {allChatsHelper()}
       </div>

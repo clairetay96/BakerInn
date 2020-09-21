@@ -4,7 +4,6 @@ import './index.css'
 export default function Chat({ chat_id, user_id, socket, onClose }) {
   //where chat_id is the chat_id and user_id is the logged in user_id
 
-
   ///////////////
   // debugging code here
   socket.on('disconnect', ()=>{
@@ -101,7 +100,7 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
             setMessages(res)
 
             let messageHTMLtemp = res.map((message, index)=>{
-                return <p key={message._id}><span>{message.sender_name}: </span>{message.message}</p>
+                return <div className="single-message" key={message._id}><div className={user_id==message.user_id ? "message-sender" : "message-receiver"}>{message.sender_name} </div> <div className="message-text">{message.message}</div></div>
 
             })
 
@@ -124,7 +123,7 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
   const id = `message-board-${chat_id}`
   const text = document.getElementById(id);
   useEffect(()=>{
-      if (text && messageHTML.length > 0){   
+      if (text && messageHTML.length > 0){
         text.scrollTop = text.scrollHeight
       }
   }, [messageHTML])
@@ -132,35 +131,33 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
   useEffect(()=>{
     //socket to join chat room - emit
     socket.emit('join', { room_id: chat_id })
+
+    return ()=>{
+        socket.emit('leave', { room_id: chat_id })
+    }
+
   }, [])
 
 
   useEffect(()=>{
     //socket to  receive message - on
-    socket.on('receiveMessage' + chat_id, ( { message, sender_name } )=>{
+    socket.on('receiveMessage' + chat_id, ( { message, sender_name, sender_id } )=>{
         console.log(sender_name, '-- receive');
 
         setMessages( messages =>[...messages, { message, sender_name }])
-        setMessageKey( messageKey => messageKey+1)
-        setMessageHTML(messageHTML => [...messageHTML, <p key={messageKey}><span>{sender_name}: </span>{message}</p>])
+        setMessageHTML(messageHTML => [...messageHTML, <div className="single-message" key={message._id}><div className={user_id==sender_id ? "message-sender" : "message-receiver"}>{sender_name} </div> <div className="message-text">{message}</div></div>])
 
     })
-
-    return () => {
-        socket.off('receiveMessage' + chat_id, ( { message, sender_name } )=>{
-
-        setMessages( messages =>[...messages, { message, sender_name }])
-        setMessageKey( messageKey => messageKey+1)
-        setMessageHTML(messageHTML => [...messageHTML, <p key={messageKey}><span>{sender_name}: </span>{message}</p>])
-
-    })
-    }
 
   }, [])
 
+  //set message Key
+  useEffect(()=> {
+    setMessageKey( messageKey => messageKey+1)
+  }, [messageHTML])
+
   //populate the options available to the user - after setListing,setSender,setReceiver have been changed.
   useEffect(()=>{
-    console.log(sender)
     if(listing.state === "available"){
         if(listing.option=="loan"){
             setTransactionOption(<button onClick={agreeToLoan}>Transfer Item</button>)
@@ -174,12 +171,18 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
         //if the buyer in the chat is not the buyer in the database, notify that item is unavailable. If the buyer in the chat is the buyer in the database, notify that they are in possession of the item. If user is the owner of the item let them know the item who they sold it to.
         if(!sender.isOwner) {
             if(listing.successful_buyer_id !== sender.user_id){
-                setTransactionOption("item now unavailable")
+                setTransactionOption("Item now unavailable.")
             } else {
-                setTransactionOption("you are currently in possession of this item.")
+                setTransactionOption("You currently own this item.")
             }
         } else {
-            setTransactionOption("This item is owned by" + listing.successful_buyer_id)
+            fetch('/api/users/'+listing.successful_buyer_id)
+                    .then(res => res.json())
+                    .then(res => {
+                        console.log(res)
+                        setTransactionOption("This item is now owned by " + res.username)
+                    })
+                    .catch(err => {console.log(err, "----- in fetching owner data")})
         }
 
     } else if (listing.state==="on loan"){
@@ -188,10 +191,18 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
             setTransactionOption(<button onClick={agreeToReturn}>Return Item</button>)
         } else {
             if(!sender.isOwner){ //if the sender is not the owner, let them know the item is out on loan
-            setTransactionOption("item is on loan to someone else at the moment.")
+            setTransactionOption("Item currently on loan")
 
             } else { //if the sender is the owner, let them know who the item is currently on loan to.
-                setTransactionOption("This item is on loan by" + listing.successful_buyer_id)
+
+                fetch('/api/users/'+listing.successful_buyer_id)
+                    .then(res => res.json())
+                    .then(res => {
+                        console.log(res)
+                        setTransactionOption("This item is on loan by " + res.username)
+                    })
+                    .catch(err => {console.log(err, "----- in fetching loaner data")})
+
             }
         }
     }
@@ -207,7 +218,8 @@ const sendMessage = (event) => {
         message,
         sender_name: sender.username,
         chatroom_id: chat_id,
-        userroom_id: 'user' + receiver.user_id
+        userroom_id: receiver.user_id,
+        sender_id: user_id
     }
 
     //emit message
@@ -501,24 +513,31 @@ useEffect(()=>{
     <>
     <div className={toggle ? "chat-root" : "chat-root min-chat"}>
       <div className="chat-window">
+
+        <div className="close-chat-buttons">
+        <button onClick={toggleChat}>{toggle ? "-" : "O"}</button>
         <button className="on-close"
                 onClick={()=>onClose(chat_id)}>
-            Close
+            X
         </button>
-        <button onClick={toggleChat}>Minimize</button>
-        <div className="on-close">{chat_id} {transactionOption}</div>
+        </div>
+
+
+        <div className="on-close-bottom"><div className="listing-info"><div className={ toggle? "receiver-username" : "receiver-username inline"}>{receiver.username}</div><div className={toggle? "listing-item" : "listing-item inline"}> for {listing.item}</div></div> {toggle ? <div className="transaction-option">{transactionOption}</div> : null}</div>
         {error
          ? (<p>{error}</p>)
          : null
         }
-        <div className="message-board" 
+        <div className="message-board"
              id={`message-board-${chat_id}`}>
             {messageHTML}
         </div>
+
         <form onSubmit={sendMessage}>
           <input type="text" value={message} onChange={(event)=>{setMessage(event.target.value)}}/>
           <input type="submit" value="Send" />
         </form>
+
       </div>
     </div>
     </>

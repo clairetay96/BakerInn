@@ -10,7 +10,7 @@ import Auth from './Auth';
 import ProtectedRoute from './Components/ProtectedRoute';
 import { Container } from 'react-bootstrap';
 import Footer from './Components/Footer';
-import Test from './Pages/tempTest.js';
+import Test from './Pages/TestPage';
 import ChatContainer from './Components/ChatContainer';
 import io from 'socket.io-client'
 
