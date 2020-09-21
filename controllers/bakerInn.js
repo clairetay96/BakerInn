@@ -19,9 +19,9 @@ module.exports = (db) => {
         modelFuncs.getAllUsers((err, res) => {
             if (err) {
                 console.log(err.message)
-                response.send("Error occurred.")
+                response.status(500).send("Error occurred - cannot get all users.")
             } else {
-                response.send(res)
+                response.status(200).send(res)
             }
         })
     }
@@ -33,9 +33,8 @@ module.exports = (db) => {
         modelFuncs.getUserFromID(userID, (err, res) => {
             if (err) {
                 console.log(err.message)
-                response.send("Error occurred.")
+                response.status(500).send("Error occurred.-- cannot get user info")
             } else {
-                console.log(res)
                 response.send(res)
             }
         })
@@ -45,6 +44,7 @@ module.exports = (db) => {
         let newUserInfo = request.body
         modelFuncs.createNewUser(newUserInfo, (err, res) => {
             if (err) {
+                console.log(err)
                 response.status(500).send(err)
             } else {
                 response.status(201).send('user created')
@@ -106,9 +106,9 @@ module.exports = (db) => {
         modelFuncs.getAllListings((err, res) => {
             if (err) {
                 console.log(err)
-                response.send("error occurred.")
+                response.status(500).send("error occurred. - cannot get all listings")
             } else {
-                response.send(res)
+                response.status(200).send(res)
             }
         })
     }
@@ -117,13 +117,13 @@ module.exports = (db) => {
         let newListingInput = request.body
         let userID = request.userId; //from cookies
         newListingInput.owner_id = userID
-        console.log(newListingInput)
+        newListingInput.state = "available"
         modelFuncs.makeNewListing(newListingInput, userID, (err, res) => {
             if (err) {
                 console.log(err)
-                response.send("error occurred.")
+                response.status(500).send("error occurred. - cannot make new listing")
             } else {
-                response.send("success")
+                response.status(200).send("success")
             }
         })
 
@@ -134,9 +134,9 @@ module.exports = (db) => {
         modelFuncs.getUserListing(userID, false, (err, res) => {
             if (err) {
                 console.log(err)
-                response.status(500).send(err)
+                response.status(500).send("Error occurred. - cannot get user listings")
             } else {
-                response.send(res)
+                response.status(200).send(res)
             }
         })
     }
@@ -148,9 +148,9 @@ module.exports = (db) => {
         modelFuncs.getUserListing(userID, true, (err, res) => {
             if (err) {
                 console.log(err)
-                response.send("Error occurred in get borrowlisting.")
+                response.status(500).send("Error occurred. - cannot get user borrowed listings")
             } else {
-                response.send(res)
+                response.status(200).send(res)
             }
         })
     }
@@ -160,9 +160,9 @@ module.exports = (db) => {
         modelFuncs.getOneListing(listingID, (err, res) => {
             if (err) {
                 console.log(err)
-                response.send("Error occurred.")
+                response.status(500).send("Error occurred. - cannot get listing info")
             } else {
-                response.send(res)
+                response.status(200).send(res)
             }
         })
     }
@@ -173,7 +173,7 @@ module.exports = (db) => {
         modelFuncs.expressInterest(listingID, userID, (err, res) => {
             if (err) {
                 console.log(err)
-                response.status(500).send("Error occurred.")
+                response.status(500).send("Error occurred. - cannot express interest")
             } else {
                 response.status(200).send("successfully expressed interest.")
             }
@@ -181,6 +181,7 @@ module.exports = (db) => {
 
         })
     }
+
 
     // edit listing info
     let editListing = (request, response) => {
@@ -207,6 +208,19 @@ module.exports = (db) => {
                 response.send("Redirect to homepage.")
             }
         })
+
+    let makeTransaction = (request, response) => {
+        let listingID = request.params.id
+        let updateInfo = request.body
+        modelFuncs.makeTransaction(listingID, updateInfo, (err, res)=>{
+            if(err){
+                console.log(err)
+                response.status(500).send("Error occurred. - cannot make unavailable")
+            } else {
+                response.status(200).send("Listing made unavailable")
+            }
+        })
+
     }
 
     return {
@@ -225,7 +239,8 @@ module.exports = (db) => {
         validate,
         expressInterest,
         editListing,
-        deleteListing
+        deleteListing,
+        makeTransaction
     }
 
 };

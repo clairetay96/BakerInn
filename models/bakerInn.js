@@ -6,7 +6,7 @@ const ObjectId = mongo.ObjectId
 module.exports = (db) => {
 
     let getAllUsers = (callback) => {
-        db.collection("users").find({}).toArray()
+        db.collection("users").aggregate([{$project: {password: 0}}]).toArray()
             .then(res => {
                 callback(null, res)
             })
@@ -18,6 +18,7 @@ module.exports = (db) => {
     let getUserFromID = (userID, callback) => {
         db.collection("users").findOne({ _id: ObjectId(userID) })
             .then(res => {
+                delete res.password
                 callback(null, res)
             })
             .catch(err => {
@@ -128,25 +129,27 @@ module.exports = (db) => {
     //get a user's posted listings or borrowed listings, depending on value of 'borrowed' (T/F) argument
     let getUserListing = (userID, borrowed, callback) => {
         db.collection("users").findOne({ _id: ObjectId(userID) })
-            .then(res => {
-                console.log("FIRST RES", res)
+            .then(res => { //the user object whose listings you're trying to retrieve
                 let userListings = borrowed ? res.borrowed : res.listings
                 let allQueries = []
                 userListings.forEach((listingID) => {
                     allQueries.push(
                         db.collection("listings").findOne({ _id: ObjectId(listingID) })
                             .then(res1 => { //res1 is the listing object from listings collection
-                                if (res1) {
+                                if(res1){
                                     let allSubQueries = []
+
                                     allSubQueries.push(res1)
-                                    allSubQueries.push(db.collection("users").findOne({ _id: ObjectId(res1.owner_id) }))
+                                    allSubQueries.push( db.collection("users").findOne({ _id: ObjectId(res1.owner_id) }) )
+                                  
                                     return Promise.all(allSubQueries)
                                 } else {
                                     return null
                                 }
+
                             })
                             .then(res2 => { //res2 is a list [listingobject, userobject]
-                                if (res2) {
+                                if(res2){
                                     res2[0].owner_info = { username: res2[1].username }
                                     return res2[0]
                                 } else {
@@ -226,6 +229,36 @@ module.exports = (db) => {
             })
     }
 
+    //update listing and either push to buyers borrowed, or bought, or remove from borrowed.
+    let makeTransaction = (listingID, updateInfo, callback) => {
+
+        let allQueries = []
+
+        if(updateInfo.state=="on loan"){
+
+            allQueries.push(db.collection("users").updateOne({_id: ObjectId(updateInfo.buyer_id)}, {$push: {borrowed: listingID}}))
+
+        } else if (updateInfo.state=="available"){
+
+            allQueries.push(db.collection("users").updateOne({_id: ObjectId(updateInfo.previous_borrower_id)}, {$pull: {borrowed: listingID}}))
+
+            delete updateInfo.previous_borrower_id
+
+
+        } else if(updateInfo.state=="unavailable"){
+
+            allQueries.push(db.collection("users").updateOne({_id: ObjectId(updateInfo.buyer_id)}, {$push: {bought: listingID}}))
+        }
+
+        //update listing
+        allQueries.push(db.collection("listings").updateOne({_id: ObjectId(listingID)}, {$set: updateInfo}))
+
+
+        Promise.all(allQueries)
+            .then(res => callback(null, res))
+            .catch(err => callback(err, null))
+    }
+
 
     return {
         getAllUsers,
@@ -239,6 +272,7 @@ module.exports = (db) => {
         userLogin,
         expressInterest,
         updateListingInfo,
-        deleteListing
+        deleteListing,
+        makeTransaction
     }
 }

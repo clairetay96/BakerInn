@@ -10,9 +10,10 @@ import Auth from './Auth';
 import ProtectedRoute from './Components/ProtectedRoute';
 import { Container } from 'react-bootstrap';
 import Footer from './Components/Footer';
-import Test from './Pages/TestPage';
+import Test from './Pages/tempTest.js';
 import ChatContainer from './Components/ChatContainer';
 import io from 'socket.io-client'
+
 
 
 class App extends React.Component {
@@ -124,6 +125,8 @@ class App extends React.Component {
               newChatData={this.state.newChatData} />)
             : null
           }
+
+
           <Container style={{ marginTop: '66px', textAlign: "center" }}>
             <Route path="/signup" exact component={Register} />
 
@@ -144,7 +147,7 @@ class App extends React.Component {
 
             {/* blank page for testing*/}
             <Route path="/test">
-              <Test />
+              <Test listingId="5f670aebb063fffb5a0d183f" socket={this.state.socket}/>
             </Route>
 
             {/* redirect all non-specified routes. maybe have a 404 page*/}
@@ -153,6 +156,7 @@ class App extends React.Component {
             </Route>
             <Footer />
           </Container>
+
         </Router>
       </div>
     );
@@ -160,4 +164,3 @@ class App extends React.Component {
 }
 
 export default App;
-
