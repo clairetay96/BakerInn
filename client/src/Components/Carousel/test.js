@@ -11,8 +11,6 @@ export default function CarouselV2({lastestListing = [], interval = null, column
     return - ((Math.ceil(length/col) - 1) * frameSize)
   }
 
-  console.log(lastestListing);
-
   let col = columns || 5
   let padding = null || 5
   let carouselSize = 900
@@ -112,14 +110,17 @@ export default function CarouselV2({lastestListing = [], interval = null, column
       listStyle: "none",
       paddingTop: `calc(100% / ${col} / ${totalFrames})`,
       position: "relative"
+    },
+    title: {
+      margin: "20px"
     }
   }
 
   return (
     <>
       {headerLink
-        ? (<Link to={headerLink}><h4>{ title }</h4></Link>)
-        : (<h4>{ title }</h4>)
+        ? (<Link to={headerLink}><h4 style={style.title} >{ title }</h4></Link>)
+        : (<h4 style={style.title}>{ title }</h4>)
       }
       {length
         ? (
