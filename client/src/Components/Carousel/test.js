@@ -7,24 +7,48 @@ import './index.css'
 export default function CarouselV2({lastestListing = [], interval = null, columns = null, title, headerLink=null}) {
   // make it responsive
   // no hard coded values
-  const calcLastFrame = (length, col=5) => {
-    return - ((Math.ceil(length/col) - 1) * frameSize)
-  }
 
-  let col = columns || 5
-  let padding = null || 5
-  let carouselSize = 900
-  let frameSize = carouselSize - 10 * padding;
+  // make breakpoints
+  // xs=2
+  // md=5
+  // l=7
+
+
+  // get screensize
   let length;
   if (lastestListing) {
     length = lastestListing.length
   } else {
     length = 0
   }
-  let lastFrame = calcLastFrame(length, 5);// last frame position
   let interval_ = interval || 5000;
 
-  let totalFrames = Math.ceil(length/col)
+
+  const [col, setCol] = useState(5)
+  const [totalFrames, setTotalFrames] = useState(Math.ceil(length/col))
+
+  const resizeObserver = new ResizeObserver(entries => {
+    for(let entry of entries) {
+      if(entry.contentRect.width < 501) {
+        setCol(2)
+        setTotalFrames(Math.ceil(length/2))
+      } else if(entry.contentRect.width < 700) {
+        setCol(4)
+        setTotalFrames(Math.ceil(length/4))
+      } else {
+        setCol(6)
+        setTotalFrames(Math.ceil(length/6))
+      }
+    }
+  })
+
+  const refCallback = element => {
+    if (element) {
+      resizeObserver.observe(element)
+    }
+  };
+
+
 
 
   const [slide, setSlide] = useState(0)
@@ -68,7 +92,7 @@ export default function CarouselV2({lastestListing = [], interval = null, column
       width: "100%",
       alignItems: "center", 
       margin: "0 auto",
-      backgroundColor: 'rgba(240,255,240,1)',
+      backgroundColor: "white"
     },
     nextRight: {
       textAlign: "center",
@@ -112,7 +136,9 @@ export default function CarouselV2({lastestListing = [], interval = null, column
       position: "relative"
     },
     title: {
-      margin: "20px"
+      margin: "20px 0",
+      padding: "20px",
+      backgroundColor: "white"
     }
   }
 
@@ -124,7 +150,7 @@ export default function CarouselV2({lastestListing = [], interval = null, column
       }
       {length
         ? (
-            <div style={style.carousel}>
+            <div ref={refCallback} style={style.carousel}>
               <div onClick={prevSlide}
                   className="next"
                   style={style.nextRight}>
