@@ -70,5 +70,5 @@ const authenticate = async (cb) => {
 module.exports = {
   login,
   register,
-  authenticate,
+  authenticate
 }
