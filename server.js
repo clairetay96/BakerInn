@@ -9,6 +9,8 @@ const bodyParser = require("body-parser")
 const methodOverride = require("method-override")
 const cookieParser = require("cookie-parser")
 
+require("dotenv").config();
+
 
 // middleware
 app.use(express.json())
@@ -23,7 +25,7 @@ app.use(cookieParser());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-const uri = "mongodb://localhost:27017"
+const uri = process.env.MONGODB_URI
 const myClient = new mongo.MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 
 //connect to mongo client to perform operations

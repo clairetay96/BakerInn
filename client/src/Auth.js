@@ -67,8 +67,10 @@ const authenticate = async (cb) => {
   }
 }
 
-module.exports = {
+const Auth = {
   login,
   register,
-  authenticate,
+  authenticate
 }
+
+export default Auth

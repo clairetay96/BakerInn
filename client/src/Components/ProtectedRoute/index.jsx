@@ -8,8 +8,8 @@ function ProtectedRoute({ children, ...rest }) {
         <Route
             {...rest}
             render={({ location }) =>{
-                return Auth.authenticate() 
-                ? (children) 
+                return Auth.authenticate()
+                ? (children)
                 : (<Redirect to="/homepage"/>)
                 }}
         />
@@ -17,4 +17,3 @@ function ProtectedRoute({ children, ...rest }) {
 }
 
 export default ProtectedRoute;
-

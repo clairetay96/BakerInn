@@ -1,4 +1,5 @@
 const withAuth = require("./authorization.js")
+require("dotenv").config();
 
 module.exports = (app, db) => {
 
@@ -74,5 +75,12 @@ module.exports = (app, db) => {
 
   //get all of a user's loan to listings
   app.get('/api/listings/user/:userid/loan', withAuth, bakerIn.getUserLoanTo)
+
+
+  if(process.env.NODE_ENV=="production"){
+    app.get('/*', function(req, res) {
+        res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    })
+  }
 
 };

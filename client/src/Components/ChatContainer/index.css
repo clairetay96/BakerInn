@@ -1,18 +1,18 @@
 .chat-container {
   position: fixed;
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse;
   height: 400px;
-  padding: 7px;
   right: 10px;
   bottom: 20px;
   z-index: 20;
-  background-color: lightgrey;
   border: 1px solid mediumslateblue;
   overflow: hidden;
 }
 
 .chat-list {
+	height: 78%;
+	margin: 7px;
   width: 265px;
   overflow: scroll;
   border: 1px solid mediumslateblue;
@@ -49,10 +49,10 @@
   background-color: rgb(228, 255, 228);
 }
 
-.chat-placeholder {
+/*.chat-placeholder {
   height: 350px;
   width: 265px;
-}
+}*/
 
 .hide-container {
   display: none;
@@ -69,6 +69,10 @@
   right: 40px;
   z-index: 10;
   cursor: pointer;
+}
+
+.chat-burden {
+  background-color: lightgrey;
 }
 
 .chat-container-username {

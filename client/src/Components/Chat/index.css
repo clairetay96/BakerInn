@@ -102,3 +102,7 @@
 	width: 90%;
 	margin: 0 auto;
 }
+
+.listing-info > * {
+	line-height: 1.1
+}

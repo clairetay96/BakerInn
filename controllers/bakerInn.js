@@ -1,6 +1,9 @@
 const { response } = require('express');
 const jwt = require('jsonwebtoken')
-const secret = "youGuess"
+require("dotenv").config();
+
+
+const secret = process.env.SECRET
 
 module.exports = (db) => {
 
