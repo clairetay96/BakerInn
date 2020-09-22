@@ -15,6 +15,8 @@ import Test from './Pages/TestPage';
 import ChatContainer from './Components/ChatContainer';
 import io from 'socket.io-client'
 
+require("dotenv").config();
+
 
 
 class App extends React.Component {
@@ -110,7 +112,7 @@ class App extends React.Component {
   setupSocket = (username) => {
 
     //query to send the username
-    const ENDPOINT = "localhost:5000"
+    const ENDPOINT = process.env.PORT || "localhost:5000"
     let socket = io(ENDPOINT, { query: `username=${username}` })
     socket.on('connect', () => {
       console.log(username, 'connected');
