@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './index.css'
+import {ReactComponent as MiniIcon} from '../../minimize.svg'
 
 export default function Chat({ chat_id, user_id, socket, onClose }) {
   //where chat_id is the chat_id and user_id is the logged in user_id

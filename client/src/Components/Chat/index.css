@@ -6,7 +6,7 @@
 .chat-window {
   height: 400px;
   width: 265px;
-  border: 1px solid rebeccapurple;
+  border: 1px solid mediumslateblue;
   background-color: lightgray;
 }
 
@@ -14,7 +14,7 @@
   margin: 10px auto;
   height: 65%;
   width: 250px;
-  border: 1px solid rebeccapurple;
+  border: 1px solid mediumslateblue;
   overflow: auto;
   background-color: white;
 }

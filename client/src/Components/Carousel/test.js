@@ -1,31 +1,54 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import CarouselCard from '../CarouselCard'
+import {ReactComponent as NextIcon} from '../../arrow.svg';
 import './index.css'
 
 export default function CarouselV2({lastestListing = [], interval = null, columns = null, title, headerLink=null}) {
   // make it responsive
   // no hard coded values
-  const calcLastFrame = (length, col=5) => {
-    return - ((Math.ceil(length/col) - 1) * frameSize)
-  }
 
-  console.log(lastestListing);
+  // make breakpoints
+  // xs=2
+  // md=5
+  // l=7
 
-  let col = columns || 5
-  let padding = null || 5
-  let carouselSize = 900
-  let frameSize = carouselSize - 10 * padding;
+
+  // get screensize
   let length;
   if (lastestListing) {
     length = lastestListing.length
   } else {
     length = 0
   }
-  let lastFrame = calcLastFrame(length, 5);// last frame position
   let interval_ = interval || 5000;
 
-  let totalFrames = Math.ceil(length/col)
+
+  const [col, setCol] = useState(5)
+  const [totalFrames, setTotalFrames] = useState(Math.ceil(length/col))
+
+  const resizeObserver = new ResizeObserver(entries => {
+    for(let entry of entries) {
+      if(entry.contentRect.width < 501) {
+        setCol(2)
+        setTotalFrames(Math.ceil(length/2))
+      } else if(entry.contentRect.width < 700) {
+        setCol(4)
+        setTotalFrames(Math.ceil(length/4))
+      } else {
+        setCol(6)
+        setTotalFrames(Math.ceil(length/6))
+      }
+    }
+  })
+
+  const refCallback = element => {
+    if (element) {
+      resizeObserver.observe(element)
+    }
+  };
+
+
 
 
   const [slide, setSlide] = useState(0)
@@ -69,27 +92,27 @@ export default function CarouselV2({lastestListing = [], interval = null, column
       width: "100%",
       alignItems: "center", 
       margin: "0 auto",
-      backgroundColor: 'rgba(240,255,240,1)',
+      backgroundColor: "white"
     },
     nextRight: {
       textAlign: "center",
-      height: "50px",
-      width: "50px",
-      border: "1px solid palevioletred",
+      height: "60px",
+      width: "60px",
+      padding: 10,
       borderRadius: "50%",
       position: "absolute",
-      left: -20,
+      left: -36,
       zIndex: 5,
       visibility: slide > 0 ? "visible" : "hidden"
     },
     nextLeft: {
       textAlign: "center",
-      height: "50px",
-      width: "50px",
-      border: "1px solid palevioletred",
+      height: "60px",
+      width: "60px",
+      padding: 10,
       borderRadius: "50%",
       position: "absolute",
-      right: -20,
+      right: -36,
       zIndex: 5,
       visibility: slide < totalFrames - 1 ? "visible" : "hidden"
     },
@@ -111,22 +134,27 @@ export default function CarouselV2({lastestListing = [], interval = null, column
       listStyle: "none",
       paddingTop: `calc(100% / ${col} / ${totalFrames})`,
       position: "relative"
+    },
+    title: {
+      margin: "20px 0",
+      padding: "20px",
+      backgroundColor: "white"
     }
   }
 
   return (
     <>
       {headerLink
-        ? (<Link to={headerLink}><h4>{ title }</h4></Link>)
-        : (<h4>{ title }</h4>)
+        ? (<Link to={headerLink}><h4 style={style.title} >{ title }</h4></Link>)
+        : (<h4 style={style.title}>{ title }</h4>)
       }
       {length
         ? (
-            <div style={style.carousel}>
+            <div ref={refCallback} style={style.carousel}>
               <div onClick={prevSlide}
                   className="next"
                   style={style.nextRight}>
-                <h1>{`<`}</h1>
+                <NextIcon transform='rotate(-90)'/>
               </div>
         
                 <div onMouseOver={pauseSlide} 
@@ -150,7 +178,7 @@ export default function CarouselV2({lastestListing = [], interval = null, column
               <div onClick={nextSlide} 
                   className="next"
                   style={style.nextLeft}>
-                <h1>{`>`}</h1>
+                <NextIcon transform='rotate(90)'/>
               </div>
             </div>
           )
