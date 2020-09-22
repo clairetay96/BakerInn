@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Switch from 'react-bootstrap/esm/Switch';
-import { Route } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 
 import Carousel from '../../Components/Carousel';
 import CarouselV2 from '../../Components/Carousel/test';
@@ -9,8 +9,9 @@ import IntroBanner from '../../Components/IntroBanner';
 import SearchBar from '../../Components/SearchBar';
 import CategoryPage from '../CategoryPage';
 import SingleListingPage from '../SingeListingPage';
+import SearchResults from '../SearchResultsPage'
 
-export default class HomePage extends Component {
+class HomePage extends Component {
   constructor(props) {
     super(props);
 
@@ -19,6 +20,7 @@ export default class HomePage extends Component {
       lastestListing: null,
       ingredient: null,
       equipment: null,
+      searchResults: null
     }
   }
 
@@ -31,9 +33,13 @@ export default class HomePage extends Component {
   handleSearch = (e) => {
     if (e.keyCode === 13 && e.target.value !== '') {
       console.log(this.state.search);
+
+        this.props.history.push("/search?q="+this.state.search)
+
       this.setState({
         search: '',
       })
+
     }
   }
 
@@ -77,12 +83,15 @@ export default class HomePage extends Component {
         <Switch style={{ paddingLeft: '0' }}>
           <Route exact path="/homepage">
 
+
             {isLoggedIn
               ? (<Discovery />)
               : (<IntroBanner />)
             }
 
-            {/* 
+
+
+            {/*
               Carousel listings need to updated with proper fetches
               Suggestions carousel need to have an algorithm choosing
               the listing
@@ -90,7 +99,7 @@ export default class HomePage extends Component {
 
             <CarouselV2 title="Freshest offers"
               lastestListing={this.state.lastestListing}/>
-            
+
             <CarouselV2 title="New ingredients"
               headerLink="/homepage/ingredient"
               lastestListing={this.state.ingredient}/>
@@ -118,3 +127,5 @@ export default class HomePage extends Component {
     )
   }
 }
+
+export default withRouter(HomePage)

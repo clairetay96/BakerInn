@@ -69,8 +69,8 @@ module.exports = (app, db) => {
   app.get('/api/chats/:id/messages', bakerInChats.getMessages)
 
   //search listings, search users
-  app.get('/api/search/listings/')
-  app.get('/api/search/users/')
+  app.get('/api/search/listings', bakerIn.searchListings)
+  app.get('/api/search/users', bakerIn.searchUsers)
 
   //get all of a user's loan to listings
   app.get('/api/listings/user/:userid/loan', withAuth, bakerIn.getUserLoanTo)

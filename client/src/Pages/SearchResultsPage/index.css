@@ -1,0 +1,21 @@
+.search-results {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.indiv-listing-search-result {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	border: 1px solid lightgray;
+	padding: 5px;
+	width: 80%;
+	margin: 5px 0;
+	cursor: pointer;
+
+}
+
+.indiv-listing-search-result p {
+	font-size: 12px;
+}

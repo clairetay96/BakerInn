@@ -6,6 +6,7 @@ import Register from "./Pages/RegisterPage/"
 import NavBar from './Components/NavBar';
 import DashboardPage from './Pages/DashboardPage';
 import HomePage from './Pages/HomePage';
+import SearchResults from './Pages/SearchResultsPage';
 import Auth from './Auth';
 import ProtectedRoute from './Components/ProtectedRoute';
 import { Container } from 'react-bootstrap';
@@ -152,6 +153,10 @@ class App extends React.Component {
             <Route path="/homepage">
               <HomePage isLoggedIn={this.state.loggedIn}
                 createChat={this.createChat} />
+            </Route>
+
+            <Route exact path="/search">
+              <SearchResults />
             </Route>
 
             {/* blank page for testing*/}
