@@ -31,9 +31,25 @@ export default class HomePage extends Component {
   handleSearch = (e) => {
     if (e.keyCode === 13 && e.target.value !== '') {
       console.log(this.state.search);
+      let searchListingsUrl="/api/search/listings?q="+this.state.search
+      let searchUsersUrl="/api/search/users?q="+this.state.search
+
+      fetch(searchListingsUrl)
+        .then(res=>res.json())
+        .then(res=>{console.log(res, "---listings")})
+
+      fetch(searchUsersUrl)
+        .then(res=>res.json())
+        .then(res=>{console.log(res, "---users")})
+
+
       this.setState({
         search: '',
       })
+
+
+
+
     }
   }
 
@@ -82,7 +98,7 @@ export default class HomePage extends Component {
               : (<IntroBanner />)
             }
 
-            {/* 
+            {/*
               Carousel listings need to updated with proper fetches
               Suggestions carousel need to have an algorithm choosing
               the listing
@@ -90,7 +106,7 @@ export default class HomePage extends Component {
 
             <CarouselV2 title="Freshest offers"
               lastestListing={this.state.lastestListing}/>
-            
+
             <CarouselV2 title="New ingredients"
               headerLink="/homepage/ingredient"
               lastestListing={this.state.ingredient}/>

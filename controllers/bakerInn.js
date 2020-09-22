@@ -228,6 +228,60 @@ module.exports = (db) => {
 
     }
 
+    let searchListings = (request, response) => {
+        let queryParams = request.query.q.split(" ")
+        let queryWords = []
+
+        for(let i=0;i<queryParams.length;i++){
+            if(queryParams[i]){
+
+                queryWords.push(".*"+queryParams[i].split("").join(".*").replace(/y|ie|ee|ei|e/gi, "(y|ie|ee|ei|e)")+".*")
+
+                let cutoffLength= queryParams[i].length > 1 ? 2 : 1
+
+                queryWords.push(queryParams[i].slice(0, cutoffLength)+queryParams[i].slice(cutoffLength, queryParams[i].length).split("").join("?.").replace(/y|ie|ee|ei|e/gi, "(y|ie|ee|ei|e)")+"?")
+            }
+        }
+
+        modelFuncs.searchDatabase(queryWords, "listings", (err, res)=>{
+            if(err){
+                console.log(err, "--- error in search function")
+                response.status(500).send(err)
+            } else {
+                response.status(200).send(res)
+            }
+        })
+    }
+
+
+    let searchUsers = (request, response) => {
+        let queryParams = request.query.q.split(" ")
+        let queryWords = []
+
+        for(let i=0;i<queryParams.length;i++){
+            if(queryParams[i]){
+
+                queryWords.push(".*"+queryParams[i].split("").join(".*").replace(/y|ie|ee|ei|e/gi, "(y|ie|ee|ei|e)")+".*")
+
+                let cutoffLength= queryParams[i].length > 1 ? 2 : 1
+
+                queryWords.push(queryParams[i].slice(0, cutoffLength)+queryParams[i].slice(cutoffLength, queryParams[i].length).split("").join("?").replace(/y|ie|ee|ei|e/gi, "(y|ie|ee|ei|e)")+"?")
+            }
+        }
+
+        modelFuncs.searchDatabase(queryWords, "users", (err, res)=>{
+            if(err){
+                console.log(err, "--- error in search function")
+                response.status(500).send(err)
+            } else {
+                res.forEach((item)=>{
+                    delete item.password
+                })
+                response.status(200).send(res)
+            }
+        })
+    }
+
     return {
         ping,
         getAllUsers,
@@ -244,7 +298,9 @@ module.exports = (db) => {
         validate,
         editListing,
         deleteListing,
-        makeTransaction
+        makeTransaction,
+        searchListings,
+        searchUsers
     }
 
 };

@@ -265,6 +265,30 @@ module.exports = (db) => {
     }
 
 
+    let searchDatabase = (queryWords, table, callback) => {
+        // let query = queryWords.join(" | ")
+        // console.log(query)
+        let regex = []
+        queryWords.forEach((item)=>{
+            regex.push(new RegExp(item, 'i'))
+        })
+
+        if(table==="users"){
+            db.collection(table).find({$or: [{username: { $in: regex}}, {email: { $in: regex}}]}).toArray()
+                .then(res => callback(null, res))
+                .catch(err => callback(err, null))
+
+        } else if (table==="listings"){
+            db.collection(table).find({ $or: [{item: { $in: regex}}, {description: { $in: regex}}]}).toArray()
+                .then(res => callback(null, res))
+                .catch(err => callback(err, null))
+
+        }
+
+
+    }
+
+
     return {
         getAllUsers,
         getUserFromID,
@@ -278,6 +302,7 @@ module.exports = (db) => {
         expressInterest,
         updateListingInfo,
         deleteListing,
-        makeTransaction
+        makeTransaction,
+        searchDatabase
     }
 }
