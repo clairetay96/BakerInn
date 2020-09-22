@@ -112,8 +112,8 @@ class App extends React.Component {
   setupSocket = (username) => {
 
     //query to send the username
-    const ENDPOINT = process.env.PORT || "localhost:5000"
-    let socket = io(ENDPOINT, { query: `username=${username}` })
+    // const ENDPOINT = process.env.PORT || "localhost:5000"
+    let socket = io({ query: `username=${username}` })
     socket.on('connect', () => {
       console.log(username, 'connected');
     })
