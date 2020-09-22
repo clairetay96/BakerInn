@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom';
-import Auth from '../../../Auth';
+import Auth from '../../../Auth.js';
 
 const Login = (props) => {
     let history = useHistory();
@@ -71,4 +71,3 @@ const Login = (props) => {
 }
 
 export default Login;
-
