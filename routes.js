@@ -77,7 +77,7 @@ module.exports = (app, db) => {
   app.get('/api/listings/user/:userid/loan', withAuth, bakerIn.getUserLoanTo)
 
 
-  if(process.env.NODE_ENV=="production"){
+  if(process.env.NODE_ENV==="production"){
     app.get('/*', function(req, res) {
         res.sendFile(path.join(__dirname, 'build', 'index.html'));
     })
