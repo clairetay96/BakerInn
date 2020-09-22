@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import CarouselV2 from '../../Components/Carousel/test'
+import {ReactComponent as ReactLogo} from '../../arrow.svg';
+
 
 export default class Test extends Component {
     constructor() {
@@ -21,7 +22,9 @@ export default class Test extends Component {
     render() {
         return (
             <div>
-                {/* <CarouselV2 title="Test"/> */}
+                <div style={{width: "200px"}}>
+                <ReactLogo transform='rotate(-90)'/>
+                </div>
             </div>
         )
     }
