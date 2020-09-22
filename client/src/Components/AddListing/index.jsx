@@ -36,8 +36,6 @@ const AddListing = () => {
         setItem("")
         setDescription("")
         setPrice("")
-        setCategory("")
-        setOption("")
         setLocation("")
         setSuccess(true)
         setTimeout(() => {
