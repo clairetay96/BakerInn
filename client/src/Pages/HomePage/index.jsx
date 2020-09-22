@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Switch from 'react-bootstrap/esm/Switch';
-import { Route } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 
 import Carousel from '../../Components/Carousel';
 import CarouselV2 from '../../Components/Carousel/test';
@@ -10,7 +10,7 @@ import SearchBar from '../../Components/SearchBar';
 import CategoryPage from '../CategoryPage';
 import SingleListingPage from '../SingeListingPage';
 
-export default class HomePage extends Component {
+class HomePage extends Component {
   constructor(props) {
     super(props);
 
@@ -19,6 +19,7 @@ export default class HomePage extends Component {
       lastestListing: null,
       ingredient: null,
       equipment: null,
+      searchResults: null
     }
   }
 
@@ -41,6 +42,11 @@ export default class HomePage extends Component {
       fetch(searchUsersUrl)
         .then(res=>res.json())
         .then(res=>{console.log(res, "---users")})
+
+
+
+      this.props.history.push('/search?q='+e.target.value)
+
 
 
       this.setState({
@@ -134,3 +140,5 @@ export default class HomePage extends Component {
     )
   }
 }
+
+export default withRouter(HomePage)
