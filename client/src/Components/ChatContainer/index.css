@@ -1,26 +1,32 @@
 .chat-container {
   position: fixed;
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: column;
+  height: 400px;
+  padding: 7px;
   right: 10px;
   bottom: 20px;
   z-index: 20;
+  background-color: lightgrey;
   border: 1px solid mediumslateblue;
   overflow: hidden;
 }
 
 .chat-list {
-  height: 400px;
   width: 265px;
   overflow: scroll;
   border: 1px solid mediumslateblue;
-  background-color: lightgrey;
   display: flex;
   flex-direction: column;
 }
 
-.chat-list button {
-	align-self: flex-end;
+.chat-container-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-container-wrapper button {
+  align-self: flex-end;
 	font-size: 18px;
 	border: none;
   background-color: rgba(0,0,0,0);
@@ -28,8 +34,8 @@
 	width: 15%;
 }
 
-.chat-list > h4 {
-  text-align: center;
+.chat-container-wrapper h4 {
+  align-self: center;
 }
 
 .chat-list-item {

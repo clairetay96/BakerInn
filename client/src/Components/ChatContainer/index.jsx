@@ -240,9 +240,11 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
     <>
     <div onClick={toggleChat} className="show-container"><ChatIcon /></div>
     <div className={toggle ? "chat-container" : "chat-container hide-container"}>
+      <div className="chat-container-wrapper">
+          <button onClick={toggleChat}><MiniIcon/></button>
+          <h4>BakerInn Chats</h4>
+      </div>
       <div className="chat-list">
-        <button onClick={toggleChat}><MiniIcon/></button>
-        <h4>BakerInn Chats</h4>
           {allChatsHelper(allChats)}
       </div>
       { renderActive }
