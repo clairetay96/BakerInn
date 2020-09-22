@@ -237,9 +237,9 @@ module.exports = (db) => {
 
                 queryWords.push(".*"+queryParams[i].split("").join(".*").replace(/y|ie|ee|ei|e/gi, "(y|ie|ee|ei|e)")+".*")
 
-                let cutoffLength= queryParams[i].length > 1 ? 2 : 1
+                let cutoffLength= queryParams[i].length > 3 ? 3 : 1
 
-                queryWords.push(queryParams[i].slice(0, cutoffLength)+queryParams[i].slice(cutoffLength, queryParams[i].length).split("").join("?.").replace(/y|ie|ee|ei|e/gi, "(y|ie|ee|ei|e)")+"?")
+                queryWords.push(queryParams[i].slice(0, cutoffLength)+queryParams[i].slice(cutoffLength, queryParams[i].length).split("").join("?").replace(/y|ie|ee|ei|e/gi, "(y|ie|ee|ei|e)"))
             }
         }
 
@@ -263,9 +263,9 @@ module.exports = (db) => {
 
                 queryWords.push(".*"+queryParams[i].split("").join(".*").replace(/y|ie|ee|ei|e/gi, "(y|ie|ee|ei|e)")+".*")
 
-                let cutoffLength= queryParams[i].length > 1 ? 2 : 1
+                let cutoffLength= queryParams[i].length > 3 ? 3 : 1
 
-                queryWords.push(queryParams[i].slice(0, cutoffLength)+queryParams[i].slice(cutoffLength, queryParams[i].length).split("").join("?").replace(/y|ie|ee|ei|e/gi, "(y|ie|ee|ei|e)")+"?")
+                queryWords.push(queryParams[i].slice(0, cutoffLength)+queryParams[i].slice(cutoffLength, queryParams[i].length).split("").join("?").replace(/y|ie|ee|ei|e/gi, "(y|ie|ee|ei|e)"))
             }
         }
 

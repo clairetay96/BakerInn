@@ -9,6 +9,7 @@ import IntroBanner from '../../Components/IntroBanner';
 import SearchBar from '../../Components/SearchBar';
 import CategoryPage from '../CategoryPage';
 import SingleListingPage from '../SingeListingPage';
+import SearchResults from '../SearchResultsPage'
 
 class HomePage extends Component {
   constructor(props) {
@@ -32,29 +33,12 @@ class HomePage extends Component {
   handleSearch = (e) => {
     if (e.keyCode === 13 && e.target.value !== '') {
       console.log(this.state.search);
-      let searchListingsUrl="/api/search/listings?q="+this.state.search
-      let searchUsersUrl="/api/search/users?q="+this.state.search
 
-      fetch(searchListingsUrl)
-        .then(res=>res.json())
-        .then(res=>{console.log(res, "---listings")})
-
-      fetch(searchUsersUrl)
-        .then(res=>res.json())
-        .then(res=>{console.log(res, "---users")})
-
-
-
-      this.props.history.push('/search?q='+e.target.value)
-
-
+        this.props.history.push("/search?q="+this.state.search)
 
       this.setState({
         search: '',
       })
-
-
-
 
     }
   }
@@ -99,10 +83,13 @@ class HomePage extends Component {
         <Switch style={{ paddingLeft: '0' }}>
           <Route exact path="/homepage">
 
+
             {isLoggedIn
               ? (<Discovery />)
               : (<IntroBanner />)
             }
+
+
 
             {/*
               Carousel listings need to updated with proper fetches
