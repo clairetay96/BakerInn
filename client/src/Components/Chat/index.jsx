@@ -520,11 +520,31 @@ useEffect(()=>{
         </div>
 
 
-        <div className="on-close-bottom"><div className="listing-info"><div className={ toggle? "receiver-username" : "receiver-username inline"}>{receiver.username}</div><div className={toggle? "listing-item" : "listing-item inline"}> for {listing.item}</div></div> {toggle ? <div className="transaction-option">{transactionOption}</div> : null}</div>
+        <div className="on-close-bottom">
+            <div className="listing-info">
+                <div className={ toggle
+                                    ? "receiver-username"
+                                    : "receiver-username inline"
+                                }>
+                    {receiver.username}
+                </div>
+                <div className={toggle? "listing-item" : "listing-item inline"}>
+                    for {listing.item}
+                </div>
+            </div>
+            {toggle
+                ? <div className="transaction-option">{transactionOption}</div>
+                : null
+            }
+        </div>
+
+
         {error
          ? (<p>{error}</p>)
          : null
         }
+
+
         <div className="message-board"
              id={`message-board-${chat_id}`}>
             {messageHTML}

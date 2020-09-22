@@ -1,7 +1,8 @@
 // authorization middleware
+require("dotenv").config();
 
 const jwt = require('jsonwebtoken');
-const secret = "youGuess"
+const secret = process.env.SECRET
 
 const withAuth = (req, res, next) => {
     const token = req.cookies.token;

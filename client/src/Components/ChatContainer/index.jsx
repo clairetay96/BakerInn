@@ -151,7 +151,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
 
   // track addition of more chatrooms from list
   const [activeChat, setActiveChatWindow] = useState([])
-  
+
   // helper to limit number of chat windows
   const setActiveChat = (arr) => {
     if (arr.length > 3) {
@@ -240,6 +240,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
     <>
     <div onClick={toggleChat} className="show-container"><ChatIcon /></div>
     <div className={toggle ? "chat-container" : "chat-container hide-container"}>
+    <div className="chat-burden">
       <div className="chat-container-wrapper">
           <button onClick={toggleChat}><MiniIcon/></button>
           <h4>BakerInn Chats</h4>
@@ -247,8 +248,10 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
       <div className="chat-list">
           {allChatsHelper(allChats)}
       </div>
+    </div>
       { renderActive }
     </div>
+
     </>
   )
 }
