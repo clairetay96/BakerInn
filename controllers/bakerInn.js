@@ -73,34 +73,34 @@ module.exports = (db) => {
         })
     }
 
-    let editUser = (request, response) => {
-        //some authentication required
-        let updatedUserInfo = request.body
-        let userID = request.userId
-        modelFuncs.updateUserInfo(updatedUserInfo, userID, (err, res) => {
-            if (err) {
-                console.log(err)
-                response.send("error occurred.")
-            } else {
-                response.send("Redirect to dashboard")
-            }
+    // let editUser = (request, response) => {
+    //     //some authentication required
+    //     let updatedUserInfo = request.body
+    //     let userID = request.userId
+    //     modelFuncs.updateUserInfo(updatedUserInfo, userID, (err, res) => {
+    //         if (err) {
+    //             console.log(err)
+    //             response.send("error occurred.")
+    //         } else {
+    //             response.send("Redirect to dashboard")
+    //         }
 
-        })
-    }
+    //     })
+    // }
 
-    let deleteUser = (request, response) => {
-        //some authentication required
-        let userID = request.userId
-        modelFuncs.deleteUser(userID, (err, res) => {
-            if (err) {
-                console.log(err)
-                response.send("error occurred.")
-            } else {
-                response.send("Redirect to homepage.")
-            }
-        })
+    // let deleteUser = (request, response) => {
+    //     //some authentication required
+    //     let userID = request.userId
+    //     modelFuncs.deleteUser(userID, (err, res) => {
+    //         if (err) {
+    //             console.log(err)
+    //             response.send("error occurred.")
+    //         } else {
+    //             response.send("Redirect to homepage.")
+    //         }
+    //     })
 
-    }
+    // }
 
     let getAllListings = (request, response) => {
         modelFuncs.getAllListings((err, res) => {
@@ -145,7 +145,7 @@ module.exports = (db) => {
     let getUserBorrowed = (request, response) => {
         //some authentication required - only a user can see their borrowed items
         let userID = request.userId
-        if(userID==request.params.userid){
+        if (userID == request.params.userid) {
             modelFuncs.getUserListing(userID, true, (err, res) => {
                 if (err) {
                     console.log(err)
@@ -191,7 +191,6 @@ module.exports = (db) => {
     let editListing = (request, response) => {
         let listingID = request.params.id
         let updatedListingInfo = request.body
-        console.log("EDIT LISTING INFO IN CONTROLLER", updatedListingInfo)
         modelFuncs.updateListingInfo(updatedListingInfo, listingID, (err, res) => {
             if (err) {
                 console.log(err)
@@ -217,8 +216,8 @@ module.exports = (db) => {
     let makeTransaction = (request, response) => {
         let listingID = request.params.id
         let updateInfo = request.body
-        modelFuncs.makeTransaction(listingID, updateInfo, (err, res)=>{
-            if(err){
+        modelFuncs.makeTransaction(listingID, updateInfo, (err, res) => {
+            if (err) {
                 console.log(err)
                 response.status(500).send("Error occurred. - cannot make unavailable")
             } else {
@@ -282,13 +281,31 @@ module.exports = (db) => {
         })
     }
 
+    // get all user's current loan to listings
+    let getUserLoanTo = (request, response) => {
+        let userID = request.userId
+        if (userID == request.params.userid) {
+            modelFuncs.getUserLoanTo(userID, (err, res) => {
+                if (err) {
+                    console.log(err)
+                    response.status(500).send("Error occurred. - cannot get user Lending listings")
+                } else {
+                    response.status(200).send(res)
+                }
+            })
+        } else {
+            response.status(400).send("A user can only see their own Lending items.")
+        }
+
+    }
+
     return {
         ping,
         getAllUsers,
         getUser,
         createUser,
-        editUser,
-        deleteUser,
+        // editUser,
+        // deleteUser,
         getAllListings,
         makeNewListing,
         getUserListings,
@@ -300,7 +317,8 @@ module.exports = (db) => {
         deleteListing,
         makeTransaction,
         searchListings,
-        searchUsers
+        searchUsers,
+        getUserLoanTo
     }
 
 };

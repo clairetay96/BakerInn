@@ -20,8 +20,8 @@ module.exports = (app, db) => {
   app.post('/api/users/login', bakerIn.login)
 
   app.get('/api/users/:id', withAuth, bakerIn.getUser)
-  app.put('/api/users/:id/edit', withAuth, bakerIn.editUser)
-  app.delete('/api/users/:id/delete', withAuth, bakerIn.deleteUser)
+  // app.put('/api/users/:id/edit', withAuth, bakerIn.editUser)
+  // app.delete('/api/users/:id/delete', withAuth, bakerIn.deleteUser)
 
   //listings CRUD operations
   app.get('/api/listings', bakerIn.getAllListings)
@@ -32,7 +32,7 @@ module.exports = (app, db) => {
   //get all of a user's posted listings
   app.get('/api/listings/user/:userid', bakerIn.getUserListings)
 
-  //get all of a user's borrowed listings
+  //get all of a user's borrowed from listings
   app.get('/api/listings/user/:userid/borrowed', withAuth, bakerIn.getUserBorrowed)
 
   //get specific listing info
@@ -71,5 +71,8 @@ module.exports = (app, db) => {
   //search listings, search users
   app.get('/api/search/listings', bakerIn.searchListings)
   app.get('/api/search/users', bakerIn.searchUsers)
+
+  //get all of a user's loan to listings
+  app.get('/api/listings/user/:userid/loan', withAuth, bakerIn.getUserLoanTo)
 
 };

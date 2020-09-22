@@ -14,6 +14,8 @@ export default function ListingTabs(props) {
 
   let { available = null } = props.listingData
 
+  let { borrowNo, lendNo, listingNo } = props
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -32,7 +34,7 @@ export default function ListingTabs(props) {
             <h3>Lending</h3>
             <p >
               <Link to="/dashboard/lending">
-                x items
+                {lendNo} items
                   </Link>
             </p>
           </div>
@@ -40,7 +42,7 @@ export default function ListingTabs(props) {
             <h3>Borrowing</h3>
             <p >
               <Link to="/dashboard/borrowing">
-                x items
+                {borrowNo} items
                   </Link>
             </p>
           </div>
@@ -49,7 +51,7 @@ export default function ListingTabs(props) {
       <Tab eventKey="user-listing" title="My Available Listing">
         <div style={{ display: "flex", justifyContent: "space-between", justifyItems: "center", marginTop: "35px" }}>
           <div>
-            <p>Total listing: xxx</p>
+            <p>Total listing: {listingNo}</p>
           </div>
           <div>
             <Button variant="primary" onClick={handleShow}>Add New Listing</Button>

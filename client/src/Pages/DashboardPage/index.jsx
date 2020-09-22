@@ -14,17 +14,20 @@ export default class DashboardPage extends Component {
 
     // retrieve userID in cookie
     const cookie = document.cookie
-    const userId = JSON.parse(atob(cookie.split(".")[1])).userId
+    let userId = ""
+    if (cookie) {
+      userId = JSON.parse(atob(cookie.split(".")[1])).userId
+    }
+
 
     this.state = {
       search: '',
       userId: userId,
       userLendingListings: {
         available: [],
-        loan: [6, 7, 8, 9, 10],
+        loan: [],
       },
-      userBorrowing: [11, 12, 13, 14, 15],
-      refreshPage: false
+      userBorrowing: []
     }
   }
 
@@ -32,6 +35,7 @@ export default class DashboardPage extends Component {
     this.pingServer()
     this.fetchUserBorrowesListing()
     this.fetchUserPostedListing()
+    this.fetchUserLendingListing()
   }
 
   pingServer = async () => {
@@ -55,12 +59,31 @@ export default class DashboardPage extends Component {
   }
 
   fetchUserBorrowesListing = async () => {
-    const url = `/api/listings/user/${this.state.user}/borrowed`;
+    const url = `/api/listings/user/${this.state.userId}/borrowed`;
 
     let res = await fetch(url)
-    // let borrowedListing = await res.json()
+    let borrowedListings = await res.json()
 
-    // console.log(borrowedListing);
+    this.setState((prevState) => ({
+      userBorrowing: prevState.userBorrowing = borrowedListings
+    }))
+
+    console.log("USER BORROW LISTING", borrowedListings)
+
+  }
+
+  fetchUserLendingListing = async () => {
+    const url = `/api/listings/user/${this.state.userId}/loan`;
+
+    let res = await fetch(url)
+    let loanListings = await res.json()
+
+    this.setState((prevState) => ({
+      userLendingLists: prevState.userLendingListings.loan = loanListings
+    }))
+
+    console.log("USER LOAN LISTING", loanListings)
+
   }
 
   handleChange = (e) => {
@@ -93,7 +116,10 @@ export default class DashboardPage extends Component {
             <ListingTabs listingData={{
               ...this.state.userLendingListings,
               userBorrowing: this.state.userBorrowing
-            }} />
+            }}
+              borrowNo={this.state.userBorrowing.length}
+              lendNo={this.state.userLendingListings.loan.length}
+              listingNo={this.state.userLendingListings.available.length} />
           </ProtectedRoute>
           <Route path="/dashboard/borrowing">
             <ListingDetailPage allListings={this.state.userBorrowing}
