@@ -6,7 +6,6 @@
   right: 10px;
   bottom: 20px;
   z-index: 20;
-  border: 1px solid mediumslateblue;
   overflow: hidden;
 }
 
@@ -15,7 +14,6 @@
 	margin: 7px;
   width: 265px;
   overflow: scroll;
-  border: 1px solid mediumslateblue;
   display: flex;
   flex-direction: column;
 }
@@ -32,10 +30,11 @@
   background-color: rgba(0,0,0,0);
   margin-top: 5px;
 	width: 15%;
+
 }
 
-.chat-container-wrapper h4 {
-  text-align: center;
+.chat-container-wrapper h5 {
+  margin-left: 5%;
 }
 
 .chat-list-item {
@@ -46,7 +45,7 @@
 }
 
 .chat-list-item:hover {
-  background-color: rgb(228, 255, 228);
+  background-color: rgba(211, 225, 238);
 }
 
 .hide-container {
