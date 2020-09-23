@@ -16,12 +16,12 @@ export default function CarouselCard({item}) {
       backgroundColor: "mediumslateblue",
       backgroundImage: (img ? `url(http://res.cloudinary.com/dk0bjhiu9/image/upload/v1/${img})` : `url(${placeholder})`),
       boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)",
-      borderRadius: 15,
+      borderRadius: 9,
     },
     pop: {
       height: "max-content",
       overflowWrap: "anywhere",
-      borderRadius: "15px 15px 0 0",
+      borderRadius: "9px 9px 0 0",
       backgroundColor: 'white',
     }
   }

@@ -28,12 +28,11 @@
 .nav-links {
     list-style: none;
     margin: 0;
-    padding-right: 650px;
 }
 
 .nav-links li {
     display: inline-block;
-    padding: 0 20px;
+    padding: 0 0 0 20px;
 }
 
 .nav-links li a {
@@ -45,7 +44,8 @@
 }
 
 .nav-button {
-    padding: 9px 10px;
+    margin: 0 0 0 7px;
+    padding: 7px 10px;
     background-color: rgba(0, 136, 169, 1);
     border: none;
     border-radius: 50px;
@@ -63,5 +63,9 @@
 }
 
 .nav-textLogin {
-    font-size: 25px;   
+    font-size: 22px;   
+}
+
+.secret {
+    width: 50px;
 }
