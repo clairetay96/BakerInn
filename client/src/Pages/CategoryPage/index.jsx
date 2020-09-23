@@ -14,6 +14,7 @@ export default function CategoryPage({listings, category}) {
           {category}
         </Breadcrumb.Item>
       </Breadcrumb>
+      
       <h4>All listings for one category</h4>
       <CardDeck>
         <ListingDetail allListings={listings}/>

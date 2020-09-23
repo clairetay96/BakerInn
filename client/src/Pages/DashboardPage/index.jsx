@@ -9,8 +9,8 @@ import ProtectedRoute from '../../Components/ProtectedRoute';
 
 export default class DashboardPage extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     // retrieve userID in cookie
     const cookie = document.cookie
@@ -89,10 +89,12 @@ export default class DashboardPage extends Component {
     console.log("UPDATED AVAIBLE", this.state.userLendingListings.available)
     return (
       <div>
-        <h1>Welcome back User</h1>
         
         <Switch>
           <ProtectedRoute exact path="/dashboard">
+    
+            <h1>Welcome back {this.props.user}</h1>
+
             <ListingTabs listingData={{
               ...this.state.userLendingListings,
               userBorrowing: this.state.userBorrowing
