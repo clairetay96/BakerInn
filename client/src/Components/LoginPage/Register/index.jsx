@@ -63,8 +63,8 @@ const Register = () => {
                             onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <div style={isValid
-                        ? { visibility: 'hidden' }
-                        : { visibility: 'visible' }}>
+                        ? { visibility: 'hidden', margin: "10px 0" }
+                        : { visibility: 'visible', color: "red", margin: "10px 0" }}>
                         {error}
                     </div>
                     <div className="form-input">
