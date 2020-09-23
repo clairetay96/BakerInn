@@ -28,7 +28,7 @@ module.exports = (db) => {
                             ObjectId(newChatInfo.buyer_id) ]
                         }
                     },
-                    { $push: { chats: res.insertedId }})
+                    { $push: { chats: { chat_id: res.insertedId, notifications: 0, updated_at: 0 } }})
                         .then(res1 => res1))
 
                  return Promise.all(queries)
@@ -143,12 +143,32 @@ module.exports = (db) => {
             .catch(err=>callback(err, null))
     }
 
+    let updateNotifications = (queryInfo, callback) => {
+        if(queryInfo.action=="clear"){
+            db.collection("users").updateOne({_id: ObjectId(queryInfo.receiver_id), "chats.chat_id": ObjectId(queryInfo.chat_id) }, {$set: {"chats.$.notifications": 0}} )
+                .then(res=>{callback(null, res)})
+                .catch(err=>{callback(err, null)})
+
+        } else if(queryInfo.action=="increment"){
+            db.collection("users").updateOne({_id: ObjectId(queryInfo.receiver_id), "chats.chat_id": ObjectId(queryInfo.chat_id) }, {$inc: {"chats.$.notifications": 1}, $set: {"chats.$.updated_at": queryInfo.updated_at}} )
+                .then(res=>{
+                    console.log("Chat notification incremented.")
+                    callback(null, res)})
+                .catch(err=>{callback(err, null)})
+
+
+        }
+
+
+    }
+
     return {
         newChat,
         postMessage,
         getChatInfo,
         getChatMessages,
-        getChatId
+        getChatId,
+        updateNotifications
 
     }
 

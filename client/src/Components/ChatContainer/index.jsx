@@ -9,6 +9,12 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
 
   const cookie = document.cookie
   const user_id = JSON.parse(atob(cookie.split(".")[1])).userId
+  const [allChats, setAllChats] = useState(null)
+  const [toggle, setToggle] = useState(false)
+  // track addition of more chatrooms from list
+  const [activeChat, setActiveChatWindow] = useState([])
+  //rerender
+  const [renderActive, setRenderActive] = useState([])
 
   // add more chats when the user clicks on the chat button
   // initialize the list of chats when first rendered
@@ -23,51 +29,52 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
       if (res.chats){
 
         //get data for each chat
-        let allChatData = res.chats.map((chat_id, index)=>{
-            return fetch(`/api/chats/${chat_id}`)
+        let allChatData = res.chats.map((chat, index)=>{
+            return fetch(`/api/chats/${chat.chat_id}`)
                     .then(res => res.json())
+                    .then(res => {
+                        res.notifications = chat.notifications
+                        res.updated_at = chat.updated_at
+                        return res
+                    })
                     .catch(err => {throw err})
         })
 
         return Promise.all(allChatData)
 
       } else {
-        setAllChats([])
         return null
       }
     })
     .then(res1 => {
         if(res1){
+            res1.sort((a,b)=>{
+                return  Date.parse(b.updated_at) - Date.parse(a.updated_at)
+            })
+            socket.off('receiveNotification'+user_id)
             setAllChats(res1)
+        } else {
+            socket.off('receiveNotification'+user_id)
+            setAllChats([])
         }
     })
     .catch(err=>{
       console.log(err)
+      socket.off('receiveNotification'+user_id)
       setAllChats([])
     })
+
+
   }, [])
 
 
-  // track creation of rooms from single lising page
+  // track creation of rooms from single listing page
   useEffect(()=>{
-    // info from single listing page
-    // -- seller id
-    // -- listing id
-
-    // info from the token
-    // -- user id
-
-    // how to handle if the user clicks on his own chat???
-    // current limitation if the chat button is clicked twice it cant register
-    // a change in the newChatData
-    // no new chat window is opened
-
-    // if data exist then run this
+    //newChatData contains information about the single listing - owner_id and listing_id
     if (newChatData) {
 
-
-      setToggle(true)
-
+      setToggle(true) //opens the chat container
+      //check if a chat already exists in this database
       const url = `/api/chats/find/${newChatData.owner_id}/${newChatData._id}`
       fetch(url)
       .then(res=>{
@@ -79,7 +86,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
 
       })
       .then(res=> {
-
+        //if chat doesn't exist yet, create a new chat
         if (!res) {
           // create new in db
           console.clear();
@@ -115,6 +122,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
                 // add new chat in allchats
                 setAllChats([...allChats, res])
 
+
                 // open new chat window
                 setActiveChat([...activeChat, res._id])
 
@@ -122,18 +130,12 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
             })
             .catch(err => {console.log(err)})
 
-
-          console.log('create new chat room everywhere')
         } else {
-          // open chat window
+          // open the existing chat window
 
-          console.log(res, '-- fetch chat');
           let { _id, listing_id, owner_id, buyer_id } = res
-          console.log(allChats, "---chat exists, open")
           setActiveChat([...activeChat, _id])
         }
-
-        console.log(allChats, "---Do nothing because chat is open")
 
       })
       .catch(err=>{
@@ -142,18 +144,123 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
     }
 
     clearChatData()
-    // for debug
-    if (newChatData) {
-      console.log('lets make a newChat room from: ')
-      console.log(newChatData);
-    }
+
   }, [newChatData])
 
-  // track addition of more chatrooms from list
-  const [activeChat, setActiveChatWindow] = useState([])
+  //define a function that will make api request to clear notifications
+  function clearNotifications(id, receiver_id){
+    let clearNotifURL = "/api/chats/"+id+"/"+receiver_id+"/update-notifications"
+    let clearNotifOptions = {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            chat_id: id,
+            receiver_id: receiver_id,
+            action: "clear"
+        })
+    }
+
+    fetch(clearNotifURL, clearNotifOptions)
+        .then(res=>{
+            if(res.status===200){
+                console.log("everything ok notifs cleared")
+            } else {
+                console.log("some server error")
+            }
+        })
+        .catch(err=>{console.log("some error in fetch for clearing notifs")})
+
+  }
+
+
+  //user socket listening for notifications - effect hook
+  useEffect(()=>{
+    socket.on('receiveNotification'+user_id, ({ chat_id })=>{
+        //if chat id is not in allchats, create new chat
+        console.log(toggle, activeChat, "----message received")
+
+        let allChatsIDs = allChats.map(chat=>chat._id)
+
+        if(allChatsIDs.includes(chat_id)){
+            if(toggle){
+                //if chat id is not in active chats, render notification for individual chat and push to top
+                if(!activeChat.includes(chat_id)){
+                    let allChatsTemp = [...allChats]
+                    let rememberedIndex;
+                    let updatedChat;
+                    allChatsTemp.forEach((item, index)=>{
+                        if(item._id===chat_id){
+                            item.notifications += 1
+                            rememberedIndex = index
+                            updatedChat = item
+                        }
+                    })
+
+                    allChatsTemp.splice(rememberedIndex, 1)
+                    let allChatsTemp2 = [updatedChat, ...allChatsTemp]
+                    socket.off('receiveNotification'+user_id)
+                    setAllChats(allChatsTemp2)
+
+
+
+
+                } else { //if chat id is in active chats, send request to database to clear notifications
+                    console.log("clearing notifications")
+                    clearNotifications(chat_id, user_id)
+                }
+            } else {
+                //if chat is not open, render on the message icon
+                console.log("increment notifications on chats icon.")
+
+                let allChatsTemp = [...allChats]
+                let rememberedIndex;
+                let updatedChat;
+                allChatsTemp.forEach((item, index)=>{
+                    if(item._id===chat_id){
+                        item.notifications += 1
+                        rememberedIndex = index
+                        updatedChat = item
+                    }
+                })
+
+                allChatsTemp.splice(rememberedIndex, 1)
+                let allChatsTemp2 = [updatedChat, ...allChatsTemp]
+                socket.off('receiveNotification'+user_id)
+                setAllChats(allChatsTemp2)
+
+            }
+        } else {
+            //if chat does not exist in user's chats, means it's newly created - fetch chat data and add it to allChats.
+            let fetchChatURL = "/api/chats/"+chat_id
+
+            fetch(fetchChatURL)
+                .then(res=>res.json())
+                .then(res => {
+                    res.notifications = 1
+                    // add new chat in allchats
+                    socket.off('receiveNotification'+user_id)
+                    setAllChats((prevState)=>[res, ...prevState])
+
+
+
+                })
+                .catch(err => {console.log(err)})
+
+        }
+
+
+    })
+
+  }, [allChats, toggle, activeChat])
+
+
 
   // helper to limit number of chat windows
   const setActiveChat = (arr) => {
+    socket.off('receiveNotification'+user_id)
     if (arr.length > 3) {
       // remove the lastest
       arr.splice(0,1)
@@ -164,7 +271,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
   }
 
   // populate active chat
-  const handleAddWindow = (id) => {
+  const handleAddWindow = (id, receiver_id) => {
     // take the id of the chat
 
     if (activeChat.includes(id)) {
@@ -173,11 +280,25 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
 
     // add it to the active chats
     setActiveChat([...activeChat, id])
+
+
+    //also clear notifications - to database
+    clearNotifications(id, receiver_id)
+
+    //and clear notifications of this chat allChats.
+    let allChatsTemp = [...allChats]
+    for(let i=0;i<allChatsTemp.length;i++){
+        if(allChatsTemp[i]._id==id){
+            allChatsTemp[i].notifications=0
+        }
+    }
+    socket.off('receiveNotification'+user_id)
+    setAllChats(allChatsTemp)
+
   }
 
 
-  //rerender
-  const [renderActive, setRenderActive] = useState([])
+
 
   useEffect(() => {
 
@@ -202,12 +323,12 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
         console.log(item, '-- item');
         return item !== id
     })
-
+    socket.off('receiveNotification'+user_id)
     setActiveChat(filter)
   }
 
   // helper function to return desired rendering
-  let [allChats, setAllChats] = useState(null)
+
 
   const allChatsHelper = (_allChats) => {
     if (!_allChats) {
@@ -218,25 +339,27 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
       if (_allChats.length > 0) {
         let output = _allChats.map((chat, index)=>{
 
-            return (<div onClick={()=>handleAddWindow(chat._id)}
-                        className="chat-list-item"
+            return (<div onClick={()=>handleAddWindow(chat._id, user_id)}
+                        className="chat-list-item row"
                         key={index}>
+                        <div className="col-10">
                         <div className="chat-container-username">
-                        {user_id===chat.owner_id ? chat.buyer_username : chat.owner_username}
+                        <div>{user_id===chat.owner_id ? chat.buyer_username : chat.owner_username}</div>
                         </div>
                         <div className="chat-container-listing">
-                         for {chat.listing_item}
+                         for {user_id===chat.owner_id? "your" : "their" } listing: '{chat.listing_item}'
                         </div>
+                    </div>
+                     <div className="notification col-2">{chat.notifications==0 ? null : <div>{chat.notifications}</div>}</div>
                     </div>)
         })
         return output
       } else {
-        return 'U hav no frens how sad :('
+        return 'You have no chats.'
       }
     }
   }
 
-  const [toggle, setToggle] = useState(false)
 
   const [stow, setStow] = useState(false)
   // const [display, setDisplay] = useState("chat-container")
@@ -251,6 +374,11 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
   //     setDisplay("chat-container")
   //   }
   // }, [stow, toggle])
+  
+  const toggleChat = () => {
+    socket.off('receiveNotification'+user_id)
+    setToggle(!toggle)
+  }
 
   return (
     <>

@@ -76,6 +76,8 @@ module.exports = (app, db) => {
   //get all of a user's loan to listings
   app.get('/api/listings/user/:userid/loan', withAuth, bakerIn.getUserLoanTo)
 
+  app.put('/api/chats/:chatid/:receiverid/update-notifications', bakerInChats.updateNotifications)
+
 
   if(process.env.NODE_ENV==="production"){
     app.get('/*', function(req, res) {
