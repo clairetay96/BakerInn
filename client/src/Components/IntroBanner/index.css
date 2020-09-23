@@ -3,3 +3,13 @@
   text-align: center;
   margin: 0 0 10px 0;
 }
+
+.intro-title {
+  border: 1px solid red;
+  margin-top: 25px;
+}
+
+.intro-cards {
+  border: 1px solid black;
+  height: 200px
+}

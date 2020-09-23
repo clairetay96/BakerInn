@@ -54,7 +54,7 @@ class HomePage extends Component {
 
 
 
-        <Switch style={{ paddingLeft: '0' }}>
+        <Switch>
           <Route exact path="/homepage">
 
             {isLoggedIn

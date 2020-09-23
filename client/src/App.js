@@ -183,7 +183,7 @@ class App extends React.Component {
 
 
         <Container style={{ marginTop: '122px', textAlign: "center" }}>
-          <Switch>
+          <Switch style={{ padding: "0" }}>
             <Route exact path="/search">
               <SearchResults searchInput={this.state.searchThis} />
             </Route>

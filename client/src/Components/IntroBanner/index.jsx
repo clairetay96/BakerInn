@@ -5,14 +5,14 @@ import './index.css'
 export default function IntroBanner() {
   return (
     <Row className="intro-banner">
-      <Col xs={12}>
+      <Col className="intro-title" xs={12}>
         <h3>What we offer</h3>
         <p>need make fancy cards</p>
       </Col>
-      
-      <Col xs={4}>Share your extra items</Col>
-      <Col xs={4}>Looking for something</Col>
-      <Col xs={4}>Connect with the community</Col>
+
+      <Col className="intro-cards" xs={4}>Share your extra items</Col>
+      <Col className="intro-cards" xs={4}>Looking for something</Col>
+      <Col className="intro-cards" xs={4}>Connect with the community</Col>
     </Row>
   )
 }
