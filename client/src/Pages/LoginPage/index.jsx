@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Login from "../../Components/LoginPage/Login"
+import './index.css'
 
 export default class LoginPage extends Component {
     constructor(props) {
@@ -9,22 +10,15 @@ export default class LoginPage extends Component {
 
     render() {
         return (
-            <div>
-                <header>
-                    Logo
-                    BakerInn
-                </header>
-                <div>
+            <div className="login-page-box">
+                <div className="login-box">
                     <h3>Login</h3>
-                    <p>Dont have an account? <Link to="/signup">Sign Up</Link></p>
                     <Login loggedIn={this.props.loggedIn} />
-                    <div>
-                        img
-                    </div>
                 </div>
-                <footer>
-                    footer
-                </footer>
+                <div className="login-box">
+                    <p>Dont have an account? </p>
+                    <button><Link to="/signup">Sign Up</Link></button>
+                </div>
             </div>
         )
     }

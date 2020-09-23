@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom';
 import Auth from '../../../Auth.js';
+import './index.css'
 
 const Login = (props) => {
     let history = useHistory();
@@ -41,29 +42,31 @@ const Login = (props) => {
     }
 
     return (
-        <div>
-            <div className="Login">
+        <div className="form-box">
+            <div className="login">
                 <form onSubmit={handleSubmit}>
-                    <div>
-                        <label >Email:</label>
+                    <div className="form-input">
                         <input type="email"
                             name="email"
                             value={email}
+                            placeholder="Email"
                             onChange={(e) => setEmail(e.target.value)} />
                     </div>
-                    <div>
-                        <label >Password:</label>
+                    <div className="form-input">
                         <input type="password"
                             name="password"
                             value={password}
+                            placeholder="Password"
                             onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <div style={isValid
-                        ? { visibility: 'hidden' }
-                        : { visibility: 'visible' }}>
+                        ? { visibility: 'hidden', margin: "10px 0" }
+                        : { visibility: 'visible', color: "red", margin: "10px 0" }}>
                         {error}
                     </div>
-                    <button type="submit">Login</button>
+                    <div className="form-input">
+                        <button type="submit">Login</button>
+                    </div>
                 </form>
             </div >
         </div>

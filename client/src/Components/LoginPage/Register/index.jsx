@@ -38,28 +38,28 @@ const Register = () => {
     }
 
     return (
-        <div>
-            <div className="Register">
+        <div className="form-box">
+            <div className="login">
                 <form onSubmit={handleSubmit}>
-                    <div>
-                        <label >Email:</label>
+                    <div className="form-input">
                         <input type="email"
                             name="email"
                             value={email}
+                            placeholder="Email"
                             onChange={(e) => setEmail(e.target.value)} />
                     </div>
-                    <div>
-                        <label >Username:</label>
+                    <div className="form-input">
                         <input type="text"
                             name="username"
                             value={username}
+                            placeholder="Username"
                             onChange={(e) => setUsername(e.target.value)} />
                     </div>
-                    <div>
-                        <label >Password:</label>
+                    <div className="form-input">
                         <input type="password"
                             name="password"
                             value={password}
+                            placeholder="Password"
                             onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <div style={isValid
@@ -67,7 +67,9 @@ const Register = () => {
                         : { visibility: 'visible' }}>
                         {error}
                     </div>
-                    <button type="submit">Register</button>
+                    <div className="form-input">
+                        <button type="submit">Register</button>
+                    </div>
                 </form>
             </div >
         </div>
