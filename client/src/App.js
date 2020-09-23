@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Redirect, BrowserRouter as Router } from "react-router-dom"
+import { Route, Redirect, BrowserRouter as Router, withRouter, Link } from "react-router-dom"
 import './App.css';
 import Login from "./Pages/LoginPage/"
 import Register from "./Pages/RegisterPage/"
@@ -14,6 +14,7 @@ import Footer from './Components/Footer';
 import Test from './Pages/TestPage';
 import ChatContainer from './Components/ChatContainer';
 import io from 'socket.io-client'
+import SearchBar from './Components/SearchBar';
 
 require("dotenv").config();
 
@@ -28,7 +29,9 @@ class App extends React.Component {
       socket: null,
       newChatData: null,
       username: null,
-      userId: null
+      userId: null,
+      search: '',
+      searchResults: null
     }
   }
 
@@ -74,7 +77,7 @@ class App extends React.Component {
 
   clearChatData = () => {
     this.setState({
-        newChatData: null
+      newChatData: null
     })
   }
 
@@ -112,8 +115,13 @@ class App extends React.Component {
   setupSocket = (username) => {
 
     //query to send the username
-    // const ENDPOINT = process.env.PORT || "localhost:5000"
-    let socket = io({ query: `username=${username}` })
+    let socket;
+    if (process.env.NODE_ENV === 'production') {
+      socket = io({ query: `username=${username}` })
+    } else {
+      const ENDPOINT = process.env.PORT || "localhost:5000"
+      socket = io(ENDPOINT, { query: `username=${username}` })
+    }
     socket.on('connect', () => {
       console.log(username, 'connected');
     })
@@ -121,6 +129,24 @@ class App extends React.Component {
   }
 
 
+  handleChange = (e) => {
+    this.setState({
+      search: e.target.value,
+    })
+  }
+
+  handleSearch = (e) => {
+    if (e.keyCode === 13 && e.target.value !== '') {
+      console.log(this.state.search);
+
+      this.props.history.push("/search?q=" + this.state.search)
+
+      this.setState({
+        search: '',
+      })
+
+    }
+  }
 
   render() {
     return (
@@ -130,17 +156,27 @@ class App extends React.Component {
             user={this.state.username}
             signout={this.signout} />
 
+          <SearchBar  onChange={this.handleChange}
+                      onKeyUp={this.handleSearch}
+                      value={this.state.search} />
+
+
           {/* conditionally render chat-overlay, show only when logged in */}
           {this.state.loggedIn
             ? (<ChatContainer socket={this.state.socket}
               newChatData={this.state.newChatData}
-              clearChatData={this.clearChatData}/>)
+              clearChatData={this.clearChatData} />)
             : null
           }
 
 
-          <Container style={{ marginTop: '66px', textAlign: "center" }}>
-            <Route path="/signup" exact component={Register} />
+          <Container style={{ marginTop: '122px', textAlign: "center" }}>
+
+            <Route exact path="/search">
+              <SearchResults />
+            </Route>
+
+            <Route exact path="/signup" component={Register} />
 
             <Route path="/login"
               exact
@@ -157,13 +193,9 @@ class App extends React.Component {
                 createChat={this.createChat} />
             </Route>
 
-            <Route exact path="/search">
-              <SearchResults />
-            </Route>
-
             {/* blank page for testing*/}
-            <Route path="/test">
-              <Test listingId="5f670aebb063fffb5a0d183f" socket={this.state.socket}/>
+            <Route exact path="/test">
+              <Test listingId="5f670aebb063fffb5a0d183f" socket={this.state.socket} />
             </Route>
 
             {/* redirect all non-specified routes. maybe have a 404 page*/}
@@ -179,4 +211,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default withRouter(App);

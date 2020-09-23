@@ -81,7 +81,7 @@ class SingleListingPage extends Component {
           </div>
         </div>
       </div>
-      <Link to="/homepage"><Button>Back to home</Button></Link>
+      {/* <Link to="/homepage"><Button>Back to home</Button></Link> */}
       </>
     )
   }

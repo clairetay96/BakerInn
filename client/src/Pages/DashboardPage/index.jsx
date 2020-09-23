@@ -21,7 +21,6 @@ export default class DashboardPage extends Component {
 
 
     this.state = {
-      search: '',
       userId: userId,
       userLendingListings: {
         available: [],
@@ -86,31 +85,12 @@ export default class DashboardPage extends Component {
 
   }
 
-  handleChange = (e) => {
-    this.setState({
-      search: e.target.value,
-    })
-  }
-
-  handleSearch = (e) => {
-    if (e.keyCode === 13 && e.target.value !== '') {
-      console.log(this.state.search);
-      this.setState({
-        search: '',
-      })
-    }
-  }
-
   render() {
     console.log("UPDATED AVAIBLE", this.state.userLendingListings.available)
     return (
       <div>
         <h1>Welcome back User</h1>
-
-        <SearchBar scope={"dashboard"}
-          onChange={this.handleChange}
-          onKeyUp={this.handleSearch}
-          value={this.state.search} />
+        
         <Switch>
           <ProtectedRoute exact path="/dashboard">
             <ListingTabs listingData={{

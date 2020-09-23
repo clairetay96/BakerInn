@@ -21,12 +21,12 @@
 }
 
 .chat-container-wrapper {
-  display: flex;
-  flex-direction: column;
+  /* display: flex; */
+  /* flex-direction: column; */
 }
 
 .chat-container-wrapper button {
-  align-self: flex-end;
+  /* align-self: flex-end; */
 	font-size: 18px;
 	border: none;
   background-color: rgba(0,0,0,0);
@@ -35,7 +35,7 @@
 }
 
 .chat-container-wrapper h4 {
-  align-self: center;
+  text-align: center;
 }
 
 .chat-list-item {
@@ -48,11 +48,6 @@
 .chat-list-item:hover {
   background-color: rgb(228, 255, 228);
 }
-
-/*.chat-placeholder {
-  height: 350px;
-  width: 265px;
-}*/
 
 .hide-container {
   display: none;
@@ -69,6 +64,10 @@
   right: 40px;
   z-index: 10;
   cursor: pointer;
+}
+
+.stow-container {
+  bottom: 440px;
 }
 
 .chat-burden {

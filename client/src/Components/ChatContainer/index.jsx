@@ -188,6 +188,12 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
                         onClose={handleDeleteWindow}
                         socket={socket}/>)
     }))
+    
+    if (activeChat.length === 0 && (stow || !toggle)) {
+      setStow(false)
+      setToggle(false)
+    }
+
   },[activeChat])
 
   // delete when you click on x
@@ -232,24 +238,57 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
 
   const [toggle, setToggle] = useState(false)
 
-  const toggleChat = () => {
-    setToggle(!toggle)
-  }
+  const [stow, setStow] = useState(false)
+  // const [display, setDisplay] = useState("chat-container")
+  // useEffect(()=>{
+  //   if(stow){
+
+  //   } else if (toggle) {
+
+  //   }
+  //   "chat-container hide-container"
+  //   return () => {
+  //     setDisplay("chat-container")
+  //   }
+  // }, [stow, toggle])
 
   return (
     <>
-    <div onClick={toggleChat} className="show-container"><ChatIcon /></div>
-    <div className={toggle ? "chat-container" : "chat-container hide-container"}>
-    <div className="chat-burden">
-      <div className="chat-container-wrapper">
-          <button onClick={toggleChat}><MiniIcon/></button>
-          <h4>BakerInn Chats</h4>
+      <div onClick={()=>{
+            if (stow) {
+              setStow(!stow)
+            } else {
+              setToggle(!toggle)
+            }
+           }} 
+          className={stow ? "show-container stow-container" : "show-container"}>
+        <ChatIcon transform="scale(-1,1)"/>
       </div>
-      <div className="chat-list">
-          {allChatsHelper(allChats)}
+
+      <div className={toggle ? "chat-container" : "chat-container hide-container"}>
+
+      <div className={stow ? "chat-burden hide-container" : "chat-burden"}>
+        <div className="chat-container-wrapper">
+          <div style={{display:"flex", justifyContent:"space-between"}}>
+            <button onClick={()=>{
+                      if(activeChat.length > 0) {
+                        setStow(!stow)
+                      } else {
+                        setToggle(!toggle)
+                      }
+                    }}>V</button>
+
+            <button onClick={()=>setToggle(!toggle)}><MiniIcon/></button>
+          </div>
+            <h4>BakerInn Chats</h4>
+        </div>
+        <div className="chat-list">
+            {allChatsHelper(allChats)}
+        </div>
       </div>
-    </div>
+
       { renderActive }
+    
     </div>
 
     </>
