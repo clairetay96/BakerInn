@@ -15,12 +15,14 @@
   width: 265px;
   overflow: scroll;
   display: flex;
+  background-color: lightgray;
   flex-direction: column;
 }
 
 .chat-container-wrapper {
   /* display: flex; */
   /* flex-direction: column; */
+  border: 1px solid gray;
 }
 
 .chat-container-wrapper button {
@@ -42,6 +44,10 @@
   background-color: white;
   margin: 5px 5px;
   padding: 9px 0
+}
+
+.chat-list-item * {
+	background-color: rgba(0,0,0,0);
 }
 
 .chat-list-item:hover {
