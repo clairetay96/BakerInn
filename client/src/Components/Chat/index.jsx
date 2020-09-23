@@ -212,14 +212,12 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
 
 const sendMessage = (event) => {
     event.preventDefault()
-    console.log(sender.username, '-- sendMessage');
-    console.log(user_id, '--user id sendMessage');
 
     let messageInfo = {
         message,
         sender_name: sender.username,
-        chatroom_id: chat_id,
-        userroom_id: receiver.user_id,
+        chat_id: chat_id,
+        user_id: receiver.user_id,
         sender_id: user_id
     }
 
@@ -241,6 +239,7 @@ const sendMessage = (event) => {
         })
     }
 
+    //store the message data
     fetch(url, requestOptions)
         .then(res => {
             if(res.status===200){
@@ -250,6 +249,31 @@ const sendMessage = (event) => {
             }
         })
         .catch(err => console.log(err))
+
+    //also update notifications of the receiver id
+    let updateNotifURL = "/api/chats/"+chat_id+"/"+receiver.user_id+"/update-notifications"
+    let updateNotifOptions = {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            chat_id: chat_id,
+            receiver_id: receiver.user_id,
+            action: "increment"
+        })
+    }
+
+    fetch(updateNotifURL, updateNotifOptions)
+        .then(res=>{
+            if(res.status===200){
+                console.log("everything ok receiver notifs updated")
+            } else {
+                console.log("some server error")
+            }
+        })
+        .catch(err=>{console.log("some error in fetch for updating notifs")})
 
     // set message to empty
     setMessage("")
@@ -520,8 +544,8 @@ useEffect(()=>{
         </div>
 
 
-        <div className="on-close-bottom">
-            <div className="listing-info">
+        <div className="on-close-bottom row">
+            <div className="listing-info col-8">
                 <div className={ toggle
                                     ? "receiver-username"
                                     : "receiver-username inline"
@@ -529,11 +553,11 @@ useEffect(()=>{
                     {receiver.username}
                 </div>
                 <div className={toggle? "listing-item" : "listing-item inline"}>
-                    for {listing.item}
+                    for {sender.isOwner ? "your" : "their" } listing '{listing.item}'
                 </div>
             </div>
             {toggle
-                ? <div className="transaction-option">{transactionOption}</div>
+                ? <div className="transaction-option col-4">{transactionOption}</div>
                 : null
             }
         </div>
