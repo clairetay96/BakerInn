@@ -101,6 +101,20 @@ module.exports = (db) => {
         })
     }
 
+    let updateNotifications = (request, response)=>{
+        let queryInfo = request.body
+        queryInfo.updated_at=new Date()
+        modelChatFuncs.updateNotifications(queryInfo, (err, res)=>{
+            if(err){
+                console.log(err, "---error in updating notifications")
+                response.status(500).send("Error occurred.")
+            } else {
+                response.status(200).send(res)
+            }
+        })
+
+    }
+
 
     return {
         createChat,
@@ -108,7 +122,8 @@ module.exports = (db) => {
         getChat,
         getMessages,
         getChatIdByInfo,
-        getChatIdsByInfo
+        getChatIdsByInfo,
+        updateNotifications
 
     }
 

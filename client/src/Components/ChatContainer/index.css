@@ -42,7 +42,7 @@
   cursor: pointer;
   background-color: white;
   margin: 5px 5px;
-  padding: 9px
+  padding: 9px 0
 }
 
 .chat-list-item:hover {
@@ -77,8 +77,29 @@
 .chat-container-username {
 	font-size: 15px;
 	font-weight: bold;
+	display: flex;
+	justify-content: space-between
+}
+
+.notification {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+
+}
+
+.notification > div{
+	box-sizing: border-box;
+	background-color: darkred;
+	color: white;
+	text-align: center;
+	font-size: 12px;
+	width: 50px;
+	border-radius: 50%;
+
 }
 
 .chat-container-listing {
 	font-size: 12px;
+	text-overflow: ellipsis;
 }

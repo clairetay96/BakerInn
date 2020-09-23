@@ -70,7 +70,8 @@
 	width: 50%;
 	display: flex;
 	justify-content: flex-end;
-	font-size: 15px;
+	text-align: right;
+	font-size: 10px;
 }
 
 .single-message {
