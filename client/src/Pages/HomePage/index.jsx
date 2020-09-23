@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Switch from 'react-bootstrap/esm/Switch';
 import { Route, withRouter } from 'react-router-dom';
 
-import Carousel from '../../Components/Carousel';
 import CarouselV2 from '../../Components/Carousel/test';
 import Discovery from '../../Components/Discovery';
 import IntroBanner from '../../Components/IntroBanner';
@@ -33,10 +32,10 @@ class HomePage extends Component {
         let ingredient = null;
         let equipment = null;
         if (res) {
-            ingredient = res.filter((item) => {
+          ingredient = res.filter((item) => {
             return item.category === "ingredient"
           })
-            equipment = res.filter((item) => {
+          equipment = res.filter((item) => {
             return item.category === "equipment"
           })
         }
@@ -64,11 +63,11 @@ class HomePage extends Component {
             }
 
             <CarouselV2 title="Freshest offers"
-              lastestListing={this.state.lastestListing}/>
+              lastestListing={this.state.lastestListing} />
 
             <CarouselV2 title="New ingredients"
               headerLink="/homepage/ingredient"
-              lastestListing={this.state.ingredient}/>
+              lastestListing={this.state.ingredient} />
 
             <CarouselV2 title="New equipment"
               headerLink="/homepage/equipment"
@@ -83,10 +82,10 @@ class HomePage extends Component {
           </Route>
 
           <Route path="/homepage/ingredient">
-            <CategoryPage listings={this.state.ingredient} category="ingredient"/>
+            <CategoryPage listings={this.state.ingredient} category="ingredient" />
           </Route>
           <Route path="/homepage/equipment">
-            <CategoryPage listings={this.state.equipment} category="equipment"/>
+            <CategoryPage listings={this.state.equipment} category="equipment" />
           </Route>
         </Switch>
       </>
