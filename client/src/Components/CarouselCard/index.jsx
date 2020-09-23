@@ -2,14 +2,19 @@ import React from 'react'
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import './index.css'
+import donut from '../../donut.svg';
+import mixer from '../../electric-mixer.svg';
 
 export default function CarouselCard({item}) {
+  const img = item.img_public_id || null
+  let placeholder = item.category !== 'ingredient' ? mixer : donut
   const style = {
     container: {
       height: "calc(100% - 10px * 2)",
       width: "calc(100% - 10px * 2)",
       margin: "10px",
       backgroundColor: "mediumslateblue",
+      backgroundImage: (img ? `url(http://res.cloudinary.com/dk0bjhiu9/image/upload/v1/${img})` : `url(${placeholder})`),
       boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)",
       borderRadius: 15,
     },
