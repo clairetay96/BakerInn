@@ -1,19 +1,40 @@
 .listing-tabs > a {
   width: 50%;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .listing-selection {
   border: 1px solid lightgrey;
-  height: 300px;
-  width: 500px;
   display: flex;
+  padding: 30px;
   flex-direction: column;
   justify-content: center;
-  justify-items: center;
+  align-items: center;
+
+}
+
+.listing-selection:hover {
+  background-color: orange;
+  transition: 0.3s;
+
+}
+
+
+
+.add-new-listing-button {
+	margin: 10px;
+	padding: 5px;
+	display: flex;
+	justify-content: flex-start;
 
 }
 
 .listing-selection-box {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
+}
+
+.listing-selection-box * {
+  background-color: rgba(0,0,0,0);
 }

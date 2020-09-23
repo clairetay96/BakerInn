@@ -4,6 +4,7 @@ import ListingTabs from '../../Components/ListingTabs'
 import ListingDetailPage from '../../Pages/ListingDetailPage';
 import EditSingleListingPage from '../../Pages/EditSingleListingPage';
 import { Switch, Route } from 'react-router-dom';
+import './index.css'
 import ProtectedRoute from '../../Components/ProtectedRoute';
 
 export default class DashboardPage extends Component {
@@ -39,7 +40,7 @@ export default class DashboardPage extends Component {
     try {
       let res = await fetch(url)
       let userListings = await res.json()
-  
+
       this.setState({
         available: userListings
       })
@@ -53,7 +54,7 @@ export default class DashboardPage extends Component {
     try {
       let res = await fetch(url)
       let borrowedListings = await res.json()
-  
+
       this.setState({
         borrowing: borrowedListings
       })
@@ -67,7 +68,7 @@ export default class DashboardPage extends Component {
     try {
       let res = await fetch(url)
       let loanListings = await res.json()
-  
+
       this.setState({
         loan: loanListings
       })
@@ -86,21 +87,22 @@ export default class DashboardPage extends Component {
     console.log(this.state);
     return (
       <div>
-        
+
         <Switch>
           <ProtectedRoute exact path="/dashboard">
-    
-            <h1>Welcome back {this.props.user}</h1>
+          <div className="dashboard-header">
+            <h1>Welcome back, {this.props.user}.</h1>
+            </div>
 
 
-            <ListingTabs 
+            <ListingTabs
               user={this.props.user}
               userId={this.state.userId}
               updateParentState={this.addNewListingToState}
               borrowing={this.state.borrowing}
               borrowNo={this.state.borrowing.length}
               listingNo={this.state.available.length}
-              lendNo={this.state.loan.length} 
+              lendNo={this.state.loan.length}
             />
           </ProtectedRoute>
 
@@ -113,20 +115,20 @@ export default class DashboardPage extends Component {
               nextpage={"loan"}
               edit={true} />
           </Route>
-          
-          
-          
-          
+
+
+
+
           {/* On loan */}
           <Route path="/dashboard/loan">
             <ListingDetailPage allListings={this.state.loan}
               nextpage={"available"}
               edit={true} />
           </Route>
-          
-          
-          
-          
+
+
+
+
           <Route path="/dashboard/listing/:id" component={EditSingleListingPage} />
 
         </Switch>
@@ -135,4 +137,3 @@ export default class DashboardPage extends Component {
     )
   }
 }
- 
