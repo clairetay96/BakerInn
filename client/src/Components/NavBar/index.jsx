@@ -24,10 +24,18 @@ class NavBar extends Component {
           </Navbar.Brand>
         </Link>
         {isLoggedIn 
-         ? (<>
-              <Link className="nav-link" style={{color: "lightgrey"}} to='/dashboard'>Dashboard</Link>
-              <Link className="nav-link" style={{color: "lightgrey"}} to='/homepage'>Homepage</Link>
-            </>
+         ? (<Nav variant="pills" defaultActiveKey={this.props.location.pathname.split('/')[0]}>
+              <Nav.Item>
+                <Nav.Link as="div" href="homepage" style={{padding: "0 0.5em"}}>              
+                  <Link className="nav-link" style={{color: "lightgrey"}} to='/homepage'>Homepage</Link>
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link as="div" eventKey="dashboard" style={{padding: "0 0.5em"}}>
+                  <Link className="nav-link" style={{color: "lightgrey"}} to='/dashboard'>Dashboard</Link>
+                </Nav.Link>
+              </Nav.Item>
+            </Nav>
             )
          : null}
         <Navbar.Collapse className="justify-content-end">
@@ -41,3 +49,4 @@ class NavBar extends Component {
 }
 
 export default withRouter(NavBar);
+

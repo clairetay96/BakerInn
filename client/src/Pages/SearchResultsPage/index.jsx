@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, withRouter, useHistory } from 'react-router-dom'
 import './index.css'
-import SearchBar from '../../Components/SearchBar'
 
 
-function SearchResults({ user_results, listing_results }) {
+
+function SearchResults({ searchInput }) {
     let history = useHistory()
     let query = new URLSearchParams(useLocation().search)
     let searchQueryTemp = query.get("q")
@@ -12,7 +12,12 @@ function SearchResults({ user_results, listing_results }) {
     let [searchQuery, setSearchQuery] = useState(searchQueryTemp)
     let [listingsHTML, setListingsHTML] = useState(null)
     let [usersHTML, setUsersHTML] = useState(null)
-    let [searchBarValue, setSearchBarValue] = useState(searchQuery)
+
+    useEffect(()=>{
+        if (searchInput) {
+            setSearchQuery(searchInput)
+        }
+    },[searchInput])
 
     useEffect(()=>{
 
@@ -57,20 +62,12 @@ function SearchResults({ user_results, listing_results }) {
 
     }, [searchQuery])
 
-    function handleSearch(event) {
-        if(event.keyCode===13&&event.target.value){
-            history.push("/search?q="+searchBarValue)
-            setSearchQuery(event.target.value)
-        }
-    }
-
     function goToListingsPage(listing_id){
         history.push("/homepage/listing/"+listing_id)
 
     }
 
     return (<div>
-                <SearchBar onChange={(e)=>{setSearchBarValue(e.target.value)}} onKeyUp={handleSearch} value={searchBarValue}/>
                 <div className="search-results">
                 <h3>Users</h3>
                 {usersHTML}

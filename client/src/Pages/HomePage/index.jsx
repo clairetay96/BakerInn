@@ -6,42 +6,20 @@ import Carousel from '../../Components/Carousel';
 import CarouselV2 from '../../Components/Carousel/test';
 import Discovery from '../../Components/Discovery';
 import IntroBanner from '../../Components/IntroBanner';
-import SearchBar from '../../Components/SearchBar';
 import CategoryPage from '../CategoryPage';
 import SingleListingPage from '../SingeListingPage';
-import SearchResults from '../SearchResultsPage'
 
 class HomePage extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      search: '',
       lastestListing: null,
       ingredient: null,
-      equipment: null,
-      searchResults: null
+      equipment: null
     }
   }
 
-  handleChange = (e) => {
-    this.setState({
-      search: e.target.value,
-    })
-  }
-
-  handleSearch = (e) => {
-    if (e.keyCode === 13 && e.target.value !== '') {
-      console.log(this.state.search);
-
-        this.props.history.push("/search?q="+this.state.search)
-
-      this.setState({
-        search: '',
-      })
-
-    }
-  }
 
   componentDidMount() {
     const url = '/api/listings'
@@ -74,28 +52,16 @@ class HomePage extends Component {
     let { isLoggedIn } = this.props;
     return (
       <>
-        {/* search all pages and listings */}
-        <SearchBar scope={"homepage"}
-          onChange={this.handleChange}
-          onKeyUp={this.handleSearch}
-          value={this.state.search} />
+
+
 
         <Switch style={{ paddingLeft: '0' }}>
           <Route exact path="/homepage">
-
 
             {isLoggedIn
               ? (<Discovery />)
               : (<IntroBanner />)
             }
-
-
-
-            {/*
-              Carousel listings need to updated with proper fetches
-              Suggestions carousel need to have an algorithm choosing
-              the listing
-            */}
 
             <CarouselV2 title="Freshest offers"
               lastestListing={this.state.lastestListing}/>
