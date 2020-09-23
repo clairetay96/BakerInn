@@ -138,18 +138,18 @@ export default function CarouselV2({ lastestListing = [], interval = null, colum
       position: "relative",
       textAlign: "left",
     },
-    title: {
-      margin: "20px 0",
-      padding: "20px",
-      backgroundColor: "white"
-    }
+    // title: {
+    //   marginTop: "60px",
+    //   padding: "20px",
+    //   backgroundColor: "white"
+    // }
   }
 
   return (
     <>
       {headerLink
-        ? (<Link to={headerLink}><h4 style={style.title} >{title}</h4></Link>)
-        : (<h4 style={style.title}>{title}</h4>)
+        ? (<h4 className="carou-title"><Link to={headerLink}><span>{title}</span></Link></h4>)
+        : (<h4 className="carou-title"><span>{title}</span></h4>)
       }
       {length
         ? (

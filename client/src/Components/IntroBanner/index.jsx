@@ -1,21 +1,28 @@
 import React from 'react'
-import { Col, Row } from 'react-bootstrap'
 import './index.css'
 
 export default function IntroBanner() {
   return (
-    <div className="intro-banner">
-      <Row >
-        <Col className="intro-title" xs={12}>
-          <h3>What we offer</h3>
-          <p>need make fancy cards</p>
-        </Col>
+    <div className="intro-banner-box" style={{ marginTop: "160px" }}>
+      <div className="intro-title" >
+        <h3>What We Offer</h3>
+      </div>
 
-        <Col className="intro-cards" xs={4}>Share your extra items</Col>
-        <Col className="intro-cards" xs={4}>Looking for something</Col>
-        <Col className="intro-cards" xs={4}>Connect with the community</Col>
-      </Row>
+      <div className="intro-cards-box">
+        <div className="intro-cards" >
+          Share your extra items
+          <div className="intro-cards-image1"></div>
+        </div>
+        <div className="intro-cards" >
+          Looking for something
+          <div className="intro-cards-image2"></div>
+        </div>
+        <div className="intro-cards" >
+          Connect with the community
+          <div className="intro-cards-image3"></div>
+        </div>
+      </div>
+
     </div>
-
   )
 }
