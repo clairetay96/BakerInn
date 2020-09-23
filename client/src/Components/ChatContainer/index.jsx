@@ -226,8 +226,6 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
 
                     }
                 } else {
-                    //if chat is not open, render on the message icon
-                    console.log("increment notifications on chats icon.")
 
                     let allChatsTemp = pushChatToTop([...allChats], chat_id, true)
                     socket.off('receiveNotification'+user_id)
@@ -427,7 +425,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
 
             <button onClick={()=>{socket.off('receiveNotification'+user_id);setToggle(!toggle)}}><MiniIcon/></button>
           </div>
-            <h4>BakerInn Chats</h4>
+            <h5>Chats</h5>
         </div>
         <div className="chat-list">
             {allChatsHelper(allChats)}

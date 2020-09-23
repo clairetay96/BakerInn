@@ -101,7 +101,7 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
             setMessages(res)
 
             let messageHTMLtemp = res.map((message, index)=>{
-                return <div className="single-message" key={message._id}><div className={user_id==message.user_id ? "message-sender" : "message-receiver"}>{message.sender_name} </div> <div className="message-text">{message.message}</div></div>
+                return <div className={user_id==message.user_id ? "single-message sender" : "single-message receiver"} key={message._id}><div className={user_id==message.user_id ? "message-sender" : "message-receiver"}>{message.sender_name} </div> <div className="message-text">{message.message}</div></div>
 
             })
 
@@ -146,7 +146,7 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
         console.log(sender_name, '-- receive');
 
         setMessages( messages =>[...messages, { message, sender_name }])
-        setMessageHTML(messageHTML => [...messageHTML, <div className="single-message" key={message._id}><div className={user_id==sender_id ? "message-sender" : "message-receiver"}>{sender_name} </div> <div className="message-text">{message}</div></div>])
+        setMessageHTML(messageHTML => [...messageHTML, <div className={user_id==sender_id ? "single-message sender" : "single-message receiver"} key={message._id}><div className={user_id==sender_id ? "message-sender" : "message-receiver"}>{sender_name} </div> <div className="message-text">{message}</div></div>])
 
     })
 
@@ -174,7 +174,7 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
             if(listing.successful_buyer_id !== sender.user_id){
                 setTransactionOption("Item now unavailable.")
             } else {
-                setTransactionOption("You currently own this item.")
+                setTransactionOption("You now own this item.")
             }
         } else {
             fetch('/api/users/'+listing.successful_buyer_id)
@@ -213,7 +213,8 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
 const sendMessage = (event) => {
     event.preventDefault()
 
-    let messageInfo = {
+    if(message){
+        let messageInfo = {
         message,
         sender_name: sender.username,
         chat_id: chat_id,
@@ -221,62 +222,65 @@ const sendMessage = (event) => {
         sender_id: user_id
     }
 
-    //emit message
-    socket.emit('sendMessage', messageInfo)
+        //emit message
+        socket.emit('sendMessage', messageInfo)
 
-    //write message to database
-    let url = `/api/chats/${chat_id}/new-message`
-    let requestOptions = {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            message,
-            user_id,
-            chat_id
-        })
+        //write message to database
+        let url = `/api/chats/${chat_id}/new-message`
+        let requestOptions = {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message,
+                user_id,
+                chat_id
+            })
+        }
+
+        //store the message data
+        fetch(url, requestOptions)
+            .then(res => {
+                if(res.status===200){
+                    console.log("message stored in database")
+                } else {
+                    console.log("help...")
+                }
+            })
+            .catch(err => console.log(err))
+
+        //also update notifications of the receiver id
+        let updateNotifURL = "/api/chats/"+chat_id+"/"+receiver.user_id+"/update-notifications"
+        let updateNotifOptions = {
+            method: "PUT",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                chat_id: chat_id,
+                receiver_id: receiver.user_id,
+                action: "increment"
+            })
+        }
+
+        fetch(updateNotifURL, updateNotifOptions)
+            .then(res=>{
+                if(res.status===200){
+                    console.log("everything ok receiver notifs updated")
+                } else {
+                    console.log("some server error")
+                }
+            })
+            .catch(err=>{console.log("some error in fetch for updating notifs")})
+
+        // set message to empty
+        setMessage("")
     }
 
-    //store the message data
-    fetch(url, requestOptions)
-        .then(res => {
-            if(res.status===200){
-                console.log("message stored in database")
-            } else {
-                console.log("help...")
-            }
-        })
-        .catch(err => console.log(err))
 
-    //also update notifications of the receiver id
-    let updateNotifURL = "/api/chats/"+chat_id+"/"+receiver.user_id+"/update-notifications"
-    let updateNotifOptions = {
-        method: "PUT",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            chat_id: chat_id,
-            receiver_id: receiver.user_id,
-            action: "increment"
-        })
-    }
-
-    fetch(updateNotifURL, updateNotifOptions)
-        .then(res=>{
-            if(res.status===200){
-                console.log("everything ok receiver notifs updated")
-            } else {
-                console.log("some server error")
-            }
-        })
-        .catch(err=>{console.log("some error in fetch for updating notifs")})
-
-    // set message to empty
-    setMessage("")
 }
 
 
@@ -546,13 +550,10 @@ useEffect(()=>{
 
         <div className="on-close-bottom row">
             <div className="listing-info col-8">
-                <div className={ toggle
-                                    ? "receiver-username"
-                                    : "receiver-username inline"
-                                }>
+                <div className="receiver-username">
                     {receiver.username}
                 </div>
-                <div className={toggle? "listing-item" : "listing-item inline"}>
+                <div className="listing-item">
                     for {sender.isOwner ? "your" : "their" } listing '{listing.item}'
                 </div>
             </div>

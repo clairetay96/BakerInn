@@ -1,22 +1,21 @@
 .chat-root {
   z-index: 30;
-  overflow: auto;
 }
 
 .chat-window {
+	box-sizing: border-box;
   height: 400px;
   width: 265px;
-  border: 1px solid mediumslateblue;
-  background-color: lightgray;
+  background-color: rgba(211, 225, 238);
+  border: 1px solid black;
 }
 
 .message-board {
-  margin: 10px auto;
+  margin: 5px auto;
   height: 65%;
   width: 250px;
-  border: 1px solid mediumslateblue;
-  overflow: auto;
   background-color: white;
+  overflow: auto;
 }
 
 
@@ -54,11 +53,9 @@
 }
 
 .listing-item {
-	font-size: 15px;
-}
-
-.inline {
-	display: inline;
+	font-size: 12px;
+	width: 100%;
+	overflow: auto;
 }
 
 .receiver-username {
@@ -75,7 +72,7 @@
 }
 
 .single-message {
-	padding: 3px;
+	padding: 3px 10px;
 	margin: 1px;
 }
 
@@ -83,16 +80,21 @@
 	border-bottom: 0.5px solid lightgray;
 }
 
+.single-message.sender *{
+	text-align: right;
+
+}
+
 .message-sender {
 	font-size: 15px;
 	font-weight: bold;
-	color: darkblue;
+	color: black;
 }
 
 .message-receiver {
 	font-size: 15px;
 	font-weight: bold;
-	color: black;
+	color: darkblue;
 }
 
 .message-text {
@@ -104,6 +106,23 @@
 	margin: 0 auto;
 }
 
+.message-input [type="submit"] {
+	background-color: white;
+	border: none;
+	height: 28px;
+	margin-left: 5px;
+	padding: 0 10px;
+	font-size: 15px;
+}
+
 .listing-info > * {
-	line-height: 1.1
+	line-height: 1.2
+}
+
+.listing-info {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	height: 50px;
 }
