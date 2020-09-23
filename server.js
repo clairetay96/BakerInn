@@ -70,7 +70,12 @@ io.on('connection', (socket) => {
 
     //send the message to the room
     io.to(chat_id).emit('receiveMessage' + chat_id , { message, sender_name, sender_id } )
-    socket.to(user_id).emit('receiveNotification'+user_id, { chat_id })
+
+    //send notification to message recipient
+    socket.to(user_id).emit('receiveNotification'+user_id, { chat_id, isSender: false })
+
+    //send signal to message sender to push chat to the top.
+    io.to(sender_id).emit('receiveNotification'+sender_id, { chat_id, isSender: true })
 
   })
 

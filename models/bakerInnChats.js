@@ -42,9 +42,21 @@ module.exports = (db) => {
     }
 
     let postMessage = (newMessageInfo, callback) => {
-        db.collection("messages").insertOne(newMessageInfo)
+        let allQueries = []
+
+        //update user's chats updated_at
+        allQueries.push(db.collection("users").updateOne({_id: ObjectId(newMessageInfo.user_id), "chats.chat_id": ObjectId(newMessageInfo.chat_id) }, {$set: {"chats.$.updated_at": new Date()}} )
+            .then(res => res)
+            .catch(err => {throw err}))
+
+        //post message to messages
+        allQueries.push(db.collection("messages").insertOne(newMessageInfo)
+            .then(res => res)
+            .catch(err => {throw err}))
+
+        Promise.all(allQueries)
             .then(res => {callback(null, res)})
-            .catch(err => {callback(err,null)})
+            .catch(err => {callback(err, null)})
     }
 
     //chat info as well as listing name, owner username and buyer username

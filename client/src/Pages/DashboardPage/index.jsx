@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 
 import ListingTabs from '../../Components/ListingTabs'
-import SearchBar from '../../Components/SearchBar'
 import ListingDetailPage from '../../Pages/ListingDetailPage';
 import EditSingleListingPage from '../../Pages/EditSingleListingPage';
 import { Switch, Route } from 'react-router-dom';
@@ -9,8 +8,8 @@ import ProtectedRoute from '../../Components/ProtectedRoute';
 
 export default class DashboardPage extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     // retrieve userID in cookie
     const cookie = document.cookie
@@ -22,98 +21,113 @@ export default class DashboardPage extends Component {
 
     this.state = {
       userId: userId,
-      userLendingListings: {
-        available: [],
-        loan: [],
-      },
-      userBorrowing: []
+      available: [],
+      loan: [],
+      borrowing: []
     }
   }
 
   componentDidMount() {
-    this.pingServer()
     this.fetchUserBorrowesListing()
     this.fetchUserPostedListing()
     this.fetchUserLendingListing()
   }
 
-  pingServer = async () => {
-    const res = await fetch('/api')
-    const data = await res.text()
-    console.log("pingserver", data);
-  }
-
   fetchUserPostedListing = async () => {
     const url = `/api/listings/user/${this.state.userId}`;
 
-    let res = await fetch(url)
-    let userListings = await res.json()
-
-    this.setState((prevState) => ({
-      userLendingLists: prevState.userLendingListings.available = userListings
-    }))
-
-    console.log("USERLISTING", userListings)
-
+    try {
+      let res = await fetch(url)
+      let userListings = await res.json()
+  
+      this.setState({
+        available: userListings
+      })
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   fetchUserBorrowesListing = async () => {
     const url = `/api/listings/user/${this.state.userId}/borrowed`;
-
-    let res = await fetch(url)
-    let borrowedListings = await res.json()
-
-    this.setState((prevState) => ({
-      userBorrowing: prevState.userBorrowing = borrowedListings
-    }))
-
-    console.log("USER BORROW LISTING", borrowedListings)
-
+    try {
+      let res = await fetch(url)
+      let borrowedListings = await res.json()
+  
+      this.setState({
+        borrowing: borrowedListings
+      })
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   fetchUserLendingListing = async () => {
     const url = `/api/listings/user/${this.state.userId}/loan`;
+    try {
+      let res = await fetch(url)
+      let loanListings = await res.json()
+  
+      this.setState({
+        loan: loanListings
+      })
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
-    let res = await fetch(url)
-    let loanListings = await res.json()
-
-    this.setState((prevState) => ({
-      userLendingLists: prevState.userLendingListings.loan = loanListings
+  addNewListingToState= (obj) => {
+    this.setState(prevState=>({
+      available: [...prevState.available, obj]
     }))
-
-    console.log("USER LOAN LISTING", loanListings)
-
   }
 
   render() {
-    console.log("UPDATED AVAIBLE", this.state.userLendingListings.available)
+    console.log(this.state);
     return (
       <div>
-        <h1>Welcome back User</h1>
         
         <Switch>
           <ProtectedRoute exact path="/dashboard">
-            <ListingTabs listingData={{
-              ...this.state.userLendingListings,
-              userBorrowing: this.state.userBorrowing
-            }}
-              borrowNo={this.state.userBorrowing.length}
-              lendNo={this.state.userLendingListings.loan.length}
-              listingNo={this.state.userLendingListings.available.length} />
+    
+            <h1>Welcome back {this.props.user}</h1>
+
+
+            <ListingTabs 
+              user={this.props.user}
+              userId={this.state.userId}
+              updateParentState={this.addNewListingToState}
+              borrowing={this.state.borrowing}
+              borrowNo={this.state.borrowing.length}
+              listingNo={this.state.available.length}
+              lendNo={this.state.loan.length} 
+            />
           </ProtectedRoute>
-          <Route path="/dashboard/borrowing">
-            <ListingDetailPage allListings={this.state.userBorrowing}
-              nextpage={"lending"}
-              edit={false} />
-          </Route>
-          <Route path="/dashboard/lending">
-            <ListingDetailPage allListings={this.state.userLendingListings.loan}
-              nextpage={"borrowing"}
+
+
+
+
+          {/* available */}
+          <Route path="/dashboard/available">
+            <ListingDetailPage allListings={this.state.available}
+              nextpage={"loan"}
               edit={true} />
           </Route>
+          
+          
+          
+          
+          {/* On loan */}
+          <Route path="/dashboard/loan">
+            <ListingDetailPage allListings={this.state.loan}
+              nextpage={"available"}
+              edit={true} />
+          </Route>
+          
+          
+          
+          
           <Route path="/dashboard/listing/:id" component={EditSingleListingPage} />
-          {/* <EditSingleListingPage />
-          </Route> */}
 
         </Switch>
 
@@ -121,3 +135,4 @@ export default class DashboardPage extends Component {
     )
   }
 }
+ 

@@ -127,6 +127,7 @@ export default function CarouselV2({lastestListing = [], interval = null, column
       padding: 0,
       margin: 0,
       display: "flex",
+      transition: "transform 0.7s ease-in-out",
       transform: `translateX(-${(slide / totalFrames) * 100}%)`
     },
     carouselItem: {

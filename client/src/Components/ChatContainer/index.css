@@ -85,16 +85,20 @@
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
+	position: relative;
 
 }
 
 .notification > div{
-	box-sizing: border-box;
+	position: absolute;
 	background-color: darkred;
 	color: white;
-	text-align: center;
-	font-size: 12px;
-	width: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 13px;
+	width: 24px;
+	height: 24px;
 	border-radius: 50%;
 
 }
@@ -102,4 +106,22 @@
 .chat-container-listing {
 	font-size: 12px;
 	text-overflow: ellipsis;
+}
+
+.all-notifications-counter {
+	position: absolute;
+	top:-12px;
+	left: 50px;
+	background-color: darkred;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 30px;
+	width: 30px;
+	border-radius: 50%;
+	color: white;
+}
+
+.hidden-counter {
+	display: none;
 }

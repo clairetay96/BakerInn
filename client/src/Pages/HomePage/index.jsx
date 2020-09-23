@@ -82,10 +82,17 @@ class HomePage extends Component {
           </Route>
 
           <Route path="/homepage/ingredient">
+<<<<<<< HEAD
             <CategoryPage listings={this.state.ingredient} />
           </Route>
           <Route path="/homepage/equipment">
             <CategoryPage listings={this.state.equipment} />
+=======
+            <CategoryPage listings={this.state.ingredient} category="ingredient"/>
+          </Route>
+          <Route path="/homepage/equipment">
+            <CategoryPage listings={this.state.equipment} category="equipment"/>
+>>>>>>> upstream/master
           </Route>
         </Switch>
       </>

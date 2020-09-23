@@ -126,7 +126,7 @@ module.exports = (db) => {
                 console.log(err)
                 response.status(500).send("error occurred. - cannot make new listing")
             } else {
-                response.status(200).send("success")
+                response.status(201).send(res)
             }
         })
 
