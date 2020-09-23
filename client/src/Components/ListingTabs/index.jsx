@@ -4,79 +4,79 @@ import './index.css'
 import { Tab, Tabs, Button, Modal, CardDeck } from "react-bootstrap";
 import ListingDetail from '../ListingDetail';
 import { Link } from 'react-router-dom';
+import AddListing from '../AddListing';
 
-import AddListingPage from "../../Pages/AddListingPage";
+// import AddListingPage from "../../Pages/AddListingPage";
 
 
-export default function ListingTabs(props) {
-
-  console.log("LISTING TABS", props)
-
-  let { available = null } = props.listingData
-
-  let { borrowNo, lendNo, listingNo } = props
+export default function ListingTabs({ user, userId, borrowNo, lendNo, listingNo, borrowing = null, updateParentState}) {
 
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const refreshPage = () => {
-    window.location.reload();
-  }
-
   return (
-    <Tabs defaultActiveKey="listing-status" transition={false} id="noanim-tab-listing" className="listing-tabs">
-      <Tab eventKey="listing-status" title="Listing Status">
-        Links to user borrowing from other users and user lending to other users
-            <div className="listing-selection-box">
+    <>
+
+    <div>
+      <Button variant="primary" onClick={handleShow}>Add New Listing</Button>
+      <Modal size="lg" show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title >Add Listing</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AddListing autoClose={handleClose}
+                      updateParentState={updateParentState}
+                      userId={userId}
+                      user={user}/>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => {
+            handleClose();
+          }}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+
+    <Tabs defaultActiveKey="user-listing" transition={false} id="noanim-tab-listing" className="listing-tabs">  
+      <Tab eventKey="user-listing" title="My listings">
+
+             
+        <div className="listing-selection-box">
           <div className="listing-selection">
-            <h3>Lending</h3>
+            <h3>Available</h3>
             <p >
-              <Link to="/dashboard/lending">
-                {lendNo} items
+              <Link to="/dashboard/available">
+                {listingNo} items
                   </Link>
             </p>
           </div>
           <div className="listing-selection">
-            <h3>Borrowing</h3>
+            <h3>On loan</h3>
             <p >
-              <Link to="/dashboard/borrowing">
+              <Link to="/dashboard/loan">
                 {borrowNo} items
                   </Link>
             </p>
           </div>
         </div>
+
       </Tab>
-      <Tab eventKey="user-listing" title="My Available Listing">
+
+      
+      <Tab eventKey="user-borrowed" title="Borrowed">
         <div style={{ display: "flex", justifyContent: "space-between", justifyItems: "center", marginTop: "35px" }}>
           <div>
-            <p>Total listing: {listingNo}</p>
-          </div>
-          <div>
-            <Button variant="primary" onClick={handleShow}>Add New Listing</Button>
-            <Modal size="lg" show={show} onHide={handleClose}>
-              <Modal.Header closeButton>
-                <Modal.Title >Add Listing</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <AddListingPage />
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={() => {
-                  handleClose();
-                  refreshPage();
-                }}>Close</Button>
-              </Modal.Footer>
-            </Modal>
+            <p>Total listing: {lendNo}</p>
           </div>
         </div>
 
         <CardDeck className="container" style={{ display: "flex", justifyContent: "start" }}>
-          <ListingDetail allListings={available}
-            edit={true} />
+          <ListingDetail allListings={borrowing}
+            edit={false} />
         </CardDeck>
       </Tab>
     </Tabs>
+    </>
   )
 }

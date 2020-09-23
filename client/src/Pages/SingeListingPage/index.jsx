@@ -43,13 +43,13 @@ class SingleListingPage extends Component {
     return (
       <>
       <Breadcrumb>
-        <Breadcrumb.Item href="#">
+        <Breadcrumb.Item as="div" href="#">
           <Link to={`/${path1}`}>{path1}</Link>
         </Breadcrumb.Item>
-        <Breadcrumb.Item href="#">
+        <Breadcrumb.Item as="div" href="#">
           <Link to={`/${path1}/${this.state.loading ? null : this.state.data.category}`}>{this.state.loading ? null : this.state.data.category}</Link>
         </Breadcrumb.Item>
-        <Breadcrumb.Item active>
+        <Breadcrumb.Item as="div" active>
           {this.state.loading ? null : this.state.data.item}
         </Breadcrumb.Item>
       </Breadcrumb>

@@ -10,7 +10,7 @@ export default function CarouselCard({item}) {
       width: "calc(100% - 10px * 2)",
       margin: "10px",
       backgroundColor: "mediumslateblue",
-      boxShadow: "0.3em 0.3em 1em rgba(0,0,0,0.3)",
+      boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)",
       borderRadius: 15,
     },
     pop: {

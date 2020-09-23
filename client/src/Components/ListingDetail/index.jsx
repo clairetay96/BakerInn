@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import ListingCard from '../ListingCard'
 
 export default function ListingDetail(props) {
-  console.log("LISTING DETAIL PROPS", props)
-
   let { edit, allListings } = props;
   let path = edit ? "/dashboard/listing/" : "/homepage/listing/"
 

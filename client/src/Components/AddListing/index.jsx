@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Form, Row, Col, Button } from 'react-bootstrap'
 import './index.css'
 
-const AddListing = () => {
+const AddListing = ({autoClose, updateParentState, user, userId}) => {
 
     const [item, setItem] = useState("")
     const [description, setDescription] = useState("")
@@ -31,8 +31,24 @@ const AddListing = () => {
             },
             body: JSON.stringify({ item, description, price, category, option, location })
         })
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err))
+            .then (res => res.json())
+            .then(res => {
+                updateParentState({
+                    _id: res,
+                    category,
+                    description,
+                    item,
+                    location,
+                    option,
+                    owner_id: userId,
+                    owner_info: {
+                        username: user
+                    },
+                    price,
+                    state: "available"
+                })
+            })
+            .catch(err => console.log(err))
         setItem("")
         setDescription("")
         setPrice("")
@@ -40,6 +56,7 @@ const AddListing = () => {
         setSuccess(true)
         setTimeout(() => {
             setSuccess(false);
+            autoClose()
         }, 3000);
     }
 

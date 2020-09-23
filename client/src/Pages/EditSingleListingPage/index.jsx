@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import './index.css'
 import EditListing from '../../Components/EditListing'
 
-import { Button, Modal } from 'react-bootstrap'
-import { useHistory } from 'react-router-dom'
+import { Breadcrumb, Button, Modal } from 'react-bootstrap'
+import { Link, useHistory } from 'react-router-dom'
 
 function EditSingleListingPage({ match, refresh }) {
   let history = useHistory();
@@ -64,6 +64,16 @@ function EditSingleListingPage({ match, refresh }) {
 
 
   return (
+    <>
+    <Breadcrumb>
+      <Breadcrumb.Item as="div" href="#">
+        <Link to={`/dashboard`}>dashboard</Link>
+      </Breadcrumb.Item>
+      <Breadcrumb.Item as="div" active>
+        {listing.item}
+      </Breadcrumb.Item>
+    </Breadcrumb>
+
     <div className="container singleListing" >
       <div className="col">
         <div className="itemImage">
@@ -109,6 +119,7 @@ function EditSingleListingPage({ match, refresh }) {
         </div>
       </div>
     </div>
+    </>
   )
 }
 
