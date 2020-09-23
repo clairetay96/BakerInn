@@ -143,7 +143,6 @@ const EditListing = ({ listingInfo, onClose, refreshPage }) => {
                             </Form.Control>
                         </Col>
                     </Form.Group>
-                    <div>Upload photo area</div>
                     <Button type="submit" block>Edit Listing</Button>
                     <div style={success
                         ? { visibility: 'visible', color: "green", marginTop: "10px", textAlign: "center" }

@@ -36,52 +36,51 @@ class SingleListingPage extends Component {
   render() {
     // layout the page
     // get dynamic data for single page
-    let [,path1,path2,path3] = this.props.history.location.pathname.split('/');
+    let [, path1, path2, path3] = this.props.history.location.pathname.split('/');
 
     console.log(this.state.data);
 
     return (
       <>
-      <Breadcrumb>
-        <Breadcrumb.Item as="div" href="#">
-          <Link to={`/${path1}`}>{path1}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item as="div" href="#">
-          <Link to={`/${path1}/${this.state.loading ? null : this.state.data.category}`}>{this.state.loading ? null : this.state.data.category}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item as="div" active>
-          {this.state.loading ? null : this.state.data.item}
-        </Breadcrumb.Item>
-      </Breadcrumb>
+        <Breadcrumb >
+          <Breadcrumb.Item as="div" href="#" >
+            <Link to={`/${path1}`}>{path1}</Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item as="div" href="#">
+            <Link to={`/${path1}/${this.state.loading ? null : this.state.data.category}`}>{this.state.loading ? null : this.state.data.category}</Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item as="div" active>
+            {this.state.loading ? null : this.state.data.item}
+          </Breadcrumb.Item>
+        </Breadcrumb>
 
-      <div className="container singleListing" >
-        <div className="col">
-          <div className="itemImage">
-            <img className="image" src="https://storage.googleapis.com/eezee-product-images/redman-sporting-non-stick-baking-pan-zlum_600.jpg" alt="" style={{ width: "350px", borderRadius: "10px" }} />
-          </div>
-        </div>
-
-        <div className="col">
-          <div className="row userInfo">
-            <div >
-              <img src="https://apprecs.org/gp/images/app-icons/300/41/com.mybox.tothetop.jpg" style={{ width: "100px", height: "100px" }} />
-            </div>
-            <div className="text-left col user">
-              <h4>{this.state.loading ? null : this.state.data.owner_info.username}</h4>
-              <p>Item location: {this.state.loading ? null : this.state.data.location}</p>
+        <div className="container singleListing" >
+          <div className="col">
+            <div className="itemImage">
+              <div style={{ height: "280px", width: "280px", border: "1px solid lightgrey", margin: " 10px auto", display: "flex", justifyContent: "center", alignItems: "center" }}><p>Image Not Available</p> </div>
             </div>
           </div>
-          <div className="text-left itemInfo">
-            <h3>{this.state.loading ? null : this.state.data.item}</h3>
-            <p>{this.state.loading ? null : this.state.data.description}</p>
-            <Button disabled={this.state.loading}
-              onClick={() => this.props.createChat(this.state.data)}>
-              Chat
+
+          <div className="col">
+            <div className="row userInfo">
+              <div >
+                <img src="https://apprecs.org/gp/images/app-icons/300/41/com.mybox.tothetop.jpg" style={{ width: "100px", height: "100px" }} />
+              </div>
+              <div className="text-left col user">
+                <h4>{this.state.loading ? null : this.state.data.owner_info.username}</h4>
+                <p>Item location: {this.state.loading ? null : this.state.data.location}</p>
+              </div>
+            </div>
+            <div className="text-left itemInfo">
+              <h3>{this.state.loading ? null : this.state.data.item}</h3>
+              <p>{this.state.loading ? null : this.state.data.description}</p>
+              <Button disabled={this.state.loading}
+                onClick={() => this.props.createChat(this.state.data)}>
+                Chat
             </Button>
+            </div>
           </div>
         </div>
-      </div>
-      {/* <Link to="/homepage"><Button>Back to home</Button></Link> */}
       </>
     )
   }
