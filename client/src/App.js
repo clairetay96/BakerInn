@@ -57,7 +57,7 @@ class App extends React.Component {
     const username = JSON.parse(atob(cookie.split(".")[1])).username
     const userId = JSON.parse(atob(cookie.split(".")[1])).userId
 
-    let socket = this.setupSocket()
+    let socket = this.setupSocket(username, userId)
     this.setState({
       loggedIn: true,
       socket: socket,
@@ -90,7 +90,7 @@ class App extends React.Component {
           const userId = JSON.parse(atob(cookie.split(".")[1])).userId
           console.log(userId)
 
-          let socket = this.setupSocket(username)
+          let socket = this.setupSocket(username, userId)
           this.setState({
             loggedIn: valid,
             socket: socket,
@@ -109,7 +109,7 @@ class App extends React.Component {
   // open socket only when authenticated and logged in
   // check when app opens
   // check when user logs in
-  setupSocket = (username) => {
+  setupSocket = (username, userId) => {
 
     //query to send the username
     // const ENDPOINT = process.env.PORT || "localhost:5000"
@@ -117,6 +117,9 @@ class App extends React.Component {
     socket.on('connect', () => {
       console.log(username, 'connected');
     })
+
+    socket.emit('join', {room_id: userId})
+
     return socket
   }
 

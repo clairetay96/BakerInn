@@ -64,18 +64,11 @@ io.on('connection', (socket) => {
   })
 
   //on sendMessage event from client, message gets emitted to the room
-  socket.on('sendMessage', ({ message, sender_name, chatroom_id, userroom_id, sender_id })=>{
+  socket.on('sendMessage', ({ message, sender_name, chat_id, user_id, sender_id })=>{
 
-    //if there are 2 people in the room, send the message to the room. Else send a notification.
-    if(noOfClientsInRoom(chatroom_id) == 2) {
-        console.log(sender_name)
-        io.to(chatroom_id).emit('receiveMessage' + chatroom_id , { message, sender_name, sender_id } )
-
-    } else if (noOfClientsInRoom(chatroom_id) < 2) {
-
-        socket.to(userroom_id).emit('receiveNotification', { sender_name, chatroom_id })
-
-    }
+    //send the message to the room
+    io.to(chat_id).emit('receiveMessage' + chat_id , { message, sender_name, sender_id } )
+    socket.to(user_id).emit('receiveNotification'+user_id, { chat_id })
 
   })
 
@@ -108,10 +101,10 @@ io.on('connection', (socket) => {
     console.log(socket.handshake.query.username, 'disconnected');
   })
 
-  function noOfClientsInRoom(room){
-    let clients = io.nsps['/'].adapter.rooms[room]
-    return Object.keys(clients).length
-  }
+  // function noOfClientsInRoom(room){
+  //   let clients = io.nsps['/'].adapter.rooms[room].sockets
+  //   return Object.keys(clients).length
+  // }
 
 });
 
