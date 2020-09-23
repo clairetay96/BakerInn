@@ -49,7 +49,7 @@
 .on-close-bottom {
 	display: flex;
 	justify-content: space-between;
-	padding: 3px 10px;
+	margin: 0 auto;
 }
 
 .listing-item {
@@ -106,13 +106,21 @@
 	margin: 0 auto;
 }
 
+.message-input [type="text"] {
+	background-color: white;
+	border: 1px solid black;
+	width: 85%;
+	margin-right: 5px;
+	padding: 5px;
+	font-size: 15px;
+}
+
 .message-input [type="submit"] {
 	background-color: white;
 	border: none;
-	height: 28px;
+	width: 10%;
 	margin-left: 5px;
-	padding: 0 10px;
-	font-size: 15px;
+	font-size: 10px;
 }
 
 .listing-info > * {

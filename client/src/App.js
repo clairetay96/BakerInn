@@ -196,7 +196,7 @@ class App extends React.Component {
 
             {/* this route must protected */}
             <ProtectedRoute path="/dashboard">
-              <DashboardPage />
+              <DashboardPage user={this.state.username}/>
             </ProtectedRoute>
 
             {/* this route must have protected actions*/}

@@ -19,7 +19,7 @@ export default function ListingTabs({ user, userId, borrowNo, lendNo, listingNo,
     <>
 
     <div>
-      <Button variant="primary" onClick={handleShow}>Add New Listing</Button>
+
       <Modal size="lg" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title >Add Listing</Modal.Title>
@@ -38,36 +38,45 @@ export default function ListingTabs({ user, userId, borrowNo, lendNo, listingNo,
       </Modal>
     </div>
 
-    <Tabs defaultActiveKey="user-listing" transition={false} id="noanim-tab-listing" className="listing-tabs">  
+    <Tabs defaultActiveKey="user-listing" transition={false} id="noanim-tab-listing" className="listing-tabs">
       <Tab eventKey="user-listing" title="My listings">
+        <div className="add-new-listing-button">
+            <Button variant="primary" onClick={handleShow} style={{width: '200px'}}>Add New Listing</Button>
+        </div>
 
-             
         <div className="listing-selection-box">
+
+
+        <Link to="/dashboard/available">
           <div className="listing-selection">
-            <h3>Available</h3>
+            <h3>See your available listings</h3>
             <p >
-              <Link to="/dashboard/available">
+
                 {listingNo} items
-                  </Link>
+
             </p>
           </div>
+          </Link>
+          <Link to="/dashboard/loan">
           <div className="listing-selection">
-            <h3>On loan</h3>
+            <h3>See your loaned listings</h3>
             <p >
-              <Link to="/dashboard/loan">
-                {borrowNo} items
-                  </Link>
+
+                {lendNo} items
+
             </p>
           </div>
+          </Link>
         </div>
 
       </Tab>
 
-      
+
       <Tab eventKey="user-borrowed" title="Borrowed">
         <div style={{ display: "flex", justifyContent: "space-between", justifyItems: "center", marginTop: "35px" }}>
           <div>
-            <p>Total listing: {lendNo}</p>
+            <h3>Your borrowed listings</h3>
+            <p>Total borrowed listings: {borrowNo}</p>
           </div>
         </div>
 
