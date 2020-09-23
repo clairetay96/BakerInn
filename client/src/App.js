@@ -15,14 +15,15 @@ import Test from './Pages/TestPage';
 import ChatContainer from './Components/ChatContainer';
 import io from 'socket.io-client'
 import SearchBar from './Components/SearchBar';
+import Switch from 'react-bootstrap/esm/Switch';
 
 require("dotenv").config();
 
 
 
 class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       loggedIn: false,
@@ -31,7 +32,7 @@ class App extends React.Component {
       username: null,
       userId: null,
       search: '',
-      searchResults: null
+      searchThis: null
     }
   }
 
@@ -138,12 +139,18 @@ class App extends React.Component {
   handleSearch = (e) => {
     if (e.keyCode === 13 && e.target.value !== '') {
       console.log(this.state.search);
+      let location = {
+        pathname: '/search',
+        search: `?q=${this.state.search}`
+      }
 
-      this.props.history.push("/search?q=" + this.state.search)
+      // this.props.history.push("/search?q=" + this.state.search)
+      this.props.history.push(location)
 
-      this.setState({
-        search: '',
-      })
+      this.setState(prevState => ({
+        searchThis: prevState.search,
+        search: ''
+      }))
 
     }
   }
@@ -151,7 +158,6 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <Router>
           <NavBar isLoggedIn={this.state.loggedIn}
             user={this.state.username}
             signout={this.signout} />
@@ -171,41 +177,40 @@ class App extends React.Component {
 
 
           <Container style={{ marginTop: '122px', textAlign: "center" }}>
+            <Switch>
+              <Route exact path="/search">
+                <SearchResults searchInput={this.state.searchThis}/>
+              </Route>
 
-            <Route exact path="/search">
-              <SearchResults />
-            </Route>
+              <Route exact path="/signup" component={Register} />
 
-            <Route exact path="/signup" component={Register} />
+              <Route path="/login"
+                exact
+                component={() => <Login loggedIn={this.loggedIn} />} />
 
-            <Route path="/login"
-              exact
-              component={() => <Login loggedIn={this.loggedIn} />} />
+              {/* this route must protected */}
+              <ProtectedRoute path="/dashboard">
+                <DashboardPage />
+              </ProtectedRoute>
 
-            {/* this route must protected */}
-            <ProtectedRoute path="/dashboard">
-              <DashboardPage />
-            </ProtectedRoute>
+              {/* this route must have protected actions*/}
+              <Route path="/homepage">
+                <HomePage isLoggedIn={this.state.loggedIn}
+                  createChat={this.createChat} />
+              </Route>
 
-            {/* this route must have protected actions*/}
-            <Route path="/homepage">
-              <HomePage isLoggedIn={this.state.loggedIn}
-                createChat={this.createChat} />
-            </Route>
+              {/* blank page for testing*/}
+              <Route exact path="/test">
+                <Test listingId="5f670aebb063fffb5a0d183f" socket={this.state.socket} />
+              </Route>
 
-            {/* blank page for testing*/}
-            <Route exact path="/test">
-              <Test listingId="5f670aebb063fffb5a0d183f" socket={this.state.socket} />
-            </Route>
-
-            {/* redirect all non-specified routes. maybe have a 404 page*/}
-            <Route exact path="/">
-              <Redirect to="/homepage" />
-            </Route>
+              {/* redirect all non-specified routes. maybe have a 404 page*/}
+              <Route exact path="/">
+                <Redirect to="/homepage" />
+              </Route>
+            </Switch>
             <Footer />
           </Container>
-
-        </Router>
       </div>
     );
   }
