@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import CarouselCard from '../CarouselCard'
 import {ReactComponent as NextIcon} from '../../arrow.svg';
+
 import './index.css'
 
 export default function CarouselV2({lastestListing = [], interval = null, columns = null, title, headerLink=null}) {

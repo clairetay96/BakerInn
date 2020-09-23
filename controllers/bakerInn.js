@@ -121,6 +121,7 @@ module.exports = (db) => {
         let userID = request.userId; //from cookies
         newListingInput.owner_id = userID
         newListingInput.state = "available"
+
         modelFuncs.makeNewListing(newListingInput, userID, (err, res) => {
             if (err) {
                 console.log(err)
