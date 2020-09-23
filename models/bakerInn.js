@@ -121,8 +121,12 @@ module.exports = (db) => {
     //put the new listing in listings collection, add listing to user info.
     let makeNewListing = (newListingInput, userID, callback) => {
         db.collection("listings").insertOne(newListingInput)
-            .then(res => db.collection("users").updateOne({ _id: ObjectId(userID) }, { $push: { listings: res.insertedId } }))
-            .then(res => callback(null, res))
+            .then(res => {
+                let allQueries = [res.insertedId]
+                allQueries.push(db.collection("users").updateOne({ _id: ObjectId(userID) }, { $push: { listings: res.insertedId }}))
+                return Promise.all(allQueries)
+            })
+            .then(res => callback(null, res[0]))
             .catch(err => callback(err, null))
     }
 
