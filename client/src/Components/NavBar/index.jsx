@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { Navbar, Nav } from 'react-bootstrap'
 import { Link, withRouter } from 'react-router-dom';
+import "./index.css"
 
 class NavBar extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
   }
 
@@ -17,33 +18,32 @@ class NavBar extends Component {
     let { isLoggedIn } = this.props;
 
     return (
-      <Navbar bg="dark" variant="dark" fixed="top">
-        <Link to='/homepage'>
-          <Navbar.Brand>
-            BakeInn
-          </Navbar.Brand>
-        </Link>
-        {isLoggedIn 
-         ? (<Nav variant="pills" defaultActiveKey={this.props.location.pathname.split('/')[0]}>
-              <Nav.Item>
-                <Nav.Link as="div" href="homepage" style={{padding: "0 0.5em"}}>              
-                  <Link className="nav-link" style={{color: "lightgrey"}} to='/homepage'>Homepage</Link>
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link as="div" eventKey="dashboard" style={{padding: "0 0.5em"}}>
-                  <Link className="nav-link" style={{color: "lightgrey"}} to='/dashboard'>Dashboard</Link>
-                </Nav.Link>
-              </Nav.Item>
-            </Nav>
+
+      <div className="nav-header">
+        <div>
+          <Link to='/homepage'>
+            <img className="logo" src="https://i.imgur.com/3RsoWX2t.png?2" alt="" />
+          </Link>
+        </div>
+
+        <div>
+          {isLoggedIn
+            ? (<nav>
+              <ul className="nav-links">
+                <li><Link className="nav-items" to='/homepage'>Homepage</Link></li>
+                <li><Link className="nav-items" to='/dashboard'>Dashboard</Link></li>
+              </ul>
+            </nav>
             )
-         : null}
-        <Navbar.Collapse className="justify-content-end">
-            {isLoggedIn 
-              ? (<><Navbar.Text className="mr-2">Hi! {this.props.user}</Navbar.Text><button onClick={this.signout}>Sign out</button></>) 
-              : (<Link to="/login"><button>Log In</button></Link>)}
-        </Navbar.Collapse>
-      </Navbar>
+            : <span className="nav-text">Keep calm and bake</span>}
+        </div>
+
+        <div>
+          {isLoggedIn
+            ? (<><span className="nav-textLogin" style={{ paddingRight: "40px" }}>Hi! <strong>{this.props.user}</strong></span><button className="nav-button" onClick={this.signout}>Sign out</button></>)
+            : (<Link to="/login"><button className="nav-button">Log In</button></Link>)}
+        </div>
+      </div>
     )
   }
 }

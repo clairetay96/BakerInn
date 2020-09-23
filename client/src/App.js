@@ -127,7 +127,7 @@ class App extends React.Component {
       console.log(username, 'connected');
     })
 
-    socket.emit('join', {room_id: userId})
+    socket.emit('join', { room_id: userId })
 
     return socket
   }
@@ -161,59 +161,62 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
+        <div>
           <NavBar isLoggedIn={this.state.loggedIn}
             user={this.state.username}
             signout={this.signout} />
 
-          <SearchBar  onChange={this.handleChange}
-                      onKeyUp={this.handleSearch}
-                      value={this.state.search} />
+          <SearchBar onChange={this.handleChange}
+            onKeyUp={this.handleSearch}
+            value={this.state.search} />
+        </div>
 
 
-          {/* conditionally render chat-overlay, show only when logged in */}
-          {this.state.loggedIn
-            ? (<ChatContainer socket={this.state.socket}
-              newChatData={this.state.newChatData}
-              clearChatData={this.clearChatData} />)
-            : null
-          }
+
+        {/* conditionally render chat-overlay, show only when logged in */}
+        {this.state.loggedIn
+          ? (<ChatContainer socket={this.state.socket}
+            newChatData={this.state.newChatData}
+            clearChatData={this.clearChatData} />)
+          : null
+        }
 
 
-          <Container style={{ marginTop: '122px', textAlign: "center" }}>
-            <Switch>
-              <Route exact path="/search">
-                <SearchResults searchInput={this.state.searchThis}/>
-              </Route>
+        <Container style={{ marginTop: '122px', textAlign: "center" }}>
+          <Switch>
+            <Route exact path="/search">
+              <SearchResults searchInput={this.state.searchThis} />
+            </Route>
 
-              <Route exact path="/signup" component={Register} />
+            <Route exact path="/signup" component={Register} />
 
-              <Route path="/login"
-                exact
-                component={() => <Login loggedIn={this.loggedIn} />} />
+            <Route path="/login"
+              exact
+              component={() => <Login loggedIn={this.loggedIn} />} />
 
-              {/* this route must protected */}
-              <ProtectedRoute path="/dashboard">
-                <DashboardPage />
-              </ProtectedRoute>
+            {/* this route must protected */}
+            <ProtectedRoute path="/dashboard">
+              <DashboardPage />
+            </ProtectedRoute>
 
-              {/* this route must have protected actions*/}
-              <Route path="/homepage">
-                <HomePage isLoggedIn={this.state.loggedIn}
-                  createChat={this.createChat} />
-              </Route>
+            {/* this route must have protected actions*/}
+            <Route path="/homepage">
+              <HomePage isLoggedIn={this.state.loggedIn}
+                createChat={this.createChat} />
+            </Route>
 
-              {/* blank page for testing*/}
-              <Route exact path="/test">
-                <Test listingId="5f670aebb063fffb5a0d183f" socket={this.state.socket} />
-              </Route>
+            {/* blank page for testing*/}
+            <Route exact path="/test">
+              <Test listingId="5f670aebb063fffb5a0d183f" socket={this.state.socket} />
+            </Route>
 
-              {/* redirect all non-specified routes. maybe have a 404 page*/}
-              <Route exact path="/">
-                <Redirect to="/homepage" />
-              </Route>
-            </Switch>
-            <Footer />
-          </Container>
+            {/* redirect all non-specified routes. maybe have a 404 page*/}
+            <Route exact path="/">
+              <Redirect to="/homepage" />
+            </Route>
+          </Switch>
+          <Footer />
+        </Container>
       </div>
     );
   }
