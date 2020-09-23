@@ -21,11 +21,9 @@ export default class DashboardPage extends Component {
 
     this.state = {
       userId: userId,
-      userLendingListings: {
-        available: [],
-        loan: [],
-      },
-      userBorrowing: []
+      available: [],
+      loan: [],
+      borrowing: []
     }
   }
 
@@ -42,9 +40,9 @@ export default class DashboardPage extends Component {
       let res = await fetch(url)
       let userListings = await res.json()
   
-      this.setState((prevState) => ({
-        userLendingLists: prevState.userLendingListings.available = userListings
-      }))
+      this.setState({
+        available: userListings
+      })
     } catch (err) {
       console.log(err);
     }
@@ -56,9 +54,9 @@ export default class DashboardPage extends Component {
       let res = await fetch(url)
       let borrowedListings = await res.json()
   
-      this.setState((prevState) => ({
-        userBorrowing: prevState.userBorrowing = borrowedListings
-      }))
+      this.setState({
+        borrowing: borrowedListings
+      })
     } catch (err) {
       console.log(err);
     }
@@ -70,22 +68,22 @@ export default class DashboardPage extends Component {
       let res = await fetch(url)
       let loanListings = await res.json()
   
-      this.setState((prevState) => ({
-        userLendingLists: prevState.userLendingListings.loan = loanListings
-      }))
+      this.setState({
+        loan: loanListings
+      })
     } catch (err) {
       console.log(err);
     }
   }
 
   addNewListingToState= (obj) => {
-    console.log(obj, 'newData');
     this.setState(prevState=>({
-      userLendingListings: [...prevState.userLendingListings.available, obj]
+      available: [...prevState.available, obj]
     }))
   }
 
   render() {
+    console.log(this.state);
     return (
       <div>
         
@@ -99,10 +97,10 @@ export default class DashboardPage extends Component {
               user={this.props.user}
               userId={this.state.userId}
               updateParentState={this.addNewListingToState}
-              borrowing={this.state.userBorrowing}
-              borrowNo={this.state.userBorrowing.length}
-              listingNo={this.state.userLendingListings.available.length}
-              lendNo={this.state.userLendingListings.loan.length} 
+              borrowing={this.state.borrowing}
+              borrowNo={this.state.borrowing.length}
+              listingNo={this.state.available.length}
+              lendNo={this.state.loan.length} 
             />
           </ProtectedRoute>
 
@@ -111,7 +109,7 @@ export default class DashboardPage extends Component {
 
           {/* available */}
           <Route path="/dashboard/available">
-            <ListingDetailPage allListings={this.state.userLendingListings.available}
+            <ListingDetailPage allListings={this.state.available}
               nextpage={"loan"}
               edit={true} />
           </Route>
@@ -121,7 +119,7 @@ export default class DashboardPage extends Component {
           
           {/* On loan */}
           <Route path="/dashboard/loan">
-            <ListingDetailPage allListings={this.state.userLendingListings.loan}
+            <ListingDetailPage allListings={this.state.loan}
               nextpage={"available"}
               edit={true} />
           </Route>
