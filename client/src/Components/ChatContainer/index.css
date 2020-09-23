@@ -62,7 +62,8 @@
   bottom: 40px;
   right: 40px;
   z-index: 10;
-  cursor: pointer;
+	cursor: pointer;
+	transition: bottom 0.2s ease-in-out;
 }
 
 .stow-container {
