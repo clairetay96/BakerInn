@@ -15,6 +15,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
   const [activeChat, setActiveChatWindow] = useState([])
   //rerender
   const [renderActive, setRenderActive] = useState([])
+  const [stow, setStow] = useState(false)
 
   // add more chats when the user clicks on the chat button
   // initialize the list of chats when first rendered
@@ -119,11 +120,14 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
             .then(res => res.json())
             .then(res => {
 
+                res.notifications = 0
+
                 // add new chat in allchats
+                socket.off('receiveNotification'+user_id)
                 setAllChats([...allChats, res])
 
-
                 // open new chat window
+                socket.off('receiveNotification'+user_id)
                 setActiveChat([...activeChat, res._id])
 
 
@@ -176,85 +180,86 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
   }
 
 
-  //user socket listening for notifications - effect hook
-  useEffect(()=>{
-    socket.on('receiveNotification'+user_id, ({ chat_id })=>{
-        //if chat id is not in allchats, create new chat
-        console.log(toggle, activeChat, "----message received")
-
-        let allChatsIDs = allChats.map(chat=>chat._id)
-
-        if(allChatsIDs.includes(chat_id)){
-            if(toggle){
-                //if chat id is not in active chats, render notification for individual chat and push to top
-                if(!activeChat.includes(chat_id)){
-                    let allChatsTemp = [...allChats]
-                    let rememberedIndex;
-                    let updatedChat;
-                    allChatsTemp.forEach((item, index)=>{
-                        if(item._id===chat_id){
-                            item.notifications += 1
-                            rememberedIndex = index
-                            updatedChat = item
-                        }
-                    })
-
-                    allChatsTemp.splice(rememberedIndex, 1)
-                    let allChatsTemp2 = [updatedChat, ...allChatsTemp]
-                    socket.off('receiveNotification'+user_id)
-                    setAllChats(allChatsTemp2)
-
-
-
-
-                } else { //if chat id is in active chats, send request to database to clear notifications
-                    console.log("clearing notifications")
-                    clearNotifications(chat_id, user_id)
-                }
-            } else {
-                //if chat is not open, render on the message icon
-                console.log("increment notifications on chats icon.")
-
-                let allChatsTemp = [...allChats]
-                let rememberedIndex;
-                let updatedChat;
-                allChatsTemp.forEach((item, index)=>{
-                    if(item._id===chat_id){
-                        item.notifications += 1
-                        rememberedIndex = index
-                        updatedChat = item
-                    }
-                })
-
-                allChatsTemp.splice(rememberedIndex, 1)
-                let allChatsTemp2 = [updatedChat, ...allChatsTemp]
-                socket.off('receiveNotification'+user_id)
-                setAllChats(allChatsTemp2)
-
-            }
-        } else {
-            //if chat does not exist in user's chats, means it's newly created - fetch chat data and add it to allChats.
-            let fetchChatURL = "/api/chats/"+chat_id
-
-            fetch(fetchChatURL)
-                .then(res=>res.json())
-                .then(res => {
-                    res.notifications = 1
-                    // add new chat in allchats
-                    socket.off('receiveNotification'+user_id)
-                    setAllChats((prevState)=>[res, ...prevState])
-
-
-
-                })
-                .catch(err => {console.log(err)})
-
+  function pushChatToTop(allChatsTemp, chat_id, updateNotifs){
+    let rememberedIndex;
+    let updatedChat;
+    allChatsTemp.forEach((item, index)=>{
+        if(item._id===chat_id){
+            console.log(updateNotifs)
+            item.notifications += updateNotifs? 1 : 0
+            rememberedIndex = index
+            updatedChat = item
         }
-
-
     })
 
-  }, [allChats, toggle, activeChat])
+    allChatsTemp.splice(rememberedIndex, 1)
+    return [updatedChat, ...allChatsTemp]
+
+  }
+
+  //user socket listening for notifications - effect hook
+  //note that socket must always be switched off before setting the states of the dependencies to get the latest state in the socket.on event listener.
+  useEffect(()=>{
+    socket.on('receiveNotification'+user_id, ({ chat_id, isSender })=>{
+
+        if(!isSender){
+            let allChatsIDs = allChats.map(chat=>chat._id)
+
+            if(allChatsIDs.includes(chat_id)){
+                if(toggle){
+                    //if chat id is not in active chats, render notification for individual chat and push to top
+                    if(!activeChat.includes(chat_id)){
+
+                        let allChatsTemp = pushChatToTop([...allChats], chat_id, true)
+
+                        socket.off('receiveNotification'+user_id)
+                        setAllChats(allChatsTemp)
+
+
+                    } else { //if chat id is in active chats, send request to database to clear notifications and push chat to top
+                        clearNotifications(chat_id, user_id)
+
+                        let allChatsTemp = pushChatToTop([...allChats], chat_id, false)
+                        socket.off('receiveNotification'+user_id)
+                        setAllChats(allChatsTemp)
+
+
+                    }
+                } else {
+                    //if chat is not open, render on the message icon
+                    console.log("increment notifications on chats icon.")
+
+                    let allChatsTemp = pushChatToTop([...allChats], chat_id, true)
+                    socket.off('receiveNotification'+user_id)
+                    setAllChats(allChatsTemp)
+
+                }
+            } else {
+                //if chat does not exist in user's chats, means it's newly created - fetch chat data and add it to allChats.
+                let fetchChatURL = "/api/chats/"+chat_id
+
+                fetch(fetchChatURL)
+                    .then(res=>res.json())
+                    .then(res => {
+                        res.notifications = 1
+                        // add new chat in allchats
+                        socket.off('receiveNotification'+user_id)
+                        setAllChats((prevState)=>[res, ...prevState])
+
+                    })
+                    .catch(err => {console.log(err)})
+
+            }
+
+        } else {
+            //after sending a message, push the chat to the top.
+            let allChatsTemp = pushChatToTop([...allChats], chat_id, false)
+            socket.off('receiveNotification'+user_id)
+            setAllChats(allChatsTemp)
+        }
+
+    })
+  }, [allChats, toggle, activeChat, stow])
 
 
 
@@ -271,7 +276,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
   }
 
   // populate active chat
-  const handleAddWindow = (id, receiver_id) => {
+  const handleAddWindow = (id, receiver_id, notificationNo) => {
     // take the id of the chat
 
     if (activeChat.includes(id)) {
@@ -309,9 +314,11 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
                         onClose={handleDeleteWindow}
                         socket={socket}/>)
     }))
-    
+
     if (activeChat.length === 0 && (stow || !toggle)) {
+      socket.off('receiveNotification'+user_id)
       setStow(false)
+      socket.off('receiveNotification'+user_id)
       setToggle(false)
     }
 
@@ -339,7 +346,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
       if (_allChats.length > 0) {
         let output = _allChats.map((chat, index)=>{
 
-            return (<div onClick={()=>handleAddWindow(chat._id, user_id)}
+            return (<div onClick={()=>handleAddWindow(chat._id, user_id, chat.notifications)}
                         className="chat-list-item row"
                         key={index}>
                         <div className="col-10">
@@ -359,9 +366,6 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
       }
     }
   }
-
-
-  const [stow, setStow] = useState(false)
   // const [display, setDisplay] = useState("chat-container")
   // useEffect(()=>{
   //   if(stow){
@@ -374,22 +378,35 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
   //     setDisplay("chat-container")
   //   }
   // }, [stow, toggle])
-  
+
   const toggleChat = () => {
     socket.off('receiveNotification'+user_id)
     setToggle(!toggle)
+  }
+
+  const countNotifications = (allChats)=>{
+    let totalNotifs = 0
+    if(allChats){
+        allChats.forEach((item)=>{
+            console.log(item._id, item.listing_item)
+            totalNotifs += item.notifications
+        })}
+    return totalNotifs
   }
 
   return (
     <>
       <div onClick={()=>{
             if (stow) {
+              socket.off('receiveNotification'+user_id)
               setStow(!stow)
             } else {
+              socket.off('receiveNotification'+user_id)
               setToggle(!toggle)
             }
-           }} 
+           }}
           className={stow ? "show-container stow-container" : "show-container"}>
+        <div className={countNotifications(allChats)==0 ? "hidden-counter" :"all-notifications-counter"}>{countNotifications(allChats)==0? null: countNotifications(allChats)}</div>
         <ChatIcon transform="scale(-1,1)"/>
       </div>
 
@@ -400,13 +417,15 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
           <div style={{display:"flex", justifyContent:"space-between"}}>
             <button onClick={()=>{
                       if(activeChat.length > 0) {
+                        socket.off('receiveNotification'+user_id)
                         setStow(!stow)
                       } else {
+                        socket.off('receiveNotification'+user_id)
                         setToggle(!toggle)
                       }
                     }}>V</button>
 
-            <button onClick={()=>setToggle(!toggle)}><MiniIcon/></button>
+            <button onClick={()=>{socket.off('receiveNotification'+user_id);setToggle(!toggle)}}><MiniIcon/></button>
           </div>
             <h4>BakerInn Chats</h4>
         </div>
@@ -416,7 +435,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
       </div>
 
       { renderActive }
-    
+
     </div>
 
     </>
