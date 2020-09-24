@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Navbar, Nav } from 'react-bootstrap'
 import { Link, withRouter } from 'react-router-dom';
 import "./index.css"
+import {ReactComponent as SuperImportant} from '../../sourdough.svg';
 
 class NavBar extends Component {
   constructor(props) {
@@ -20,15 +21,12 @@ class NavBar extends Component {
     return (
 
       <div className="nav-header">
-        <div>
           <Link to='/homepage'>
             <img className="logo" src="https://i.imgur.com/3RsoWX2t.png?2" alt="" />
           </Link>
-        </div>
 
-        <div>
           {isLoggedIn
-            ? (<nav>
+            ? (<nav style={{flexGrow: 2}}>
               <ul className="nav-links">
                 <li><Link className="nav-items" to='/homepage'>Homepage</Link></li>
                 <li><Link className="nav-items" to='/dashboard'>Dashboard</Link></li>
@@ -36,13 +34,13 @@ class NavBar extends Component {
             </nav>
             )
             : <span className="nav-text">Keep calm and bake</span>}
-        </div>
 
-        <div>
           {isLoggedIn
-            ? (<><span className="nav-textLogin" style={{ paddingRight: "40px" }}>Hi! <strong>{this.props.user}</strong></span><button className="nav-button" onClick={this.signout}>Sign out</button></>)
+            ? (<div style={{display: "flex", alignItems: "center"}}>
+                <span className="nav-textLogin">Hi! <strong>{this.props.user}</strong></span>
+                <button className="nav-button" onClick={this.signout}>Sign out</button> 
+              </div>)
             : (<Link to="/login"><button className="nav-button">Log In</button></Link>)}
-        </div>
       </div>
     )
   }
