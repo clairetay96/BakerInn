@@ -40,8 +40,13 @@ The baking/cooking community in Singapore does not have a common space to expres
 ![Overview](/pre-project/User_Flow.png)
 
 ## Wireframing
-
-Make a wireframe for each page you need to fulfill the user stories.
+![Overview](/pre-project/homepage.png)
+![Overview](/pre-project/login.png)
+![Overview](/pre-project/sign up.png)
+![Overview](/pre-project/dashboard.png)
+![Overview](/pre-project/category.png)
+![Overview](/pre-project/single item.png)
+![Overview](/pre-project/category page.png)
 
 ## ERD
 ![Overview](/pre-project/erd_db.png)
