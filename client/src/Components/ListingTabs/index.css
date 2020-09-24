@@ -12,8 +12,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 400px;
-  height: 400px;
+  min-height: 200px;
 }
 
 #selection-1:hover {

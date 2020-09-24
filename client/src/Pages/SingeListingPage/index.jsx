@@ -9,13 +9,21 @@ class SingleListingPage extends Component {
     super(props)
     this.state = {
       data: null,
-      loading: true
+      loading: true,
+      chatButton: null
     }
   }
 
   componentDidMount() {
     // get the id for creating new chat
     const listing_id = this.props.match.params.id
+    const cookie = document.cookie
+    let userId;
+    if(cookie){
+        userId = JSON.parse(atob(cookie.split(".")[1])).userId
+    }
+
+
     this.setState({
       listing_id: listing_id
     })
@@ -29,6 +37,20 @@ class SingleListingPage extends Component {
           data: res,
           loading: false
         })
+
+        if(res.owner_id===userId){
+            this.setState({chatButton: "This is your own listing."})
+        } else if (userId) {
+            this.setState({chatButton: <Button disabled={this.state.loading}
+                onClick={() => this.props.createChat(this.state.data)}>
+                Chat
+            </Button>})
+        } else {
+            this.setState({chatButton:<Link to="/login"><Button>Log in to chat!</Button></Link>})
+
+        }
+
+
       })
       .catch(err => console.log(err))
   }
@@ -44,7 +66,8 @@ class SingleListingPage extends Component {
 
     return (
       <>
-        <Breadcrumb >
+
+        <Breadcrumb className="breadcrumb-position">
           <Breadcrumb.Item as="div" href="#" >
             <Link to={`/${path1}`}>{path1}</Link>
           </Breadcrumb.Item>
@@ -83,15 +106,14 @@ class SingleListingPage extends Component {
               <div className="text-left col user">
                 <h4>{this.state.loading ? null : this.state.data.owner_info.username}</h4>
                 <p>Item location: {this.state.loading ? null : this.state.data.location}</p>
+
               </div>
             </div>
             <div className="text-left itemInfo" style={{overflowWrap: "anywhere"}}>
               <h3>{this.state.loading ? null : this.state.data.item}</h3>
+              <p className="itemState">Currently {this.state.loading ? null : this.state.data.state}</p>
               <p>{this.state.loading ? null : this.state.data.description}</p>
-              <Button disabled={this.state.loading}
-                onClick={() => this.props.createChat(this.state.data)}>
-                Chat
-            </Button>
+              {this.state.chatButton}
             </div>
           </div>
         </div>

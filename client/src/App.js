@@ -54,6 +54,11 @@ class App extends React.Component {
       socket: null,
       username: null
     })
+
+    fetch('/api/signout')
+        .then(res=>res.text())
+        .then(res=>{console.log(res)})
+        .catch(err=>{console.log(err, "---err in signing out.")})
   }
 
   loggedIn = () => {
@@ -92,7 +97,6 @@ class App extends React.Component {
           const cookie = document.cookie
           const username = JSON.parse(atob(cookie.split(".")[1])).username
           const userId = JSON.parse(atob(cookie.split(".")[1])).userId
-          // console.log(userId)
 
           let socket = this.setupSocket(username, userId)
           this.setState({
@@ -151,8 +155,7 @@ class App extends React.Component {
       this.props.history.push(location)
 
       this.setState(prevState => ({
-        searchThis: prevState.search,
-        search: ''
+        searchThis: prevState.search
       }))
 
     }

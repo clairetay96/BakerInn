@@ -39,7 +39,7 @@ export default function CarouselCard({item}) {
   }
 
   return (
-   
+
       <OverlayTrigger
         trigger={['hover', 'focus']}
         placement="bottom"
@@ -52,7 +52,7 @@ export default function CarouselCard({item}) {
           </Popover>
         }
       >
-        <div onClick={beamMeUp}className="carousel-item-thing" 
+        <div onClick={beamMeUp}className="carousel-item-thing"
           style={style.container}>
             <div style={style.pop}>{item.item}</div>
         </div>

@@ -24,6 +24,8 @@ module.exports = (app, db) => {
   // app.put('/api/users/:id/edit', withAuth, bakerIn.editUser)
   // app.delete('/api/users/:id/delete', withAuth, bakerIn.deleteUser)
 
+  app.get('/api/signout', bakerIn.signout)
+
   //listings CRUD operations
   app.get('/api/listings', bakerIn.getAllListings)
 

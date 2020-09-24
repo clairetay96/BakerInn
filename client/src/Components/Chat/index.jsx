@@ -548,17 +548,17 @@ useEffect(()=>{
         </div>
 
 
-        <div className="on-close-bottom row">
-            <div className="listing-info col-8">
+        <div className="on-close-bottom">
+            <div className="listing-info">
                 <div className="receiver-username">
                     {receiver.username}
                 </div>
-                <div className="listing-item">
+                <div className="listing-item-chat">
                     for {sender.isOwner ? "your" : "their" } listing '{listing.item}'
                 </div>
             </div>
             {toggle
-                ? <div className="transaction-option col-4">{transactionOption}</div>
+                ? <div className="transaction-option">{transactionOption}</div>
                 : null
             }
         </div>

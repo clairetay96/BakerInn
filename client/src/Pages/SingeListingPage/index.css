@@ -11,6 +11,12 @@
     justify-content: space-around;
 }
 
+.breadcrumb-position {
+	position: relative;
+	top: 40px;
+
+}
+
 .userInfo {
     margin-top: 45px;
     margin-bottom: 20px;
@@ -21,8 +27,10 @@
     padding: 20px;
 }
 
-.itemInfo > p {
-    margin-bottom: 40px;
+.itemInfo .itemState {
+	line-height: 0.5;
+	font-size: 12px;
+
 }
 
 image {
@@ -37,4 +45,5 @@ image {
 
 button {
     width: 100px;
+    margin-top: 40px;
 }
