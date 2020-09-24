@@ -19,7 +19,7 @@ class SingleListingPage extends Component {
     const listing_id = this.props.match.params.id
     const cookie = document.cookie
     let userId;
-    if(cookie){
+    if(cookie.includes("token")){
         userId = JSON.parse(atob(cookie.split(".")[1])).userId
     }
 
@@ -82,12 +82,12 @@ class SingleListingPage extends Component {
         <div className="container singleListing" >
           <div className="col">
             <div className="itemImage">
-              <div style={{ height: "280px", 
-                            width: "280px", 
-                            border: "1px solid lightgrey", 
-                            margin: " 10px auto", 
-                            display: "flex", 
-                            justifyContent: "center", 
+              <div style={{ height: "280px",
+                            width: "280px",
+                            border: "1px solid lightgrey",
+                            margin: " 10px auto",
+                            display: "flex",
+                            justifyContent: "center",
                             alignItems: "center",
                             backgroundImage: (img ? `url(http://res.cloudinary.com/dk0bjhiu9/image/upload/v1/${img})` : null),
                             backgroundColor: "lightgrey",
