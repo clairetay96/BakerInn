@@ -30,8 +30,12 @@ function SearchResults({ searchInput }) {
             console.log(res)
             let listingsHTMLTemp = res.map((item)=>{
                 return (<div className="indiv-listing-search-result" onClick={()=>{goToListingsPage(item._id)}}>
-                    <h5>{item.item}</h5>
-                    ${item.price}, {item.state}, {item.option}
+                    <div className="indiv-listing-top">
+                        <div className="indiv-listing-name"><h5>{item.item}</h5> <span>for {item.option}</span></div>
+                        <div><h5>${item.price}</h5> </div>
+                    </div>
+
+                    <div className="indiv-listing-state">currently {item.state}</div>
                     <p>{item.description}</p>
                     </div>)
             })
@@ -67,7 +71,7 @@ function SearchResults({ searchInput }) {
 
     }
 
-    return (<div>
+    return (<div className="all-results">
                 <div className="search-results">
                 <h3>Users</h3>
                 {usersHTML}
