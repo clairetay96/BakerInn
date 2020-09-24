@@ -10,7 +10,7 @@ function EditSingleListingPage({ match, refresh }) {
 
   useEffect(() => {
     fetchListing()
-    console.log(match)
+    // console.log(match)
   }, [])
 
   const [listing, setListing] = useState({
@@ -34,7 +34,7 @@ function EditSingleListingPage({ match, refresh }) {
     const listing = await fetchListing.json();
 
     setListing(listing)
-    console.log(listing)
+    // console.log(listing)
   }
 
   const handleDelete = async (e) => {
@@ -49,7 +49,7 @@ function EditSingleListingPage({ match, refresh }) {
         "Content-Type": "application/json"
       },
     })
-      .then((res) => console.log(res))
+      // .then((res) => console.log(res))
       .catch((err) => console.log(err))
 
     setTimeout(() => {

@@ -1,17 +1,40 @@
 import React from 'react'
 import { Card } from 'react-bootstrap'
+import oven from '../../small-oven.svg'
+import croisant from '../../croisant.svg'
 
-export default function ListingCard({ listing: { item, description, option, image } }) {
+export default function ListingCard({ listing: { item, description, option, img_public_id, category } }) {
   // console.log("LISTING CARD", props)
+
+  let placeholder = category === "ingredient" ? croisant : oven
+
   return (
     <>
       <Card style={{ margin: "15px", width: "300px" }}>
 
-        {image
+        {img_public_id
 
-          ? <Card.Img variant="top" src="https://bakingamoment.com/wp-content/uploads/2019/02/IMG_2757-croissant-recipe-easy-500x500.jpg" style={{ height: "300px", width: "300px" }} />
+          ? <dic style={{ height: "300px", 
+                          width: "300px",
+                          backgroundImage: (img_public_id ? `url(http://res.cloudinary.com/dk0bjhiu9/image/upload/v1/${img_public_id})` : null),
+                          backgroundColor: "lightgrey",
+                          backgroundRepeat: "no-repeat",
+                          backgroundSize: "auto 100%",
+                          backgroundPosition: "center" }} />
 
-          : <div style={{ height: "280px", width: "280px", border: "1px solid lightgrey", margin: " 10px auto", display: "flex", justifyContent: "center", alignItems: "center" }}><p>Image Not Available</p> </div>}
+          : <div style={{ height: "280px", 
+                          width: "280px", 
+                          border: "1px solid lightgrey", 
+                          margin: " 10px auto", 
+                          display: "flex", 
+                          justifyContent: "center", 
+                          alignItems: "center",
+                          backgroundImage: `url(${placeholder})`,
+                          backgroundColor: "#e9ecef",
+                          backgroundRepeat: "no-repeat",
+                          backgroundSize: "auto 50%",
+                          backgroundPosition: "center"  }}>
+            </div>}
 
         <Card.Body>
           <Card.Title> <h3>{item}</h3></Card.Title>
@@ -26,3 +49,4 @@ export default function ListingCard({ listing: { item, description, option, imag
     </>
   )
 }
+
