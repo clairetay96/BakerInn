@@ -8,6 +8,8 @@ import IntroBanner from '../../Components/IntroBanner';
 import CategoryPage from '../CategoryPage';
 import SingleListingPage from '../SingeListingPage';
 
+import './index.css'
+
 class HomePage extends Component {
   constructor(props) {
     super(props);
@@ -51,10 +53,7 @@ class HomePage extends Component {
     let { isLoggedIn } = this.props;
     return (
       <>
-
-
-
-        <Switch style={{ paddingLeft: '0' }}>
+        <Switch style={{ padding: "0" }}>
           <Route exact path="/homepage">
 
             {isLoggedIn
@@ -62,19 +61,28 @@ class HomePage extends Component {
               : (<IntroBanner />)
             }
 
-            <CarouselV2 title="Freshest offers"
-              lastestListing={this.state.lastestListing} />
+            <div style={{ marginTop: "150px", marginBottom: "60px" }}>
+              <CarouselV2 title="Freshest offers"
+                lastestListing={this.state.lastestListing} />
+            </div>
 
-            <CarouselV2 title="New ingredients"
-              headerLink="/homepage/ingredient"
-              lastestListing={this.state.ingredient} />
+            <div className="carou-group">
+              <CarouselV2 title="New ingredients"
+                headerLink="/homepage/ingredient"
+                lastestListing={this.state.ingredient} />
+            </div>
 
-            <CarouselV2 title="New equipment"
-              headerLink="/homepage/equipment"
-              lastestListing={this.state.equipment} />
+            <div className="carou-group">
+              <CarouselV2 title="New equipment"
+                headerLink="/homepage/equipment"
+                lastestListing={this.state.equipment} />
+            </div>
 
-            <CarouselV2 title="Suggestions"
-              lastestListing={this.state.lastestListing} />
+            <div className="carou-group">
+              <CarouselV2 title="Suggestions"
+                lastestListing={this.state.lastestListing} />
+            </div>
+
           </Route>
 
           <Route path="/homepage/listing/:id">

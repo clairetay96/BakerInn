@@ -19,7 +19,6 @@ export default class DashboardPage extends Component {
       userId = JSON.parse(atob(cookie.split(".")[1])).userId
     }
 
-
     this.state = {
       userId: userId,
       available: [],
@@ -77,8 +76,8 @@ export default class DashboardPage extends Component {
     }
   }
 
-  addNewListingToState= (obj) => {
-    this.setState(prevState=>({
+  addNewListingToState = (obj) => {
+    this.setState(prevState => ({
       available: [...prevState.available, obj]
     }))
   }
@@ -88,22 +87,23 @@ export default class DashboardPage extends Component {
     return (
       <div>
 
-        <Switch>
+        <Switch style={{ padding: "0" }}>
           <ProtectedRoute exact path="/dashboard">
-          <div className="dashboard-header">
-            <h1>Welcome back, {this.props.user}.</h1>
+            <div className="dashboard-header">
+              <h3>Welcome back, {this.props.user}.</h3>
             </div>
 
-
-            <ListingTabs
-              user={this.props.user}
-              userId={this.state.userId}
-              updateParentState={this.addNewListingToState}
-              borrowing={this.state.borrowing}
-              borrowNo={this.state.borrowing.length}
-              listingNo={this.state.available.length}
-              lendNo={this.state.loan.length}
-            />
+            <div style={{ height: "600px" }}>
+              <ListingTabs
+                user={this.props.user}
+                userId={this.state.userId}
+                updateParentState={this.addNewListingToState}
+                borrowing={this.state.borrowing}
+                borrowNo={this.state.borrowing.length}
+                listingNo={this.state.available.length}
+                lendNo={this.state.loan.length}
+              />
+            </div>
           </ProtectedRoute>
 
 

@@ -19,16 +19,19 @@ export default function ListingDetailPage(props) {
   return (
     <>
       <Navbar bg="light" style={{ display: "flex", justifyContent: "flex-start" }}>
-        <Button variant="light" style={{width: '200px', marginRight: '10px'}} onClick={handleBack}>Back to Dashboard</Button>
-        <Button variant="light" style={{width: '200px'}} onClick={handleNext}>See {next=="loan"? "Loaned" : "Available"} Listings</Button>
+        <Button variant="light" style={{ width: '200px', marginRight: '10px' }} onClick={handleBack}>Back to Dashboard</Button>
+        <Button variant="light" style={{ width: '200px' }} onClick={handleNext}>See {next == "loan" ? "Loaned" : "Available"} Listings</Button>
       </Navbar>
-      <h3 style={{textAlign: 'left', margin: '30px'}}>Your {next=="loan"? "Available" : "Loaned"} Listings</h3>
-      <CardDeck className="container" style={{ display: "flex", justifyContent: "start" }}>
 
+      <h3 style={{ textAlign: 'left', margin: '30px' }}>Your {next == "loan" ? "Available" : "Loaned"} Listings</h3>
 
-        {allListings.length > 0 ? <ListingDetail allListings={allListings}
-          edit={edit} /> : "No listings to display."}
-      </CardDeck>
+      <div style={{ height: "550px" }}>
+        <CardDeck className="container" style={{ display: "flex", justifyContent: "start" }}>
+          {allListings.length > 0 ? <ListingDetail allListings={allListings}
+            edit={edit} /> : "No listings to display."}
+        </CardDeck>
+      </div>
+
     </>
   )
 }
