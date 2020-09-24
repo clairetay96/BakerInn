@@ -41,7 +41,6 @@ class SingleListingPage extends Component {
     if (!this.state.loading) {
       img = this.state.data.img_public_id || null
     }
-    console.log(this.state.data);
 
     return (
       <>
@@ -86,7 +85,7 @@ class SingleListingPage extends Component {
                 <p>Item location: {this.state.loading ? null : this.state.data.location}</p>
               </div>
             </div>
-            <div className="text-left itemInfo">
+            <div className="text-left itemInfo" style={{overflowWrap: "anywhere"}}>
               <h3>{this.state.loading ? null : this.state.data.item}</h3>
               <p>{this.state.loading ? null : this.state.data.description}</p>
               <Button disabled={this.state.loading}

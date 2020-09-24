@@ -23,7 +23,10 @@ export default function CarouselCard({item}) {
     },
     pop: {
       height: "max-content",
-      overflowWrap: "anywhere",
+      textAlign: "center",
+      overflow: "hidden",
+      whiteSpace: "nowrap",
+      textOverflow: "ellipsis",
       borderRadius: "9px 9px 0 0",
       backgroundColor: 'white',
     }
