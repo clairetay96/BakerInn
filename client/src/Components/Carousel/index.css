@@ -18,14 +18,19 @@
 }
 
 /* experimental */
+.next {
+  box-shadow: 0 0 2px 1px rgba(0,0,0,0.2);
+}
 
 .next:hover {
   cursor: pointer;
-  transform: scale(1.5);
+  transition: transform 0.05s linear;
+  transform: scale(1.22);
 }
 
 .next:active {
-  background-color: peachpuff;
+  transition: transform ease-out;
+  transform: scale(1.35);
 }
 
 .carousel-body div {

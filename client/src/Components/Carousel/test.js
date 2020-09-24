@@ -97,24 +97,26 @@ export default function CarouselV2({lastestListing = [], interval = null, column
     },
     nextRight: {
       textAlign: "center",
-      height: "60px",
-      width: "60px",
+      height: "58px",
+      width: "58px",
       padding: 10,
       borderRadius: "50%",
       position: "absolute",
-      left: -36,
+      left: -29,
       zIndex: 5,
+      transition: "visibility 0.5s ease-in",
       visibility: slide > 0 ? "visible" : "hidden"
     },
     nextLeft: {
       textAlign: "center",
-      height: "60px",
-      width: "60px",
+      height: "58px",
+      width: "58px",
       padding: 10,
       borderRadius: "50%",
       position: "absolute",
-      right: -36,
+      right: -29,
       zIndex: 5,
+      transition: "visibility 0.2s ease-in",
       visibility: slide < totalFrames - 1 ? "visible" : "hidden"
     },
     carouselWrapper: {
@@ -138,6 +140,7 @@ export default function CarouselV2({lastestListing = [], interval = null, column
       position: "relative"
     },
     title: {
+      textAlign: "left",
       margin: "20px 0",
       padding: "20px",
       backgroundColor: "white"
