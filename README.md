@@ -21,7 +21,7 @@ The baking/cooking community in Singapore does not have a common space to expres
   * food blogger and influencer
   * tries out many different recipes
   * can only buy niche ingredients in large quantities, but requires them in small quantities
-  * wants to use the platform to connect 
+  * wants to use the platform to give away the niche ingredients she has accumulated, and buy them in small quantities.
 
 ### Epics
 * Enable communication between users
@@ -37,11 +37,11 @@ The baking/cooking community in Singapore does not have a common space to expres
 ![Overview](/pre-project/BakerInn_Idea_Board.png)
 
 ## User Flow
-Diagrams of which pages you take the user to in order to acomplish their goals.
+![Overview](/pre-project/User_Flow.png)
 
 ## Wireframing
 
 Make a wireframe for each page you need to fulfill the user stories.
 
 ## ERD
-Create an ERD for your app.
+![Overview](/pre-project/erd_db.png)
