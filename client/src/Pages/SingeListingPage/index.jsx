@@ -37,7 +37,10 @@ class SingleListingPage extends Component {
     // layout the page
     // get dynamic data for single page
     let [, path1, path2, path3] = this.props.history.location.pathname.split('/');
-
+    let img;
+    if (!this.state.loading) {
+      img = this.state.data.img_public_id || null
+    }
     console.log(this.state.data);
 
     return (
@@ -57,7 +60,19 @@ class SingleListingPage extends Component {
         <div className="container singleListing" >
           <div className="col">
             <div className="itemImage">
-              <div style={{ height: "280px", width: "280px", border: "1px solid lightgrey", margin: " 10px auto", display: "flex", justifyContent: "center", alignItems: "center" }}><p>Image Not Available</p> </div>
+              <div style={{ height: "280px", 
+                            width: "280px", 
+                            border: "1px solid lightgrey", 
+                            margin: " 10px auto", 
+                            display: "flex", 
+                            justifyContent: "center", 
+                            alignItems: "center",
+                            backgroundImage: (img ? `url(http://res.cloudinary.com/dk0bjhiu9/image/upload/v1/${img})` : null),
+                            backgroundColor: "lightgrey",
+                            backgroundRepeat: "no-repeat",
+                            backgroundSize: "auto 100%",
+                            backgroundPosition: "center"}}>
+              </div>
             </div>
           </div>
 
