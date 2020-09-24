@@ -1,5 +1,6 @@
 const withAuth = require("./authorization.js")
 require("dotenv").config();
+const path = require('path')
 
 module.exports = (app, db) => {
 
