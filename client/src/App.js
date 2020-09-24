@@ -98,7 +98,6 @@ class App extends React.Component {
           const username = JSON.parse(atob(cookie.split(".")[1])).username
           const userId = JSON.parse(atob(cookie.split(".")[1])).userId
 
-
           let socket = this.setupSocket(username, userId)
           this.setState({
             loggedIn: valid,
@@ -146,7 +145,7 @@ class App extends React.Component {
 
   handleSearch = (e) => {
     if (e.keyCode === 13 && e.target.value !== '') {
-      console.log(this.state.search);
+      // console.log(this.state.search);
       let location = {
         pathname: '/search',
         search: `?q=${this.state.search}`
@@ -210,9 +209,9 @@ class App extends React.Component {
             </Route>
 
             {/* blank page for testing*/}
-            <Route exact path="/test">
+            {/* <Route exact path="/test">
               <Test listingId="5f670aebb063fffb5a0d183f" socket={this.state.socket} />
-            </Route>
+            </Route> */}
 
             {/* redirect all non-specified routes. maybe have a 404 page*/}
             <Route exact path="/">

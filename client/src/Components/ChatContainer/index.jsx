@@ -90,8 +90,8 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
         //if chat doesn't exist yet, create a new chat
         if (!res) {
           // create new in db
-          console.clear();
-          console.log(allChats,"--make a new chat if chat doesn't exist")
+          // console.clear();
+          // console.log(allChats,"--make a new chat if chat doesn't exist")
 
           let newChatURL = '/api/chats/new'
           let requestOptions = {
@@ -185,7 +185,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
     let updatedChat;
     allChatsTemp.forEach((item, index)=>{
         if(item._id===chat_id){
-            console.log(updateNotifs)
+            // console.log(updateNotifs)
             item.notifications += updateNotifs? 1 : 0
             rememberedIndex = index
             updatedChat = item
@@ -325,7 +325,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
   // delete when you click on x
   const handleDeleteWindow = (id) => {
     let filter = activeChat.filter((item) => {
-        console.log(item, '-- item');
+        // console.log(item, '-- item');
         return item !== id
     })
     socket.off('receiveNotification'+user_id)
@@ -386,7 +386,7 @@ export default function ChatContainer({ socket, newChatData, clearChatData }) {
     let totalNotifs = 0
     if(allChats){
         allChats.forEach((item)=>{
-            console.log(item._id, item.listing_item)
+            // console.log(item._id, item.listing_item)
             totalNotifs += item.notifications
         })}
     return totalNotifs

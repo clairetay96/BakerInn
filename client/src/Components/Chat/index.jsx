@@ -180,7 +180,7 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
             fetch('/api/users/'+listing.successful_buyer_id)
                     .then(res => res.json())
                     .then(res => {
-                        console.log(res)
+                        // console.log(res)
                         setTransactionOption("This item is now owned by " + res.username)
                     })
                     .catch(err => {console.log(err, "----- in fetching owner data")})
@@ -199,7 +199,7 @@ export default function Chat({ chat_id, user_id, socket, onClose }) {
                 fetch('/api/users/'+listing.successful_buyer_id)
                     .then(res => res.json())
                     .then(res => {
-                        console.log(res)
+                        // console.log(res)
                         setTransactionOption("This item is on loan by " + res.username)
                     })
                     .catch(err => {console.log(err, "----- in fetching loaner data")})
