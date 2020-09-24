@@ -76,6 +76,11 @@ module.exports = (db) => {
         })
     }
 
+    let signout = (request, response)=>{
+        response.clearCookie('token')
+        response.send("Cookie cleared.")
+    }
+
     // let editUser = (request, response) => {
     //     //some authentication required
     //     let updatedUserInfo = request.body
@@ -308,6 +313,7 @@ module.exports = (db) => {
         getAllUsers,
         getUser,
         createUser,
+        signout,
         // editUser,
         // deleteUser,
         getAllListings,

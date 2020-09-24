@@ -31,6 +31,7 @@ class HomePage extends Component {
     fetch(url)
       .then(res => res.json())
       .then(res => {
+        res.reverse()
         let ingredient = null;
         let equipment = null;
         if (res) {

@@ -15,6 +15,9 @@ export default function CarouselCard({item}) {
       margin: "10px",
       backgroundColor: "mediumslateblue",
       backgroundImage: (img ? `url(http://res.cloudinary.com/dk0bjhiu9/image/upload/v1/${img})` : `url(${placeholder})`),
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "auto 100%",
+      backgroundPosition: "center",
       boxShadow: "0.3em 0.3em 0.4em rgba(0,0,0,0.3)",
       borderRadius: 9,
     },
@@ -33,7 +36,7 @@ export default function CarouselCard({item}) {
   }
 
   return (
-   
+
       <OverlayTrigger
         trigger={['hover', 'focus']}
         placement="bottom"
@@ -46,7 +49,7 @@ export default function CarouselCard({item}) {
           </Popover>
         }
       >
-        <div onClick={beamMeUp}className="carousel-item-thing" 
+        <div onClick={beamMeUp}className="carousel-item-thing"
           style={style.container}>
             <div style={style.pop}>{item.item}</div>
         </div>
