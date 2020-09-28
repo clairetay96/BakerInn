@@ -1,0 +1,8 @@
+![BakerInn - GA project 3](https://user-images.githubusercontent.com/67059559/94386408-2eef3a80-017a-11eb-8740-9968500de054.jpg)
+![BakerInn - GA project 3 (1)](https://user-images.githubusercontent.com/67059559/94386397-2a2a8680-017a-11eb-9971-6f06c8f93d6b.jpg)
+![BakerInn - GA project 3 (3)](https://user-images.githubusercontent.com/67059559/94386400-2b5bb380-017a-11eb-8ee0-0901911f8030.jpg)
+![BakerInn - GA project 3 (5)](https://user-images.githubusercontent.com/67059559/94386402-2bf44a00-017a-11eb-8b72-7e53c5adcaa0.jpg)
+![BakerInn - GA project 3 (2)](https://user-images.githubusercontent.com/67059559/94386403-2c8ce080-017a-11eb-802c-4eab558a332f.jpg)
+![BakerInn - GA project 3 (4)](https://user-images.githubusercontent.com/67059559/94386406-2dbe0d80-017a-11eb-8e52-52d3177c8f61.jpg)
+![BakerInn - GA project 3 (6)](https://user-images.githubusercontent.com/67059559/94386407-2e56a400-017a-11eb-86f5-715c53ff95cb.jpg)
+![BakerInn - GA project 3 (8)](https://user-images.githubusercontent.com/67059559/94386411-2eef3a80-017a-11eb-9b76-c5f8cadb4840.jpg)
